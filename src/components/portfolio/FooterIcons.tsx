@@ -1,11 +1,11 @@
 import { Mail, Linkedin, FileText, Github, Coffee } from "lucide-react";
 
 const icons = [
-  { Icon: Mail, label: "Email", href: "mailto:hello@lewiseydman.com" },
-  { Icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com" },
+  { Icon: Mail, label: "Email", href: "mailto:lewiseydman@gmail.com" },
+  { Icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/lewiseydman/" },
   { Icon: FileText, label: "Résumé", href: "#" },
-  { Icon: Github, label: "GitHub", href: "https://github.com" },
-  { Icon: Coffee, label: "Buy me a coffee", href: "https://buymeacoffee.com" },
+  { Icon: Github, label: "GitHub", href: "https://github.com/lewiseydman" },
+  { Icon: Coffee, label: "Buy me a coffee", href: "https://buymeacoffee.com/lewiseydman" },
 ];
 
 export function FooterIcons() {
