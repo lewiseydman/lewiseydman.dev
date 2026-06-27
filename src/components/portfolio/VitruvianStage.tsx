@@ -101,7 +101,7 @@ export function VitruvianStage() {
       <div className="absolute inset-0 -z-10 paper-grain" />
       {/* corner crosshairs */}
       {["top-6 left-6", "top-6 right-6", "bottom-6 left-6", "bottom-6 right-6"].map((p) => (
-        <div key={p} className={`pointer-events-none absolute ${p} text-blueprint/60`}>
+        <div key={p} className={`pointer-events-none absolute ${p} text-ink/30`}>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
             <path d="M10 0v20M0 10h20" stroke="currentColor" strokeWidth="0.5" />
             <circle cx="10" cy="10" r="2.5" stroke="currentColor" strokeWidth="0.5" />
@@ -138,7 +138,7 @@ export function VitruvianStage() {
             transition={{ duration: 180, repeat: Infinity, ease: "linear" }}
             className="pointer-events-none absolute inset-0"
           >
-            <svg viewBox="0 0 400 400" className="h-full w-full text-blueprint/40">
+            <svg viewBox="0 0 400 400" className="h-full w-full text-ink/20">
               <circle cx="200" cy="200" r="198" stroke="currentColor" strokeWidth="0.5" fill="none" strokeDasharray="2 6" />
               <circle cx="200" cy="200" r="180" stroke="currentColor" strokeWidth="0.4" fill="none" />
               <circle cx="200" cy="200" r="120" stroke="currentColor" strokeWidth="0.4" fill="none" strokeDasharray="1 3" />
@@ -202,11 +202,11 @@ export function VitruvianStage() {
         </h1>
         <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
           Product Manager bridging{" "}
-          <span className="text-foreground underline decoration-blueprint underline-offset-4">
+          <span className="text-foreground underline decoration-sepia/40 underline-offset-4">
             design
           </span>{" "}
           and{" "}
-          <span className="text-foreground underline decoration-blueprint underline-offset-4">
+          <span className="text-foreground underline decoration-sepia/40 underline-offset-4">
             development
           </span>
           .
