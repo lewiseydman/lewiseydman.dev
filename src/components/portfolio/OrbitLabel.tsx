@@ -150,7 +150,7 @@ export function OrbitLines({
               y1={y1}
               x2={x2}
               y2={y2}
-              stroke="color-mix(in oklab, var(--blueprint) 55%, transparent)"
+              stroke="color-mix(in oklab, var(--sepia) 55%, transparent)"
               strokeWidth={0.0015}
               vectorEffect="non-scaling-stroke"
               initial={{ pathLength: 0, opacity: 0 }}
@@ -183,7 +183,7 @@ export function OrbitLines({
               cx={x2}
               cy={y2}
               r={0.004}
-              fill="var(--blueprint)"
+              fill="var(--sepia)"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 1.0 + i * 0.12 }}
