@@ -5,6 +5,7 @@ const icons = [
   { Icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/lewiseydman/" },
   { Icon: FileText, label: "Résumé", href: "#" },
   { Icon: Github, label: "GitHub", href: "https://github.com/lewiseydman" },
+  { Icon: Medium, label: "Medium", href: "https://medium.com/@lewiseydman" },
   { Icon: Coffee, label: "Buy me a coffee", href: "https://buymeacoffee.com/lewiseydman" },
 ];
 
