@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { SectionHeading } from "./SectionHeading";
+import { Download } from "lucide-react";
 
 const experience = [
   {
@@ -59,16 +59,22 @@ function Gear({ teeth = 8 }: { teeth?: number }) {
 
 export function ExperienceTimeline() {
   return (
-    <section id="experience" className="relative px-6 py-28 md:px-12 md:py-40">
-      <div className="mx-auto max-w-7xl">
-        <SectionHeading
-          numeral="III"
-          kicker="Cursus Honorum"
-          title="A mechanical"
-          italicTail="chronology."
-        />
+    <div className="flex flex-col gap-10">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-5">
+        <p className="font-display text-xl italic text-sepia md:text-2xl">
+          A mechanical chronology &mdash; in eight working years.
+        </p>
+        <a
+          href="/resume.pdf"
+          download
+          className="font-mono-mar group inline-flex items-center gap-2 rounded-full border border-sepia/60 bg-background px-4 py-2 text-sepia transition-all hover:border-sepia hover:bg-sepia hover:text-parchment"
+        >
+          <Download className="h-3.5 w-3.5 transition-transform group-hover:translate-y-0.5" />
+          Download Résumé
+        </a>
+      </div>
 
-        <div className="relative">
+      <div className="relative">
           {/* central spine */}
           <div className="absolute left-[1.25rem] top-0 bottom-0 w-px hairline md:left-1/2" />
 
@@ -120,8 +126,7 @@ export function ExperienceTimeline() {
               );
             })}
           </ol>
-        </div>
       </div>
-    </section>
+    </div>
   );
 }

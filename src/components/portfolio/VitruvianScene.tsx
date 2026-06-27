@@ -22,15 +22,15 @@ function WireSphere() {
 
   return (
     <>
-      {/* outer subtle wireframe icosahedron */}
+      {/* outer wireframe icosahedron — matches Vitruvian ink outline */}
       <group ref={outer}>
         <mesh>
-          <icosahedronGeometry args={[1.6, 1]} />
+          <icosahedronGeometry args={[2.0, 1]} />
           <meshBasicMaterial
-            color="#8a7a6a"
+            color="#2e251c"
             wireframe
             transparent
-            opacity={0.18}
+            opacity={0.1}
           />
         </mesh>
       </group>
@@ -38,22 +38,22 @@ function WireSphere() {
       {/* inner more detailed sphere */}
       <group ref={inner}>
         <mesh>
-          <icosahedronGeometry args={[1.05, 3]} />
+          <icosahedronGeometry args={[1.65, 3]} />
           <meshBasicMaterial
-            color="#6a5a4a"
+            color="#2e251c"
             wireframe
             transparent
-            opacity={0.22}
+            opacity={0.12}
           />
         </mesh>
-        {/* equatorial ring */}
+        {/* equatorial rings */}
         <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[1.25, 0.002, 8, 128]} />
-          <meshBasicMaterial color="#6a5a4a" transparent opacity={0.5} />
+          <torusGeometry args={[1.85, 0.002, 8, 128]} />
+          <meshBasicMaterial color="#2e251c" transparent opacity={0.25} />
         </mesh>
         <mesh rotation={[0, 0, Math.PI / 3]}>
-          <torusGeometry args={[1.18, 0.002, 8, 128]} />
-          <meshBasicMaterial color="#6a5a4a" transparent opacity={0.35} />
+          <torusGeometry args={[1.78, 0.002, 8, 128]} />
+          <meshBasicMaterial color="#2e251c" transparent opacity={0.18} />
         </mesh>
       </group>
     </>
@@ -64,7 +64,7 @@ export default function VitruvianScene() {
   return (
     <Canvas
       dpr={[1, 1.75]}
-      camera={{ position: [0, 0, 3.6], fov: 45 }}
+      camera={{ position: [0, 0, 4.5], fov: 45 }}
       gl={{ antialias: true, alpha: true }}
       style={{ background: "transparent" }}
     >

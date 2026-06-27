@@ -36,7 +36,7 @@ export function OrbitLabel({ item, innerR, outerR, index, onOpen }: Props) {
   const y2 = cy + sin * outerR;
 
   // tail goes horizontally outward from the node toward the page edge
-  const tailLen = 0.08;
+  const tailLen = 0.14;
   const tx = item.side === "right" ? x2 + tailLen : x2 - tailLen;
 
   // label HTML position (use the tail end)
@@ -140,7 +140,7 @@ export function OrbitLines({
         const y1 = cy + sin * innerR;
         const x2 = cx + cos * outerR;
         const y2 = cy + sin * outerR;
-        const tailLen = 0.08;
+        const tailLen = 0.14;
         const tx = item.side === "right" ? x2 + tailLen : x2 - tailLen;
 
         return (
