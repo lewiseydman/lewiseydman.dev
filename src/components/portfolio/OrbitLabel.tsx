@@ -74,7 +74,7 @@ export function OrbitLabel({ item, innerR, outerR, index, onOpen }: Props) {
             {item.latin}
             <motion.span
               aria-hidden
-              className="absolute -bottom-0.5 left-0 h-px w-full origin-left bg-blueprint"
+              className="absolute -bottom-0.5 left-0 h-px w-full origin-left bg-sepia"
               initial={{ scaleX: 0 }}
               animate={reduce ? { scaleX: 0 } : undefined}
               whileHover={{ scaleX: 1 }}
@@ -85,7 +85,7 @@ export function OrbitLabel({ item, innerR, outerR, index, onOpen }: Props) {
         <motion.span
           initial={{ opacity: 0, x: item.side === "right" ? -4 : 4 }}
           whileHover={{ opacity: 1, x: 0 }}
-          className="font-mono-mar mt-1 text-[0.55rem] text-blueprint opacity-0 transition-opacity group-hover:opacity-100"
+          className="font-mono-mar mt-1 text-[0.55rem] text-sepia opacity-0 transition-opacity group-hover:opacity-100"
         >
           {item.side === "right" ? "↗ open" : "open ↖"}
         </motion.span>
@@ -95,7 +95,7 @@ export function OrbitLabel({ item, innerR, outerR, index, onOpen }: Props) {
           is not feasible (we need the inner-circle point). We render lines in a sibling SVG
           via OrbitLines below. Here we render just the node hover halo. */}
       <span
-        className="pointer-events-none absolute h-2.5 w-2.5 rounded-full border border-blueprint bg-background transition-all group-hover:scale-150 group-hover:bg-blueprint"
+        className="pointer-events-none absolute h-2.5 w-2.5 rounded-full border border-sepia bg-background transition-all group-hover:scale-150 group-hover:bg-sepia"
         style={{
           left: item.side === "right" ? "-0.6rem" : "auto",
           right: item.side === "left" ? "-0.6rem" : "auto",
