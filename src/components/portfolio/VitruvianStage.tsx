@@ -6,18 +6,20 @@ import { SectionDialog } from "./SectionDialog";
 import { About } from "./About";
 import { SelectedWork } from "./SelectedWork";
 import { ExperienceTimeline } from "./ExperienceTimeline";
-import { WritingsAppraisals } from "./WritingsAppraisals";
+import { Blogs } from "./Blogs";
+import { Appraisals } from "./Appraisals";
 import { Tests } from "./Tests";
 import { FooterIcons } from "./FooterIcons";
 
 const VitruvianScene = lazy(() => import("./VitruvianScene"));
 
 const items: OrbitItem[] = [
-  { id: "vita", numeral: "I", latin: "Vita", english: "About", angle: 200, side: "left" },
-  { id: "codex", numeral: "II", latin: "Codex", english: "Writings", angle: 160, side: "left" },
-  { id: "disputatio", numeral: "III", latin: "Disputatio", english: "Tests", angle: 290, side: "right" },
-  { id: "opera", numeral: "IV", latin: "Opera", english: "Work", angle: 340, side: "right" },
-  { id: "cursus", numeral: "V", latin: "Cursus", english: "Experience", angle: 20, side: "right" },
+  { id: "vita", numeral: "I", latin: "Vita", english: "About", angle: 210, side: "left" },
+  { id: "codex", numeral: "II", latin: "Codex", english: "Blogs", angle: 180, side: "left" },
+  { id: "laudes", numeral: "III", latin: "Laudes", english: "Appraisals", angle: 150, side: "left" },
+  { id: "disputatio", numeral: "IV", latin: "Disputatio", english: "Tests", angle: 30, side: "right" },
+  { id: "opera", numeral: "V", latin: "Opera", english: "Work", angle: 0, side: "right" },
+  { id: "cursus", numeral: "VI", latin: "Cursus", english: "Experience", angle: 330, side: "right" },
 ];
 
 const sections: Record<
@@ -26,14 +28,14 @@ const sections: Record<
 > = {
   vita: { numeral: "I", latin: "Vita", english: "About", kicker: "De Ipso", node: <About /> },
   opera: {
-    numeral: "IV",
+    numeral: "V",
     latin: "Opera",
     english: "Selected Work",
     kicker: "Opera Selecta",
     node: <SelectedWork />,
   },
   cursus: {
-    numeral: "V",
+    numeral: "VI",
     latin: "Cursus",
     english: "Experience",
     kicker: "Cursus Honorum",
@@ -42,12 +44,19 @@ const sections: Record<
   codex: {
     numeral: "II",
     latin: "Codex",
-    english: "Writings & Appraisals",
+    english: "Blogs",
     kicker: "Codex Notarum",
-    node: <WritingsAppraisals />,
+    node: <Blogs />,
+  },
+  laudes: {
+    numeral: "III",
+    latin: "Laudes",
+    english: "Appraisals",
+    kicker: "Laudes & Marginalia",
+    node: <Appraisals />,
   },
   disputatio: {
-    numeral: "III",
+    numeral: "IV",
     latin: "Disputatio",
     english: "Tests",
     kicker: "Disputationes",
@@ -55,8 +64,8 @@ const sections: Record<
   },
 };
 
-const INNER_R = 0.3;
-const OUTER_R = 0.46;
+const INNER_R = 0.32;
+const OUTER_R = 0.48;
 
 export function VitruvianStage() {
   const reduce = useReducedMotion();
@@ -123,9 +132,25 @@ export function VitruvianStage() {
 
       {/* stage */}
       <div className="relative my-6 flex w-full flex-1 items-center justify-center">
-        <div className="relative aspect-square w-[min(82vh,92vw)] max-w-[860px] overflow-visible">
-          {/* three.js scene behind */}
-          <div className="pointer-events-none absolute inset-0 -z-0 opacity-90">
+        <div className="relative aspect-square w-[min(78vh,88vw)] max-w-[820px] overflow-visible">
+          {/* Vitruvian image — sits inside the sphere */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
+            className="absolute left-1/2 top-1/2 z-10 h-[56%] w-[56%] -translate-x-1/2 -translate-y-1/2"
+          >
+            <img
+              src={vitruvian}
+              alt="Vitruvian-style line drawing"
+              className="h-full w-full select-none object-contain mix-blend-multiply dark:mix-blend-screen dark:invert dark:hue-rotate-180"
+              draggable={false}
+            />
+          </motion.div>
+
+          {/* three.js sphere — rendered ON TOP of figure with low opacity so the
+              wireframe visually wraps the Vitruvian inside it. */}
+          <div className="pointer-events-none absolute inset-0 z-20">
             <Suspense fallback={null}>
               <VitruvianScene />
             </Suspense>
@@ -136,7 +161,7 @@ export function VitruvianStage() {
             initial={{ rotate: 0 }}
             animate={reduce ? {} : { rotate: 360 }}
             transition={{ duration: 180, repeat: Infinity, ease: "linear" }}
-            className="pointer-events-none absolute inset-0"
+            className="pointer-events-none absolute inset-0 z-0"
           >
             <svg viewBox="0 0 400 400" className="h-full w-full text-ink/20">
               <circle
@@ -164,7 +189,7 @@ export function VitruvianStage() {
             initial={{ rotate: 0 }}
             animate={reduce ? {} : { rotate: -360 }}
             transition={{ duration: 240, repeat: Infinity, ease: "linear" }}
-            className="pointer-events-none absolute inset-[6%]"
+            className="pointer-events-none absolute inset-[6%] z-0"
           >
             <svg viewBox="0 0 400 400" className="h-full w-full text-sepia/30">
               <circle
@@ -179,26 +204,13 @@ export function VitruvianStage() {
             </svg>
           </motion.div>
 
-          {/* Vitruvian image, center */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
-            className="absolute left-1/2 top-1/2 z-10 h-[58%] w-[58%] -translate-x-1/2 -translate-y-1/2"
-          >
-            <img
-              src={vitruvian}
-              alt="Vitruvian-style line drawing"
-              className="h-full w-full select-none object-contain mix-blend-multiply dark:mix-blend-screen dark:invert dark:hue-rotate-180"
-              draggable={false}
-            />
-          </motion.div>
-
           {/* leader lines */}
-          <OrbitLines items={items} innerR={INNER_R} outerR={OUTER_R} />
+          <div className="absolute inset-0 z-30">
+            <OrbitLines items={items} innerR={INNER_R} outerR={OUTER_R} />
+          </div>
 
           {/* labels (desktop only — visible at md+) */}
-          <div className="absolute inset-0 hidden md:block">
+          <div className="absolute inset-0 z-40 hidden md:block">
             {items.map((item, i) => (
               <OrbitLabel key={item.id} item={item} innerR={INNER_R} outerR={OUTER_R} index={i} onOpen={onOpen} />
             ))}
