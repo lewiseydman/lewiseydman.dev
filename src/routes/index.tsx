@@ -1,12 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Nav } from "@/components/portfolio/Nav";
-import { Hero } from "@/components/portfolio/Hero";
-import { About } from "@/components/portfolio/About";
-import { SelectedWork } from "@/components/portfolio/SelectedWork";
-import { ExperienceTimeline } from "@/components/portfolio/ExperienceTimeline";
-import { WritingsAppraisals } from "@/components/portfolio/WritingsAppraisals";
-import { Contact } from "@/components/portfolio/Contact";
-import { Footer } from "@/components/portfolio/Footer";
+import { VitruvianStage } from "@/components/portfolio/VitruvianStage";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -33,14 +26,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <main className="relative min-h-screen overflow-x-clip bg-background text-foreground">
-      <Nav />
-      <Hero />
-      <About />
-      <SelectedWork />
-      <ExperienceTimeline />
-      <WritingsAppraisals />
-      <Contact />
-      <Footer />
+      <VitruvianStage />
     </main>
   );
 }

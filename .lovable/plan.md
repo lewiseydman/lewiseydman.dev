@@ -1,61 +1,64 @@
-# Lewis Eydman — Da Vinci Portfolio
 
-A single-page portfolio with anchored sections, built on the existing TanStack Start + shadcn stack. Aesthetic: Leonardo's notebook reinterpreted with Swiss-modern restraint — parchment background, sepia ink, a single blueprint-cyan accent, hairline grids, and ink-draw SVG animations.
+## Goal
 
-## Design system
+Restructure the fold so the Vitruvian man becomes the visual center of the page. The Lewis Eydman intro shrinks to a compact, centered block tucked inside/under the figure, and five renaissance-themed labels extend from the surrounding circle on futuristic leader lines. Clicking any label opens that section's content in a popover/dialog — no separate routes. Add a small icon strip at the bottom. Keep the existing parchment + sepia + blueprint palette unchanged.
 
-- **Palette** (tokens in `src/styles.css`):
-  - `--background` parchment off-white `oklch(0.97 0.012 85)`
-  - `--foreground` deep ink `oklch(0.22 0.02 60)` (warm near-black)
-  - `--muted` sepia `oklch(0.55 0.04 65)`
-  - `--accent` blueprint cyan `oklch(0.55 0.12 230)`
-  - `--secondary` oxidized brass `oklch(0.65 0.08 75)`
-  - Dark mode: deep indigo blueprint background with cyan grid + ivory ink.
-- **Typography** (via `@fontsource`):
-  - Display serif: **Cormorant Garamond** (hero, section titles)
-  - Body sans: **Inter Tight** (paragraphs, UI)
-  - Mono accent: **JetBrains Mono** for marginalia/dates
-- **Texture**: subtle SVG blueprint grid + paper-grain overlay as CSS background utility.
+## Hero recomposition
 
-## Sections (single page, anchored nav)
+- Vitruvian man centered on the viewport, scaled up (~70vmin), with the existing slow-rotating outer rings preserved.
+- Optional Three.js layer behind the figure: a subtle wireframe sphere / particle ring rendered with `@react-three/fiber` + `drei`, tinted in the existing `--blueprint` token. Falls back gracefully (and respects `prefers-reduced-motion`).
+- The "Lewis Eydman" block shrinks into a small centered card directly beneath the figure: monogram `L·E`, name in display serif (smaller, ~text-2xl), one-line tagline, and the `Folio I · Anno MMXXVI` marginalia. The "View the codex" CTA is removed (navigation now happens via the orbit labels).
+- Remove the top nav pill — the orbit labels replace it. Keep the corner crosshairs and scroll hint.
 
-1. **Hero** — Large name "Lewis Eydman" in display serif, tagline "Bridging UX/UI Design & Full-Stack Development", a hand-drawn Vitruvian-style SVG that ink-draws on load, hairline crosshair guides, scroll hint.
-2. **About** — Two-column folio layout: portrait-as-sketch image left, bio + skills (Design / Code / Product) right with mirror-script Latin marginalia.
-3. **Selected Work** — 4 project cards on a faint blueprint grid; each card has a sketch icon, title, role, outcome metric, hover lift + grid-line extension animation.
-4. **Experience Timeline** — Vertical mechanical-schematic timeline with hairline leaders connecting dates (mono) to role descriptions; nodes are small gear/cog SVGs that rotate subtly on view.
-5. **Blogs + Appraisals** — Two-column list: "Writings" (essays) and "Appraisals" (short critique notes), each entry with date, title, one-line excerpt.
-6. **Contact** — Centered folio card with email, social links (GitHub, LinkedIn, Read.cv, X), signed off with a stylized "L.E." monogram.
+## Orbit labels (the navigation)
 
-Top nav is a slim floating bar with section anchors; footer carries a notebook-folio page number + copyright.
+Five labels positioned around the figure at fixed angles (e.g. 300°, 340°, 20°, 60°, 100°). Each label is:
 
-## Animations (motion level 3/5, via Framer Motion)
+- A thin animated SVG leader line that draws outward from the inner circle to a small node, then a short horizontal tail to the text.
+- Renaissance-themed names with the original meaning in small monospace marginalia underneath, so users never have to guess:
 
-- SVG `pathLength` ink-draw on the Vitruvian hero and section dividers as they enter the viewport.
-- Section titles fade + underline sweep.
-- Project cards: hover lift (translateY -4px) + accent grid line extension.
-- Timeline nodes: scale-in on scroll, gentle continuous rotation on gear icons.
-- Reduced-motion respected via `prefers-reduced-motion`.
+```text
+About     → Vita          (sub: About)
+Work      → Opera         (sub: Work)
+Experience→ Cursus        (sub: Experience)
+Writings  → Codex         (sub: Writings)
+Tests     → Disputatio    (sub: Tests)
+```
 
-## Images (generated)
+- Hover: the leader line extends slightly, the node fills with `--blueprint`, the label gains an underline-draw, and a faint `→ open` hint fades in. Cursor becomes pointer. Subtle haptic-feeling spring via framer-motion.
+- Click: opens a centered popover (shadcn `Dialog`) with that section's content. ESC + backdrop close it. URL hash updates (`#opera`, `#vita` …) so links remain shareable and deep-linkable without a route change.
 
-- Vitruvian-style hero line illustration (sepia ink on parchment, transparent PNG)
-- Portrait-as-sketch placeholder
-- 4 small sketch icons for project cards (gear, wing, lens, compass)
+## Popover content
 
-## Technical plan
+Each dialog reuses the existing section component (`About`, `SelectedWork`, `ExperienceTimeline`, `WritingsAppraisals`, plus a new `Tests` section) rendered inside a scrollable, parchment-textured dialog with the blueprint grid backdrop and a hairline header showing the Roman numeral + Latin title + English subtitle. `Tests` replaces `Contact` and will hold placeholder entries for assessments / case studies (e.g. "Disputatio I — Product Sense", placeholder copy).
 
-- Install: `bun add framer-motion @fontsource/cormorant-garamond @fontsource/inter-tight @fontsource/jetbrains-mono lucide-react` (lucide likely already present).
-- Update `src/styles.css`: import fontsource packages at top, redefine color tokens (light + dark), add `--font-display`/`--font-sans`/`--font-mono` in `@theme inline`, add `@utility blueprint-grid` and `@utility paper-grain` background utilities.
-- Replace `src/routes/index.tsx` placeholder with full portfolio page; update its `head()` with real title, description, OG tags.
-- Create components under `src/components/portfolio/`:
-  - `Nav.tsx`, `Hero.tsx`, `About.tsx`, `SelectedWork.tsx`, `ExperienceTimeline.tsx`, `WritingsAppraisals.tsx`, `Contact.tsx`, `Footer.tsx`
-  - `VitruvianSketch.tsx` (animated SVG)
-  - `BlueprintGrid.tsx` (decorative background)
-  - `InkDraw.tsx` (reusable Framer Motion SVG wrapper)
-- Generate hero illustration + portrait sketch + 4 card icons via image generation, save under `src/assets/`.
+The standalone page sections below the hero are removed from the route; their components are reused only inside dialogs. The `Contact` component is removed from the page flow (correspondence links move to the footer icon row).
 
-## What I'm NOT doing
+## Footer icon strip
 
-- No backend / Lovable Cloud (static portfolio).
-- No CMS — content lives in typed arrays inside each section component, easy to edit later.
-- No separate routes per section (single-page anchored nav fits the brief); shareable URLs for case studies can be added later if you want.
+A small horizontal row of monoline icons centered at the bottom of the viewport (matching the uploaded screenshot): Email, LinkedIn, Resume/Document, GitHub, "Buy me a coffee". Uses `lucide-react` (`Mail`, `Linkedin`, `FileText`, `Github`, `Coffee`) at ~18px, sepia stroke, hover lifts to ink color with a hairline underline. Each is a real link (`mailto:`, placeholder URLs the user can fill in later).
+
+## Motion & palette guardrails
+
+- No new colors. Everything continues to draw from `--parchment`, `--ink`, `--sepia`, `--blueprint`, `--brass`.
+- Motion intensity stays at the user's chosen 3/5: line-draw on mount, gentle label fade-in stagger, spring on hover, smooth dialog scale-in.
+- Honor `useReducedMotion` everywhere (skip Three.js animation loop, skip line-draw, fall back to instant fades).
+
+## Technical details
+
+- Add deps: `three`, `@react-three/fiber`, `@react-three/drei` (Three.js scene lazy-loaded with `React.lazy` + `Suspense` so the parchment hero paints first).
+- New components in `src/components/portfolio/`:
+  - `VitruvianStage.tsx` — wraps the image, the rotating rings, the Three.js canvas, and the orbit labels.
+  - `OrbitLabel.tsx` — SVG leader line + node + label, with hover animation, accepts `angle`, `latin`, `english`, `onOpen`.
+  - `SectionDialog.tsx` — shadcn `Dialog` styled with parchment + blueprint grid + hairline header.
+  - `FooterIcons.tsx` — the icon strip.
+  - `Tests.tsx` — placeholder content for the new Disputatio section.
+- Update `src/routes/index.tsx`: render `<VitruvianStage />` + compact name card + `<FooterIcons />` only. Remove `Nav`, in-page section stack, and `Contact` from the page. Keep SEO metadata as is.
+- A single hero-level state (`activeSection: 'vita' | 'opera' | 'cursus' | 'codex' | 'disputatio' | null`) drives the dialog and is synced with `location.hash` via a small effect so deep links work.
+- Mobile: labels collapse from radial to a vertical list of buttons under the figure (same Latin + English styling), preserving popover behavior.
+
+## Out of scope
+
+- No new routes, no payments, no backend.
+- No content rewrites inside the existing About / Work / Experience / Writings sections beyond moving them into dialogs.
+- Real social URLs — placeholders only; user can swap them in later.
