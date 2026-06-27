@@ -109,7 +109,7 @@ function Sketch({ kind }: { kind: Project["sketch"] }) {
 export function SelectedWork() {
   return (
     <section id="work" className="relative px-6 py-28 md:px-12 md:py-40">
-      <div className="absolute inset-0 -z-10 blueprint-grid opacity-30" />
+      <div className="absolute inset-0 -z-10 blueprint-grid opacity-20" />
       <div className="mx-auto max-w-7xl">
         <SectionHeading
           numeral="II"
@@ -137,7 +137,7 @@ export function SelectedWork() {
 
               <div className="flex items-center gap-6">
                 <div className="relative">
-                  <div className="absolute inset-0 rounded-full bg-blueprint/0 transition-colors group-hover:bg-blueprint/10" />
+                  <div className="absolute inset-0 rounded-full bg-sepia/0 transition-colors group-hover:bg-sepia/5" />
                   <Sketch kind={p.sketch} />
                 </div>
                 <div className="flex-1">
@@ -167,7 +167,7 @@ export function SelectedWork() {
                 </div>
               </div>
 
-              <div className="pointer-events-none absolute bottom-0 left-0 h-px w-0 bg-blueprint transition-all duration-500 group-hover:w-full" />
+              <div className="pointer-events-none absolute bottom-0 left-0 h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
             </motion.a>
           ))}
         </div>
