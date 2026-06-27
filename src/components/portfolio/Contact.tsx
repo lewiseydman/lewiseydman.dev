@@ -51,7 +51,7 @@ export function Contact() {
                 <li key={l.label}>
                   <a
                     href={l.href}
-                    className="group flex items-baseline justify-between gap-4 py-4 transition-colors hover:text-blueprint"
+                    className="group flex items-baseline justify-between gap-4 py-4 transition-colors hover:text-sepia"
                   >
                     <span className="font-mono-mar">{l.label}</span>
                     <span className="font-display text-lg transition-transform group-hover:-translate-x-1">

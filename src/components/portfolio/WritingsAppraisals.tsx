@@ -76,7 +76,7 @@ export function WritingsAppraisals() {
                 >
                   <a href="#" className="flex flex-col gap-2 py-5 transition-colors">
                     <div className="flex items-baseline justify-between gap-4">
-                      <h4 className="font-display text-xl text-foreground transition-colors group-hover:text-blueprint md:text-2xl">
+                      <h4 className="font-display text-xl text-foreground transition-colors group-hover:text-sepia md:text-2xl">
                         {w.title}
                       </h4>
                       <span className="font-mono-mar shrink-0">{w.date}</span>
