@@ -1,64 +1,80 @@
+## Overview
 
-## Goal
+Restructure the orbit navigation into six sections, deepen the content inside each popover, add brand-friendly icons (including Medium), nest the Vitruvian figure inside the 3D sphere, and tighten layout polish (label spacing, unified popover padding).
 
-Restructure the fold so the Vitruvian man becomes the visual center of the page. The Lewis Eydman intro shrinks to a compact, centered block tucked inside/under the figure, and five renaissance-themed labels extend from the surrounding circle on futuristic leader lines. Clicking any label opens that section's content in a popover/dialog — no separate routes. Add a small icon strip at the bottom. Keep the existing parchment + sepia + blueprint palette unchanged.
+## 1. Split Codex into two sections (now 6 orbit labels)
 
-## Hero recomposition
+Replace the combined "Codex · Writings & Appraisals" with two separate orbit items, redistributing angles around the circle so spacing stays even:
 
-- Vitruvian man centered on the viewport, scaled up (~70vmin), with the existing slow-rotating outer rings preserved.
-- Optional Three.js layer behind the figure: a subtle wireframe sphere / particle ring rendered with `@react-three/fiber` + `drei`, tinted in the existing `--blueprint` token. Falls back gracefully (and respects `prefers-reduced-motion`).
-- The "Lewis Eydman" block shrinks into a small centered card directly beneath the figure: monogram `L·E`, name in display serif (smaller, ~text-2xl), one-line tagline, and the `Folio I · Anno MMXXVI` marginalia. The "View the codex" CTA is removed (navigation now happens via the orbit labels).
-- Remove the top nav pill — the orbit labels replace it. Keep the corner crosshairs and scroll hint.
+- **Vita** (About)
+- **Opera** (Work)
+- **Cursus** (Experience)
+- **Codex** (Writings / Blogs)
+- **Laudes** (Appraisals — Latin for "praises/testimonials")
+- **Disputatio** (Tests)
 
-## Orbit labels (the navigation)
+`WritingsAppraisals.tsx` will be retired and split into two new components: `Blogs.tsx` and `Appraisals.tsx`.
 
-Five labels positioned around the figure at fixed angles (e.g. 300°, 340°, 20°, 60°, 100°). Each label is:
+## 2. Blogs (Codex) — readable in popover
 
-- A thin animated SVG leader line that draws outward from the inner circle to a small node, then a short horizontal tail to the text.
-- Renaissance-themed names with the original meaning in small monospace marginalia underneath, so users never have to guess:
+- Add a `blogs` data file with ~4 placeholder posts: title, dek, date, reading time, thumbnail (AI-generated, sepia/ink themed line illustrations), tags, and full markdown/JSX body.
+- Default popover view: a grid of blog cards with thumbnail, title, date, dek.
+- Clicking a card swaps the popover body to a beautifully typeset article view (drop cap, generous line-height, Cormorant headings, narrow measure, marginalia date) — no navigation away, internal back arrow returns to the index.
+- Reuses the existing `SectionDialog`; state for "which post is open" lives inside `Blogs.tsx`.
 
-```text
-About     → Vita          (sub: About)
-Work      → Opera         (sub: Work)
-Experience→ Cursus        (sub: Experience)
-Writings  → Codex         (sub: Writings)
-Tests     → Disputatio    (sub: Tests)
-```
+## 3. Disputatio (Tests) — image + summary per item
 
-- Hover: the leader line extends slightly, the node fills with `--blueprint`, the label gains an underline-draw, and a faint `→ open` hint fades in. Cursor becomes pointer. Subtle haptic-feeling spring via framer-motion.
-- Click: opens a centered popover (shadcn `Dialog`) with that section's content. ESC + backdrop close it. URL hash updates (`#opera`, `#vita` …) so links remain shareable and deep-linkable without a route change.
+- Each test entry gets a hero image (AI-generated UI/design/motion stills) plus a short summary.
+- Index view: grid of test cards with thumbnail + title.
+- Clicking opens an in-popover detail view showing the full image (max width within unified padding) and a paragraph summary. Same back-arrow pattern as Blogs.
 
-## Popover content
+## 4. Opera (Work) — case studies
 
-Each dialog reuses the existing section component (`About`, `SelectedWork`, `ExperienceTimeline`, `WritingsAppraisals`, plus a new `Tests` section) rendered inside a scrollable, parchment-textured dialog with the blueprint grid backdrop and a hairline header showing the Roman numeral + Latin title + English subtitle. `Tests` replaces `Contact` and will hold placeholder entries for assessments / case studies (e.g. "Disputatio I — Product Sense", placeholder copy).
+- Convert `SelectedWork.tsx` into an index of company/project cards (logo or thumbnail, role, dates, one-line outcome).
+- Clicking opens an in-popover case study with sections: Context, Role, Challenge, Approach, Outcome, plus 1–2 supporting images.
+- Same in-popover detail/back-arrow pattern as Blogs and Tests for consistency.
+- Seeded with placeholder companies the user can edit later.
 
-The standalone page sections below the hero are removed from the route; their components are reused only inside dialogs. The `Contact` component is removed from the page flow (correspondence links move to the footer icon row).
+## 5. Cursus (Experience) — add resume download
 
-## Footer icon strip
+- Keep timeline as-is.
+- Add a prominent "Download Résumé" button at the top of the section using the existing button styling (sepia outline, mono-mar microcopy).
+- Wire it to `src/assets/resume.pdf`. Until the user uploads their PDF, the button references a placeholder file path and shows a small note: "PDF coming soon."
+- Once the user uploads the file, swap in the real path — no other code changes needed.
 
-A small horizontal row of monoline icons centered at the bottom of the viewport (matching the uploaded screenshot): Email, LinkedIn, Resume/Document, GitHub, "Buy me a coffee". Uses `lucide-react` (`Mail`, `Linkedin`, `FileText`, `Github`, `Coffee`) at ~18px, sepia stroke, hover lifts to ink color with a hairline underline. Each is a real link (`mailto:`, placeholder URLs the user can fill in later).
+## 6. Footer icons — add Medium
 
-## Motion & palette guardrails
+- Add `react-icons` (tree-shakable, supports Medium and many brand marks) and import `SiMedium` from `react-icons/si` for the Medium entry. Keep all existing lucide icons for non-brand glyphs (Mail, LinkedIn, etc.).
+- Style all icons with identical size/stroke so the row stays visually consistent with the sepia aesthetic.
 
-- No new colors. Everything continues to draw from `--parchment`, `--ink`, `--sepia`, `--blueprint`, `--brass`.
-- Motion intensity stays at the user's chosen 3/5: line-draw on mount, gentle label fade-in stagger, spring on hover, smooth dialog scale-in.
-- Honor `useReducedMotion` everywhere (skip Three.js animation loop, skip line-draw, fall back to instant fades).
+## 7. Vitruvian inside the 3D sphere
 
-## Technical details
+- In `VitruvianStage.tsx`, move the Vitruvian `<img>` so it visually sits inside the wireframe sphere (currently the sphere is behind it). Restack z-index: sphere on top of/around the figure, figure centered, both within the same circular frame.
+- In `VitruvianScene.tsx`:
+  - Match wireframe color to the Vitruvian outline ink (read current outline as roughly `#3a2e22` / dark sepia-ink — will sample from the asset; will set both meshes to that color).
+  - Lower opacity (~0.10–0.14) so the figure remains clearly visible through the wireframe.
+  - Slightly increase sphere radius so the figure fits comfortably inside.
 
-- Add deps: `three`, `@react-three/fiber`, `@react-three/drei` (Three.js scene lazy-loaded with `React.lazy` + `Suspense` so the parchment hero paints first).
-- New components in `src/components/portfolio/`:
-  - `VitruvianStage.tsx` — wraps the image, the rotating rings, the Three.js canvas, and the orbit labels.
-  - `OrbitLabel.tsx` — SVG leader line + node + label, with hover animation, accepts `angle`, `latin`, `english`, `onOpen`.
-  - `SectionDialog.tsx` — shadcn `Dialog` styled with parchment + blueprint grid + hairline header.
-  - `FooterIcons.tsx` — the icon strip.
-  - `Tests.tsx` — placeholder content for the new Disputatio section.
-- Update `src/routes/index.tsx`: render `<VitruvianStage />` + compact name card + `<FooterIcons />` only. Remove `Nav`, in-page section stack, and `Contact` from the page. Keep SEO metadata as is.
-- A single hero-level state (`activeSection: 'vita' | 'opera' | 'cursus' | 'codex' | 'disputatio' | null`) drives the dialog and is synced with `location.hash` via a small effect so deep links work.
-- Mobile: labels collapse from radial to a vertical list of buttons under the figure (same Latin + English styling), preserving popover behavior.
+## 8. Orbit label spacing
+
+- In `OrbitLabel.tsx` / `OrbitLines.tsx`, increase the radial distance between the inner dot (on the circle) and the outer label by raising the `OUTER_R` constant (and lengthening the leader line accordingly) so labels breathe further away from the orbit.
+
+## 9. Unified popover padding
+
+- Define one padding scale and apply to every section component rendered inside `SectionDialog`. Currently `SectionDialog` body uses `px-6 py-10 md:px-10 md:py-14` but child components add their own paddings inconsistently.
+- Standardize: dialog body container owns padding; child sections add only vertical rhythm (`gap-*`) — no extra horizontal padding inside section components.
+- Update `About`, `Blogs`, `Appraisals`, `SelectedWork`, `ExperienceTimeline`, `Tests` to follow this rule.
+
+## Technical notes
+
+- New files: `src/components/portfolio/Blogs.tsx`, `Appraisals.tsx`, plus `data/blogs.ts`, `data/work.ts`, `data/tests.ts` for content.
+- Delete `WritingsAppraisals.tsx` after split.
+- AI-generated thumbnails (~12 images total): blog covers, test stills, work case-study heroes — all rendered in the existing parchment/sepia/ink palette as line illustrations to stay on-aesthetic.
+- Add `react-icons` via `bun add react-icons`.
+- No backend / Lovable Cloud needed — all content is static.
+- Resume: please upload your PDF (drag into chat) once approved; I'll place it at `src/assets/resume.pdf` and wire the download.
 
 ## Out of scope
 
-- No new routes, no payments, no backend.
-- No content rewrites inside the existing About / Work / Experience / Writings sections beyond moving them into dialogs.
-- Real social URLs — placeholders only; user can swap them in later.
+- No new routes — everything remains a single-fold experience with popovers, per your earlier direction.
+- No color palette changes beyond matching the sphere to the figure's outline ink.
