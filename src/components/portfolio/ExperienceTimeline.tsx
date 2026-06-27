@@ -93,8 +93,8 @@ export function ExperienceTimeline() {
 
                   {/* card */}
                   <div
-                    className={`col-start-2 md:col-start-${left ? "1" : "2"} md:row-start-1 ${
-                      left ? "md:pr-16 md:text-right" : "md:pl-16"
+                    className={`col-start-2 md:row-start-1 ${
+                      left ? "md:col-start-1 md:pr-16 md:text-right" : "md:col-start-2 md:pl-16"
                     }`}
                   >
                     <div className="flex flex-col gap-3">
