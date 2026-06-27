@@ -117,7 +117,7 @@ export function VitruvianStage() {
         className="font-mono-mar relative z-10 flex items-center gap-3"
       >
         <span className="hairline h-px w-10" />
-        <span>L · E · Folio I · Anno MMXXVI</span>
+        <span>Folio I · Anno MMXXVI</span>
         <span className="hairline h-px w-10" />
       </motion.div>
 
@@ -139,9 +139,25 @@ export function VitruvianStage() {
             className="pointer-events-none absolute inset-0"
           >
             <svg viewBox="0 0 400 400" className="h-full w-full text-ink/20">
-              <circle cx="200" cy="200" r="198" stroke="currentColor" strokeWidth="0.5" fill="none" strokeDasharray="2 6" />
+              <circle
+                cx="200"
+                cy="200"
+                r="198"
+                stroke="currentColor"
+                strokeWidth="0.5"
+                fill="none"
+                strokeDasharray="2 6"
+              />
               <circle cx="200" cy="200" r="180" stroke="currentColor" strokeWidth="0.4" fill="none" />
-              <circle cx="200" cy="200" r="120" stroke="currentColor" strokeWidth="0.4" fill="none" strokeDasharray="1 3" />
+              <circle
+                cx="200"
+                cy="200"
+                r="120"
+                stroke="currentColor"
+                strokeWidth="0.4"
+                fill="none"
+                strokeDasharray="1 3"
+              />
             </svg>
           </motion.div>
           <motion.div
@@ -151,7 +167,15 @@ export function VitruvianStage() {
             className="pointer-events-none absolute inset-[6%]"
           >
             <svg viewBox="0 0 400 400" className="h-full w-full text-sepia/30">
-              <circle cx="200" cy="200" r="196" stroke="currentColor" strokeWidth="0.4" fill="none" strokeDasharray="0.5 4" />
+              <circle
+                cx="200"
+                cy="200"
+                r="196"
+                stroke="currentColor"
+                strokeWidth="0.4"
+                fill="none"
+                strokeDasharray="0.5 4"
+              />
             </svg>
           </motion.div>
 
@@ -176,14 +200,7 @@ export function VitruvianStage() {
           {/* labels (desktop only — visible at md+) */}
           <div className="absolute inset-0 hidden md:block">
             {items.map((item, i) => (
-              <OrbitLabel
-                key={item.id}
-                item={item}
-                innerR={INNER_R}
-                outerR={OUTER_R}
-                index={i}
-                onOpen={onOpen}
-              />
+              <OrbitLabel key={item.id} item={item} innerR={INNER_R} outerR={OUTER_R} index={i} onOpen={onOpen} />
             ))}
           </div>
         </div>
@@ -202,14 +219,8 @@ export function VitruvianStage() {
         </h1>
         <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
           Product Manager bridging{" "}
-          <span className="text-foreground underline decoration-sepia/40 underline-offset-4">
-            design
-          </span>{" "}
-          and{" "}
-          <span className="text-foreground underline decoration-sepia/40 underline-offset-4">
-            development
-          </span>
-          .
+          <span className="text-foreground underline decoration-sepia/40 underline-offset-4">design</span> and{" "}
+          <span className="text-foreground underline decoration-sepia/40 underline-offset-4">development</span>.
         </p>
       </motion.div>
 
@@ -222,9 +233,7 @@ export function VitruvianStage() {
             onClick={() => onOpen(item.id)}
             className="flex items-baseline gap-2 rounded-full border border-border bg-background/70 px-3 py-1.5 backdrop-blur-md"
           >
-            <span className="font-mono text-[0.6rem] uppercase tracking-widest text-sepia">
-              {item.numeral}
-            </span>
+            <span className="font-mono text-[0.6rem] uppercase tracking-widest text-sepia">{item.numeral}</span>
             <span className="font-display text-base">{item.latin}</span>
             <span className="font-mono-mar">· {item.english}</span>
           </button>
