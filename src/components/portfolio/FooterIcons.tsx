@@ -1,11 +1,11 @@
-import { Mail, Linkedin, FileText, Github, Coffee } from "lucide-react";
+import { Mail, Linkedin, FileText, Github, Coffee, BookOpen } from "lucide-react";
 
 const icons = [
   { Icon: Mail, label: "Email", href: "mailto:lewiseydman@gmail.com" },
   { Icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/lewiseydman/" },
   { Icon: FileText, label: "Résumé", href: "#" },
   { Icon: Github, label: "GitHub", href: "https://github.com/lewiseydman" },
-  { Icon: Medium, label: "Medium", href: "https://medium.com/@lewiseydman" },
+  { Icon: BookOpen, label: "Medium", href: "https://medium.com/@lewiseydman" },
   { Icon: Coffee, label: "Buy me a coffee", href: "https://buymeacoffee.com/lewiseydman" },
 ];
 
