@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import portrait from "@/assets/portrait.png";
-import { SectionHeading } from "./SectionHeading";
 
 const disciplines = [
   {
@@ -22,11 +21,8 @@ const disciplines = [
 
 export function About() {
   return (
-    <section id="about" className="relative px-6 py-28 md:px-12 md:py-40">
-      <div className="mx-auto max-w-7xl">
-        <SectionHeading numeral="I" kicker="De Ipso" title="A note on the" italicTail="practitioner." />
-
-        <div className="grid gap-14 md:grid-cols-[0.85fr_1.15fr] md:gap-20">
+    <div className="flex flex-col gap-10">
+      <div className="grid gap-10 md:grid-cols-[0.85fr_1.15fr] md:gap-14">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -100,7 +96,6 @@ export function About() {
             </div>
           </div>
         </div>
-      </div>
-    </section>
+    </div>
   );
 }
