@@ -31,7 +31,7 @@ export function Hero() {
             className="font-mono-mar mb-6 flex items-center gap-3"
           >
             <span className="hairline h-px w-10" />
-            <span>Folio I · Anno MMXXVI</span>
+            <span>Folio · Anno MMXXVI</span>
           </motion.div>
 
           <h1 className="font-display text-[3.2rem] leading-[0.95] tracking-[-0.02em] sm:text-[4.5rem] md:text-[5.5rem]">
@@ -69,10 +69,7 @@ export function Hero() {
             className="mt-8 max-w-md text-base leading-relaxed text-muted-foreground md:text-lg"
           >
             Product Manager bridging{" "}
-            <span className="text-foreground underline decoration-blueprint underline-offset-4">
-              UX/UI design
-            </span>{" "}
-            and{" "}
+            <span className="text-foreground underline decoration-blueprint underline-offset-4">UX/UI design</span> and{" "}
             <span className="text-foreground underline decoration-blueprint underline-offset-4">
               full-stack development
             </span>
@@ -107,7 +104,15 @@ export function Hero() {
             className="absolute inset-0"
           >
             <svg viewBox="0 0 400 400" className="h-full w-full text-blueprint/40">
-              <circle cx="200" cy="200" r="195" stroke="currentColor" strokeWidth="0.5" fill="none" strokeDasharray="2 4" />
+              <circle
+                cx="200"
+                cy="200"
+                r="195"
+                stroke="currentColor"
+                strokeWidth="0.5"
+                fill="none"
+                strokeDasharray="2 4"
+              />
               <circle cx="200" cy="200" r="170" stroke="currentColor" strokeWidth="0.5" fill="none" />
             </svg>
           </motion.div>
