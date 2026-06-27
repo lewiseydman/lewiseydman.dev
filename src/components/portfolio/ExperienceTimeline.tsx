@@ -35,7 +35,7 @@ function Gear({ teeth = 8 }: { teeth?: number }) {
       animate={reduce ? {} : { rotate: 360 }}
       transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
       viewBox="0 0 40 40"
-      className="h-10 w-10 text-blueprint"
+      className="h-10 w-10 text-sepia"
     >
       <g stroke="currentColor" strokeWidth="0.8" fill="none">
         <circle cx="20" cy="20" r="9" />

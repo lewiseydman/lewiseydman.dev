@@ -50,7 +50,7 @@ export function Tests() {
             </div>
             <h3 className="font-display text-2xl md:text-3xl">{t.title}</h3>
             <p className="text-sm leading-relaxed text-muted-foreground">{t.note}</p>
-            <div className="mt-2 h-px w-0 bg-blueprint transition-all duration-500 group-hover:w-full" />
+            <div className="mt-2 h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
           </motion.li>
         ))}
       </ol>
