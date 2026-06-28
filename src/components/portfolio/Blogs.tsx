@@ -1,7 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowUp, ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 import thumb from "@/assets/thumb-codex.jpg";
+import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
 
 type Blog = {
   id: string;
@@ -76,8 +77,21 @@ export function Blogs() {
   const [openId, setOpenId] = useState<string | null>(null);
   const open = blogs.find((b) => b.id === openId) ?? null;
 
+  const [hero, ...rest] = blogs;
+
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-10">
+      <PopoverSummaryStrip
+        label="Codex · featured"
+        items={blogs.slice(0, 3).map((b) => ({
+          kicker: b.date,
+          title: b.title,
+          dek: `${b.read} · ${b.tags.join(" · ")}`,
+          thumb,
+          onClick: () => setOpenId(b.id),
+        }))}
+      />
+
       <AnimatePresence mode="wait">
         {!open ? (
           <motion.div
@@ -86,57 +100,110 @@ export function Blogs() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3 }}
-            className="flex flex-col gap-8"
+            className="flex flex-col gap-12"
           >
-            <p className="font-display text-2xl leading-snug md:text-3xl">
-              Essays from the workshop &mdash;{" "}
-              <span className="italic text-sepia">on craft, teams, and the long view.</span>
-            </p>
-            <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
-              {blogs.map((b, i) => (
-                <motion.button
-                  key={b.id}
-                  type="button"
-                  onClick={() => setOpenId(b.id)}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: i * 0.06 }}
-                  className="group flex flex-col gap-4 bg-background p-5 text-left transition-colors hover:bg-card md:p-6"
-                >
-                  <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border bg-card">
-                    <img
-                      src={thumb}
-                      alt=""
-                      loading="lazy"
-                      className="h-full w-full object-cover mix-blend-multiply transition-transform duration-700 group-hover:scale-[1.03] dark:mix-blend-screen"
-                    />
-                    <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
-                    <div className="absolute left-2 top-2 font-mono-mar bg-background/80 px-2 py-0.5">
-                      Folio · {String(i + 1).padStart(2, "0")}
-                    </div>
-                  </div>
-                  <div className="flex items-baseline justify-between gap-3">
-                    <span className="font-mono-mar">{b.date}</span>
-                    <span className="font-mono-mar">{b.read}</span>
-                  </div>
-                  <h3 className="font-display text-2xl leading-tight tracking-[-0.01em] transition-colors group-hover:text-sepia md:text-3xl">
-                    {b.title}
-                  </h3>
-                  <p className="text-sm leading-relaxed text-muted-foreground">{b.dek}</p>
-                  <div className="mt-auto flex flex-wrap gap-2 pt-1">
-                    {b.tags.map((t) => (
-                      <span
-                        key={t}
-                        className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
-                </motion.button>
-              ))}
+            {/* Editorial header */}
+            <div className="flex flex-wrap items-end justify-between gap-4 border-b border-border pb-4">
+              <div className="flex items-baseline gap-4">
+                <span className="font-mono-mar">№ Codex · Vol. I</span>
+                <span className="hairline h-px w-12" />
+                <span className="font-mono-mar">Essays from the workshop</span>
+              </div>
+              <span className="font-mono-mar">{blogs.length} entries</span>
             </div>
+
+            {/* Hero feature */}
+            <motion.button
+              type="button"
+              onClick={() => setOpenId(hero.id)}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="group grid w-full gap-8 text-left md:grid-cols-[1.1fr_1fr] md:items-center"
+            >
+              <div className="relative aspect-[16/10] overflow-hidden rounded-sm border border-border bg-card md:aspect-[5/4]">
+                <img
+                  src={thumb}
+                  alt=""
+                  loading="lazy"
+                  className="h-full w-full object-cover mix-blend-multiply transition-transform duration-700 group-hover:scale-[1.02] dark:mix-blend-screen"
+                />
+                <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
+                <div className="absolute left-3 top-3 font-mono-mar bg-background/85 px-2 py-0.5">
+                  Feature · {hero.date}
+                </div>
+              </div>
+              <div className="flex flex-col gap-4">
+                <span className="font-mono-mar">Lewis Eydman · {hero.read}</span>
+                <h2 className="font-display text-4xl leading-[1.05] tracking-[-0.015em] transition-colors group-hover:text-sepia md:text-5xl">
+                  {hero.title}
+                </h2>
+                <p className="font-display text-xl italic text-sepia md:text-2xl">{hero.dek}</p>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {hero.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                <span className="font-mono-mar mt-2 inline-flex items-center gap-2 text-sepia transition-colors group-hover:text-foreground">
+                  Read essay
+                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </span>
+              </div>
+            </motion.button>
+
+            {/* Archive list */}
+            <section className="flex flex-col gap-4">
+              <div className="flex items-center gap-3">
+                <span className="font-mono-mar">Archivum · earlier folios</span>
+                <span className="hairline h-px flex-1" />
+              </div>
+              <ul className="flex flex-col">
+                {rest.map((b, i) => (
+                  <motion.li
+                    key={b.id}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: i * 0.05 }}
+                    className="border-t border-border last:border-b"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setOpenId(b.id)}
+                      className="group grid w-full grid-cols-[2.5rem_5.5rem_1fr_auto] items-baseline gap-4 py-5 text-left transition-colors hover:bg-sepia/[0.04] md:grid-cols-[3rem_7rem_1fr_5rem_8rem]"
+                    >
+                      <span className="font-mono-mar text-sepia">
+                        № {String(i + 2).padStart(2, "0")}
+                      </span>
+                      <span className="font-mono-mar">{b.date}</span>
+                      <span className="flex min-w-0 flex-col gap-1">
+                        <span className="font-display text-2xl leading-tight tracking-[-0.005em] transition-colors group-hover:text-sepia md:text-3xl">
+                          {b.title}
+                        </span>
+                        <span className="truncate text-sm leading-snug text-muted-foreground">
+                          {b.dek}
+                        </span>
+                      </span>
+                      <span className="font-mono-mar hidden md:inline">{b.read}</span>
+                      <span className="hidden justify-end gap-1.5 md:flex">
+                        {b.tags.map((t) => (
+                          <span
+                            key={t}
+                            className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground"
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </span>
+                    </button>
+                  </motion.li>
+                ))}
+              </ul>
+            </section>
           </motion.div>
         ) : (
           <motion.article
@@ -145,43 +212,90 @@ export function Blogs() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.35 }}
-            className="mx-auto flex w-full max-w-2xl flex-col gap-8"
+            className="grid gap-10 md:grid-cols-[14rem_1fr]"
           >
-            <button
-              type="button"
-              onClick={() => setOpenId(null)}
-              className="font-mono-mar group flex items-center gap-2 self-start hover:text-foreground"
-            >
-              <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-0.5" />
-              Back to Codex
-            </button>
-            <header className="flex flex-col gap-3 border-b border-border pb-6">
-              <div className="font-mono-mar flex items-center gap-3">
-                <span>{open.date}</span>
-                <span className="hairline h-px w-8" />
-                <span>{open.read}</span>
+            {/* Editorial sidebar */}
+            <aside className="flex flex-col gap-5 md:sticky md:top-2 md:self-start md:border-r md:border-border md:pr-6">
+              <button
+                type="button"
+                onClick={() => setOpenId(null)}
+                className="font-mono-mar group flex items-center gap-2 self-start hover:text-foreground"
+              >
+                <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-0.5" />
+                Back to Codex
+              </button>
+              <div className="flex flex-col gap-1">
+                <span className="font-mono-mar">Author</span>
+                <span className="font-display text-base">Lewis Eydman</span>
               </div>
-              <h1 className="font-display text-4xl leading-[1.05] tracking-[-0.015em] md:text-5xl">
-                {open.title}
-              </h1>
-              <p className="font-display text-xl italic text-sepia md:text-2xl">{open.dek}</p>
-            </header>
-            <div className="flex flex-col gap-6 text-[1.0625rem] leading-[1.8] text-foreground">
-              {open.body.map((p, i) => (
-                <p
-                  key={i}
-                  className={
-                    i === 0
-                      ? "first-letter:font-display first-letter:float-left first-letter:mr-3 first-letter:text-7xl first-letter:leading-[0.9] first-letter:text-sepia"
-                      : ""
-                  }
-                >
-                  {p}
-                </p>
-              ))}
+              <div className="flex flex-col gap-1">
+                <span className="font-mono-mar">Published</span>
+                <span className="font-display text-base">{open.date}</span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="font-mono-mar">Length</span>
+                <span className="font-display text-base">{open.read}</span>
+              </div>
+              <div className="flex flex-col gap-2">
+                <span className="font-mono-mar">Tags</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {open.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <a
+                href="#top"
+                className="font-mono-mar mt-2 inline-flex items-center gap-2 text-sepia hover:text-foreground"
+              >
+                <ArrowUp className="h-3 w-3" /> Back to top
+              </a>
+            </aside>
+
+            {/* Body */}
+            <div className="flex max-w-[64ch] flex-col gap-7">
+              <header className="flex flex-col gap-3 border-b border-border pb-6">
+                <span className="font-mono-mar">Essay · {open.date}</span>
+                <h1 className="font-display text-4xl leading-[1.05] tracking-[-0.015em] md:text-5xl">
+                  {open.title}
+                </h1>
+                <p className="font-display text-xl italic text-sepia md:text-2xl">{open.dek}</p>
+              </header>
+              {open.body.map((p, i) => {
+                // Pull-quote treatment on every third paragraph (after the first)
+                const isPull = i > 0 && i % 3 === 0;
+                if (isPull) {
+                  return (
+                    <blockquote
+                      key={i}
+                      className="my-2 border-l-2 border-sepia/60 pl-5 font-display text-2xl italic leading-snug text-foreground md:text-3xl"
+                    >
+                      {p}
+                    </blockquote>
+                  );
+                }
+                return (
+                  <p
+                    key={i}
+                    className={
+                      "text-[1.0625rem] leading-[1.8] text-foreground " +
+                      (i === 0
+                        ? "first-letter:font-display first-letter:float-left first-letter:mr-3 first-letter:text-7xl first-letter:leading-[0.9] first-letter:text-sepia"
+                        : "")
+                    }
+                  >
+                    {p}
+                  </p>
+                );
+              })}
+              <div className="hairline mt-4 h-px w-full" />
+              <p className="font-mono-mar self-center">&mdash; Fin &mdash;</p>
             </div>
-            <div className="hairline mt-4 h-px w-full" />
-            <p className="font-mono-mar self-center">&mdash; Fin &mdash;</p>
           </motion.article>
         )}
       </AnimatePresence>

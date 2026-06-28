@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import thumb from "@/assets/thumb-disputatio.jpg";
+import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
 
 type Test = {
   id: string;
@@ -61,6 +62,15 @@ export function Tests() {
 
   return (
     <div className="flex flex-col gap-8">
+      <PopoverSummaryStrip
+        label="Disputationes · index"
+        items={tests.slice(0, 3).map((t) => ({
+          kicker: `Disputatio · ${t.num}`,
+          title: t.title,
+          dek: t.domain,
+          onClick: () => setOpenId(t.id),
+        }))}
+      />
       <AnimatePresence mode="wait">
         {!open ? (
           <motion.div

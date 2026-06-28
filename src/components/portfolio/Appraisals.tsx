@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
 
 type Testimonial = {
   quote: string;
@@ -47,6 +48,14 @@ const testimonials: Testimonial[] = [
 export function Appraisals() {
   return (
     <div className="flex flex-col gap-8">
+      <PopoverSummaryStrip
+        label="Laudes · selected"
+        items={testimonials.slice(0, 3).map((t, i) => ({
+          kicker: `Laus · ${String(i + 1).padStart(2, "0")} · ${t.relation}`,
+          title: t.name,
+          dek: `${t.role} · ${t.org}`,
+        }))}
+      />
       <p className="font-display text-2xl leading-snug md:text-3xl">
         Laudes &mdash;{" "}
         <span className="italic text-sepia">

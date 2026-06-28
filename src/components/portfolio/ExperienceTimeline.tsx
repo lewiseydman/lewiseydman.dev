@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Download } from "lucide-react";
+import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
 
 const experience = [
   {
@@ -7,7 +8,7 @@ const experience = [
     role: "Communications Manager",
     org: "100Green · Ware, UK",
     notes:
-      "Own the energy quote journey end-to-end — research, roadmap, Figma, React build, Ofgem compliance. +19% sign-ups May–Jun 2026.",
+      "Own the energy quote journey end-to-end — research, roadmap, Figma, React build, A/B testing, Ofgem compliance. +19% sign-ups May–Jun 2026.",
   },
   {
     year: "Jun 2021 — Apr 2024",
@@ -28,8 +29,14 @@ const experience = [
     role: "Freelance Designer & Developer",
     org: "Independent",
     notes:
-      "Custom web apps from research to deployment — Figma prototypes, React frontends, CI/CD, plus open-source contribution on the side.",
+      "Custom web apps from research to deployment — Figma prototypes, React frontends, CI/CD, plus open-source contribution on the side. Career-break with Phipps Group (landscaping) sharpened the delivery instincts.",
   },
+];
+
+const education = [
+  { year: "2024", title: "Google UX Design", org: "Google" },
+  { year: "2016 — 2019", title: "BA Graphic Communication", org: "Norwich University of the Arts" },
+  { year: "2014 — 2016", title: "BTEC Ext. Diploma, Graphic Design", org: "Harlow College" },
 ];
 
 function Gear({ teeth = 8 }: { teeth?: number }) {
@@ -64,6 +71,26 @@ function Gear({ teeth = 8 }: { teeth?: number }) {
 export function ExperienceTimeline() {
   return (
     <div className="flex flex-col gap-10">
+      <PopoverSummaryStrip
+        label="Cursus · highlights"
+        items={[
+          {
+            kicker: "Now",
+            title: experience[0].role,
+            dek: experience[0].org,
+          },
+          {
+            kicker: "Most recent",
+            title: experience[1].role,
+            dek: experience[1].org,
+          },
+          {
+            kicker: "Earliest",
+            title: experience[2].role,
+            dek: experience[2].org,
+          },
+        ]}
+      />
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-5">
         <p className="font-display text-xl italic text-sepia md:text-2xl">
           A mechanical chronology &mdash; in eight working years.
@@ -131,6 +158,26 @@ export function ExperienceTimeline() {
             })}
           </ol>
       </div>
+
+      {/* education footer */}
+      <section className="border-t border-border pt-8">
+        <div className="mb-5 flex items-center gap-3">
+          <span className="font-mono-mar">Studia · Education</span>
+          <span className="hairline h-px flex-1" />
+        </div>
+        <ul className="grid gap-4 md:grid-cols-3">
+          {education.map((e) => (
+            <li
+              key={e.title}
+              className="flex flex-col gap-1 rounded-sm border border-border bg-card/40 p-4"
+            >
+              <span className="font-mono-mar">{e.year}</span>
+              <span className="font-display text-lg leading-tight">{e.title}</span>
+              <span className="font-display italic text-sepia">{e.org}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }

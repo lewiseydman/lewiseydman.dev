@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import portrait from "@/assets/portrait.png";
+import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
 
 const disciplines = [
   {
@@ -36,109 +37,213 @@ const stats: Array<[string, string]> = [
 ];
 
 const interests = [
-  "Cycling",
-  "Film photography",
-  "Bouldering",
-  "Generative art",
+  "Coding",
+  "Gaming",
+  "Making music",
+  "Muay Thai",
+  "Landscaping",
   "Specialty coffee",
   "Open source",
-  "Sci-fi literature",
   "Sketching",
+];
+
+const whatIDo = [
+  "Product strategy & roadmaps",
+  "UX & service design",
+  "Frontend & full-stack engineering",
+  "Stakeholder & delivery leadership",
+];
+
+const howIWork = [
+  "Outcomes over rigid roadmaps.",
+  "Evidence-led — analytics, A/B testing, usability.",
+  "Sketch first, then ship the prototype.",
+  "Accessible & regulation-aware by default.",
 ];
 
 export function About() {
   return (
-    <div className="flex flex-col gap-10">
-      <div className="grid gap-10 md:grid-cols-[0.85fr_1.15fr] md:gap-14">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9 }}
-            className="relative"
-          >
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm border border-border bg-card paper-grain">
-              <img
-                src={portrait}
-                alt="Sketch portrait of Lewis Eydman"
-                loading="lazy"
-                className="h-full w-full object-contain mix-blend-multiply dark:mix-blend-screen dark:invert"
-              />
-              <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay pointer-events-none" />
-              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                <span className="font-mono-mar">Stud. ·  retrato</span>
-                <span className="font-mono-mar">N° 042</span>
-              </div>
-            </div>
-            <div className="mt-4 flex items-center justify-between">
-              <span className="font-mono-mar">Plate I</span>
-              <span className="font-mono-mar">London · MMXXVI</span>
-            </div>
-          </motion.div>
+    <div className="flex flex-col gap-12">
+      <PopoverSummaryStrip
+        label="Vita · summary"
+        items={[
+          {
+            kicker: "Practice",
+            title: "Product, design & engineering",
+            dek: "One opinionated practice — sketch, ship, measure.",
+          },
+          {
+            kicker: "Systems",
+            title: "React · Design systems",
+            dek: "Full-stack tools, JSON-LD, CI/CD pipelines.",
+          },
+          {
+            kicker: "Currently",
+            title: "Communications Manager",
+            dek: "Owning the quote journey at 100Green.",
+          },
+        ]}
+      />
 
-          <div className="flex flex-col gap-10">
-            <motion.p
+      {/* Editorial intro */}
+      <section className="flex flex-col gap-5">
+        <span className="font-mono-mar">Lewis Eydman · De Ipso</span>
+        <h2 className="font-display text-4xl leading-[1.05] tracking-[-0.015em] md:text-5xl">
+          Product, engineering, and design in one{" "}
+          <span className="italic text-sepia">opinionated practice.</span>
+        </h2>
+        <div className="grid gap-6 text-[0.95rem] leading-[1.7] text-muted-foreground md:grid-cols-2 md:gap-10">
+          <p>
+            I&rsquo;m a product manager who can sketch the interface in the morning,
+            ship the React in the afternoon, and argue both sides of the technical
+            trade-off. I care about helping ambitious teams present their products
+            with clarity, taste and a strong point of view.
+          </p>
+          <p>
+            My background blends service design, UI/UX and full-stack engineering.
+            Currently building at 100Green — energy-quote journeys, regulatory
+            compliance, and the unglamorous work that turns a sign-up form into a
+            measurable business outcome.
+          </p>
+        </div>
+      </section>
+
+      {/* At a glance band */}
+      <section className="flex flex-col gap-5">
+        <div className="flex items-center gap-3">
+          <span className="font-mono-mar">At a glance · Summa</span>
+          <span className="hairline h-px flex-1" />
+        </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          {[
+            {
+              kicker: "Current",
+              body: "Communications Manager at 100Green (UK).",
+            },
+            {
+              kicker: "Experience",
+              body: "7+ years across product, design and engineering.",
+            },
+            {
+              kicker: "Background",
+              body: "Service design, UI/UX, full-stack React.",
+            },
+          ].map((c) => (
+            <div
+              key={c.kicker}
+              className="flex flex-col gap-3 rounded-sm border border-border bg-card/40 p-5"
+            >
+              <span className="font-mono text-[0.6rem] uppercase tracking-widest text-sepia">
+                {c.kicker}
+              </span>
+              <p className="text-[0.95rem] leading-relaxed text-foreground">{c.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* What I do / How I work — numbered two-column */}
+      <section className="grid gap-10 md:grid-cols-2 md:gap-14">
+        {[
+          { title: "What I do", items: whatIDo },
+          { title: "How I work", items: howIWork },
+        ].map((col) => (
+          <div key={col.title} className="flex flex-col gap-4">
+            <h3 className="font-display text-2xl tracking-[-0.01em] md:text-3xl">
+              {col.title}
+            </h3>
+            <ul className="flex flex-col">
+              {col.items.map((line, i) => (
+                <li
+                  key={line}
+                  className="flex items-baseline gap-4 border-b border-border py-3 last:border-b-0"
+                >
+                  <span className="font-mono w-8 shrink-0 text-[0.65rem] uppercase tracking-widest text-sepia">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-[0.95rem] leading-snug text-foreground">{line}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </section>
+
+      {/* Portrait + Disciplines (manuscript block — kept) */}
+      <section className="grid gap-10 border-t border-border pt-10 md:grid-cols-[0.85fr_1.15fr] md:gap-14">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.9 }}
+          className="relative"
+        >
+          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm border border-border bg-card paper-grain">
+            <img
+              src={portrait}
+              alt="Sketch portrait of Lewis Eydman"
+              loading="lazy"
+              className="h-full w-full object-contain mix-blend-multiply dark:mix-blend-screen dark:invert"
+            />
+            <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay pointer-events-none" />
+            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+              <span className="font-mono-mar">Stud. · retrato</span>
+              <span className="font-mono-mar">N° 042</span>
+            </div>
+          </div>
+          <div className="mt-4 flex items-center justify-between">
+            <span className="font-mono-mar">Plate I</span>
+            <span className="font-mono-mar">London · MMXXVI</span>
+          </div>
+        </motion.div>
+
+        <div className="relative flex flex-col">
+          <div className="pointer-events-none absolute bottom-2 left-[0.45rem] top-2 w-px bg-sepia/30" />
+          {disciplines.map((d, i) => (
+            <motion.div
+              key={d.label}
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              className="font-display text-2xl leading-relaxed text-foreground md:text-3xl"
+              transition={{ duration: 0.55, delay: 0.08 * i }}
+              className="relative flex gap-6 border-b border-border py-7 last:border-b-0"
             >
-              I build software the way the masters built machines &mdash; with{" "}
-              <span className="italic text-sepia">pencil first</span>, then the workshop. A product
-              manager who can sketch the interface, ship the prototype, and argue both sides of the
-              technical trade-off.
-            </motion.p>
-
-            <div className="relative flex flex-col">
-              {/* manuscript spine */}
-              <div className="pointer-events-none absolute bottom-2 left-[0.45rem] top-2 w-px bg-sepia/30" />
-              {disciplines.map((d, i) => (
-                <motion.div
-                  key={d.label}
-                  initial={{ opacity: 0, y: 12 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.55, delay: 0.08 * i }}
-                  className="relative flex gap-6 border-b border-border py-7 last:border-b-0"
-                >
-                  {/* spine dot */}
-                  <span className="absolute left-0 top-[2.1rem] flex h-[0.9rem] w-[0.9rem] items-center justify-center">
-                    <span className="h-2 w-2 rounded-full border border-sepia bg-background" />
-                  </span>
-                  <div className="w-16 shrink-0 pl-7 pt-1">
-                    <span className="font-mono-mar block">§ {d.numeral}</span>
+              <span className="absolute left-0 top-[2.1rem] flex h-[0.9rem] w-[0.9rem] items-center justify-center">
+                <span className="h-2 w-2 rounded-full border border-sepia bg-background" />
+              </span>
+              <div className="w-16 shrink-0 pl-7 pt-1">
+                <span className="font-mono-mar block">§ {d.numeral}</span>
+              </div>
+              <div className="flex flex-1 flex-col gap-2">
+                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                  <h3 className="font-display text-3xl tracking-[-0.01em] md:text-4xl">{d.label}</h3>
+                  <p className="font-display text-base italic text-sepia md:text-lg">
+                    — {d.principle}
+                  </p>
+                </div>
+                <p className="max-w-prose text-sm leading-relaxed text-muted-foreground">{d.body}</p>
+                <div className="mt-1 flex flex-wrap items-center gap-2 pt-1">
+                  <span className="font-mono-mar">Instruments</span>
+                  <span className="hairline h-px w-6" />
+                  <div className="flex flex-wrap gap-1.5">
+                    {d.tools.map((t) => (
+                      <span
+                        key={t}
+                        className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground"
+                      >
+                        {t}
+                      </span>
+                    ))}
                   </div>
-                  <div className="flex flex-1 flex-col gap-2">
-                    <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                      <h3 className="font-display text-3xl tracking-[-0.01em] md:text-4xl">{d.label}</h3>
-                      <p className="font-display text-base italic text-sepia md:text-lg">— {d.principle}</p>
-                    </div>
-                    <p className="max-w-prose text-sm leading-relaxed text-muted-foreground">{d.body}</p>
-                    <div className="mt-1 flex flex-wrap items-center gap-2 pt-1">
-                      <span className="font-mono-mar">Instruments</span>
-                      <span className="hairline h-px w-6" />
-                      <div className="flex flex-wrap gap-1.5">
-                        {d.tools.map((t) => (
-                          <span
-                            key={t}
-                            className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground"
-                          >
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-          </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
+      </section>
 
-      {/* full-width stats band */}
-      <div className="border-t border-border pt-8">
+      {/* Stats */}
+      <section className="border-t border-border pt-8">
         <div className="mb-5 flex items-center gap-3">
           <span className="font-mono-mar">Quantities · Summa</span>
           <span className="hairline h-px flex-1" />
@@ -151,10 +256,10 @@ export function About() {
             </div>
           ))}
         </div>
-      </div>
+      </section>
 
-      {/* hobbies & interests */}
-      <div className="border-t border-border pt-8">
+      {/* Marginalia / Interests */}
+      <section className="border-t border-border pt-8">
         <div className="mb-5 flex items-center gap-3">
           <span className="font-mono-mar">Marginalia · Beyond the desk</span>
           <span className="hairline h-px flex-1" />
@@ -175,7 +280,7 @@ export function About() {
             ))}
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

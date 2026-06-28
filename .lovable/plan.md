@@ -1,43 +1,59 @@
-# Plan
+## 1. New résumé wiring
 
-## 1. Résumé file rename + in-popup PDF viewer
-- Rename `public/resume.pdf` → `public/Lewis_Eydman_Resume.pdf` (recruiter-friendly filename for downloads/saves).
-- Update `ExperienceTimeline.tsx` download link to the new path; keep the explicit `download` attribute so the file saves with that name.
-- In `FooterIcons.tsx`, change the Résumé icon from an `<a href>` to a button that opens a new `ResumeDialog` instead of navigating.
-- New `src/components/portfolio/ResumeDialog.tsx`:
-  - Reuses `SectionDialog` shell (numeral `※`, latin `Curriculum`, english `Résumé`) for consistent padding + aesthetic.
-  - Renders the PDF via a native `<object data="/Lewis_Eydman_Resume.pdf#view=FitH" type="application/pdf">` with an `<iframe>` fallback inside, plus a visible "Download PDF" link and "Open in new tab" link as accessible fallbacks (covers browsers that block embedded PDFs, screen readers, and mobile Safari).
-  - Dialog is keyboard-dismissible (Radix default), `aria-label="Résumé of Lewis Eydman"`, focus trapped, scroll-locked. Wrapper has `role="document"`.
-- Wire dialog state in `VitruvianStage` (or local state in `FooterIcons`) — local state in `FooterIcons` is simpler and keeps the stage clean.
+- Replace `public/Lewis_Eydman_Resume.pdf` with the newly uploaded PDF (overwrite same filename so existing links keep working).
+- `ExperienceTimeline.tsx`: tighten copy to match the refreshed résumé (100Green Communications Manager, ITS Frontend Dev, ITS Designer, Freelance, Phipps Group career-break note in the trailing card, Google UX Design + NUA Graphic Communication in a compact "Education" footer beneath the timeline).
 
-## 2. About — stats + hobbies
-- Move the 4-stat grid out of the right column and place it as a **full-width band directly beneath the portrait+disciplines section**.
-- Replace stats with more universally recognised, still-honest metrics:
-  - `7+` Years shipping
-  - `20+` Products launched
-  - `4` Industries served (energy, retail, education, freelance)
-  - `100%` On-time delivery
-  (Exact labels can be tuned, but all are recruiter/client-legible and not vague like "Disciplines woven".)
-- Add a new **Hobbies & Interests** block below the stats:
-  - Manuscript-style heading ("Marginalia · Beyond the desk") with a short intro line.
-  - Tag chips reusing the existing `Instruments` chip style: e.g. Cycling, Film photography, Bouldering, Generative art, Specialty coffee, Open-source, Sci-fi literature, Sketching. (Final list TBD — placeholders honouring the tone.)
+## 2. Résumé PDF viewer (footer button)
 
-## 3. Sphere line colour + opacity (red-arrow lines)
-- The arrow points to the **three.js wireframe lines**. Currently they're already `#1f1812` (ink) but the inner detailed icosahedron at `opacity 0.07` is what dominates and reads as cool/grey against the parchment.
-- In `VitruvianScene.tsx`: switch all wireframe materials to the exact Vitruvian outline ink token (use `var(--ink)` value resolved at runtime via `getComputedStyle`, or hard-code the matching sepia-ink `#3a2a1f` we use for the figure) and lower opacities further: outer `0.04`, inner `0.05`, rings `0.08 / 0.06`. This warms them into the same family as the figure but keeps them clearly more transparent.
+In `ResumeDialog.tsx`, change the embed URL fragment from `#view=FitH` to `#pagemode=thumbs&zoom=100` on both `<object data>` and the `<iframe src>` so the document opens with the thumbnail sidebar visible and at 100% zoom by default (matching what the user means by "sidebar"). Keep "Open in new tab" and "Download" actions untouched.
 
-## 4. Responsive scaling of orbit labels (laptop sizes)
-- Problem: at ~1280–1500px the labels sit too far from the centerpiece (large dead gap) because `tailLen` and `OUTER_R` are fixed fractions of the stage square, but the stage square is capped at `820px` while the viewport is wider.
-- Changes in `VitruvianStage.tsx`:
-  - Make the stage square fluid: replace `w-[min(78vh,88vw)] max-w-[820px]` with a fluid clamp that grows with viewport: `w-[min(82vh,72vw)] max-w-[960px] xl:max-w-[1100px]` so the figure scales with available width.
-  - Increase `OUTER_R` slightly on wider breakpoints by passing breakpoint-aware values (track via a `useMemo` reading `window.innerWidth` on resize, or simpler: CSS-variable-driven radii). Simplest implementation: introduce two presets, `{ inner: 0.32, outer: 0.48 }` for ≤lg and `{ inner: 0.34, outer: 0.5 }` for xl+, switched via a `matchMedia` hook.
-- In `OrbitLabel.tsx` / `OrbitLines.tsx`: make `tailLen` responsive too — shrink it on narrower laptop widths (e.g. `0.12` at <1400px, `0.17` at ≥1400px). Pass it as a prop from the stage so both files stay in sync.
-- Net effect: on a 13–15" laptop the labels move inward, hug the orbit, and scale proportionally with the centerpiece instead of floating against the page edges. Mobile fallback (the chip row) is untouched.
+## 3. Shared "pill summary strip" for every popover
 
-## 5. Project overview (chat reply, not implemented)
-After applying the plan I'll include a short written review covering: what's working (aesthetic cohesion, single-fold concept, content depth), suggested improvements (perf budget for three.js on low-end devices, real case-study imagery, SEO/meta per-section, motion-reduction polish, analytics, possible CMS path), and risks (PDF embedding on mobile Safari, asset weight).
+Reference screenshots show a row of summary pills with a small label + one-line dek directly beneath the popover header (e.g. *Practice / Systems / Currently*, *Jonathan / Collaboration / Delivery*, featured blog thumbnails, featured Works thumbnails). Implement once, reuse everywhere.
 
-## Technical notes
-- No new dependencies. Native `<object>`/`<iframe>` PDF embed works on all modern desktops; mobile devices get the explicit download/open-in-tab fallback inside the same dialog.
-- All colour values stay tokenised via existing CSS variables; no hardcoded utility colours.
-- Files touched: `public/resume.pdf` (rename), `FooterIcons.tsx`, `ExperienceTimeline.tsx`, `About.tsx`, `VitruvianScene.tsx`, `VitruvianStage.tsx`, `OrbitLabel.tsx`, plus new `ResumeDialog.tsx`.
+- New component: `src/components/portfolio/PopoverSummaryStrip.tsx`. Accepts an array of items: `{ kicker, title, dek, thumb? }`. Renders a horizontal row (2–4 cards) inside the dialog body — pill-shaped, hairline border, optional 40×24 thumbnail at the left, small uppercase kicker, bold title, muted one-line dek. Hover lift + sepia underline. Wraps to a single column on mobile.
+- Update `SectionDialog.tsx` to accept an optional `summary` slot rendered above the section body but inside the unified padded container (no padding drift).
+- Wire each section to pass a `summary`:
+  - **About**: `Practice` (Product, design, and engineering in one practice), `Systems` (React, design systems, full-stack tooling), `Currently` (Communications Manager at 100Green).
+  - **Opera (Work)**: one pill per project with its existing thumb + Latin `Opus · I/II/III/IV`, title, blurb (mirrors the screenshot's Works strip).
+  - **Codex (Blog)**: three featured/most-recent posts with thumbnails (mirrors screenshot's Blog strip).
+  - **Disputatio (Tests)**: each disputatio's number + title + domain.
+  - **Laudes (Testimonials)**: first 3 testimonials, name + relation + truncated quote.
+  - **Cursus (Experience)**: three timeline highlights (Now / Most-recent shipped / Earliest).
+
+## 4. Differentiate Blog popover from Work / Tests
+
+Today, Blogs/Works/Tests all use the same "grid of image cards → back-link detail" layout, which is why they read the same. Rework `Blogs.tsx` into an editorial magazine layout:
+
+- **Hero feature**: the most recent post takes a full-width card — large 16:7 image on the left, large display title + dek on the right, byline (Lewis Eydman · date · read time), tag chips, "Read essay →" CTA. Distinctive from Works' grid.
+- **Beneath**: an "Archive" list (no thumbnails) of remaining posts as numbered table rows — `№`, date, title (display serif), dek (muted), read time, right-aligned tag — hairline dividers between rows. Reads like the contents page of a journal, nothing like the image-grid pattern Works uses.
+- **Detail view**: keep the existing typeset article but add a left-aligned editorial sidebar (sticky on desktop) with date, author, read time, tags, and a tiny "↑ Top / ← Back to Codex" rail. Body widens to ~64ch with a real drop cap and pull-quote treatment (italic display, hairline left border) every few paragraphs.
+- Reuse PopoverSummaryStrip for the three featured posts above the hero.
+
+## 5. About section restructure
+
+Rework `About.tsx` to follow the reference hierarchy while keeping our renaissance tone:
+
+- Open with a single editorial headline + two-column dek (mirrors "Product, engineering, and design in one opinionated practice" with the existing tone of voice). Author kicker line above (`LEWIS EYDMAN`).
+- **At a glance** band: 3 stat-cards (`Current` = role at 100Green, `Experience` = 7+ years across design, engineering, product, `Background` = service design, UI/UX, full-stack). Same hairline-card treatment as the screenshot.
+- **What I do** + **How I work** as a two-column numbered list (4 items each, `01 02 03 04` in mono):
+  - *What I do*: Product strategy & roadmaps · UX & service design · Frontend & full-stack engineering · Stakeholder & delivery leadership.
+  - *How I work*: Outcomes over rigid roadmaps · Evidence-led, A/B-tested · Sketch first, ship the prototype · Accessible & regulation-aware by default.
+- Move existing **Disciplines** (Design / Engineering / Product manuscript block), **Quantities** (stats), and **Marginalia** (interests, refreshed with résumé-accurate items: coding, gaming, making music, Muay Thai, landscaping, etc.) below the new structure so nothing valuable is lost.
+- Numerals + Latin kickers stay; the layout is the only thing being restructured.
+
+## 6. Files touched
+
+- `public/Lewis_Eydman_Resume.pdf` (replace)
+- `src/components/portfolio/ResumeDialog.tsx`
+- `src/components/portfolio/SectionDialog.tsx`
+- `src/components/portfolio/PopoverSummaryStrip.tsx` (new)
+- `src/components/portfolio/About.tsx`
+- `src/components/portfolio/Blogs.tsx`
+- `src/components/portfolio/SelectedWork.tsx` (pass summary)
+- `src/components/portfolio/Tests.tsx` (pass summary)
+- `src/components/portfolio/Appraisals.tsx` (pass summary)
+- `src/components/portfolio/ExperienceTimeline.tsx` (pass summary + résumé copy refresh)
+- `src/components/portfolio/VitruvianStage.tsx` (pipe `summary` prop into each `SectionDialog` invocation)
+
+No backend, routing, or design-token changes — all work stays in presentation components.
