@@ -36,13 +36,13 @@ const stats: Array<[string, string]> = [
 ];
 
 const interests = [
-  "Cycling",
-  "Film photography",
-  "Bouldering",
-  "Generative art",
-  "Specialty coffee",
+  "Coding",
+  "Gaming",
+  "Making music",
+  "Muay Thai",
   "Open source",
-  "Sci-fi literature",
+  "Landscaping",
+  "Generative art",
   "Sketching",
 ];
 
