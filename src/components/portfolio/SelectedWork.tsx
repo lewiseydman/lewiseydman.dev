@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import thumb from "@/assets/thumb-opera.jpg";
+import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
 
 type CaseStudySection = { heading: string; body: string };
 
@@ -172,6 +173,16 @@ export function SelectedWork() {
 
   return (
     <div className="flex flex-col gap-8">
+      <PopoverSummaryStrip
+        label="Opera · index"
+        items={projects.map((p) => ({
+          kicker: `Opus · ${p.num}`,
+          title: p.title,
+          dek: p.role,
+          thumb,
+          onClick: () => setOpenId(p.id),
+        }))}
+      />
       <AnimatePresence mode="wait">
         {!open ? (
           <motion.div
