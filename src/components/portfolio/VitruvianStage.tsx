@@ -1,4 +1,5 @@
 import { Suspense, lazy, useEffect, useState } from "react";
+import { ChevronRight } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import vitruvian from "@/assets/vitruvian.png";
 import { OrbitLabel, OrbitLines, type OrbitItem } from "./OrbitLabel";
@@ -66,27 +67,11 @@ const sections: Record<
 
 const INNER_R = 0.32;
 const OUTER_R = 0.48;
-
-function useRadii() {
-  const [v, setV] = useState({ inner: INNER_R, outer: OUTER_R, tail: 0.13 });
-  useEffect(() => {
-    const update = () => {
-      const w = window.innerWidth;
-      if (w >= 1536) setV({ inner: 0.34, outer: 0.5, tail: 0.17 });
-      else if (w >= 1280) setV({ inner: 0.33, outer: 0.49, tail: 0.14 });
-      else setV({ inner: 0.32, outer: 0.47, tail: 0.11 });
-    };
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
-  return v;
-}
+const TAIL_LEN = 0.17;
 
 export function VitruvianStage() {
   const reduce = useReducedMotion();
   const [active, setActive] = useState<string | null>(null);
-  const radii = useRadii();
 
   // sync with hash
   useEffect(() => {
@@ -147,9 +132,22 @@ export function VitruvianStage() {
         <span className="hairline h-px w-10" />
       </motion.div>
 
+      {/* screen-reader nav landmark mirroring the radial labels */}
+      <nav aria-label="Sections" className="sr-only">
+        <ul>
+          {items.map((item) => (
+            <li key={item.id}>
+              <button type="button" onClick={() => onOpen(item.id)}>
+                {item.english} ({item.latin})
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
       {/* stage */}
       <div className="relative my-6 flex w-full flex-1 items-center justify-center">
-        <div className="relative aspect-square w-[min(82vh,72vw)] max-w-[920px] overflow-visible 2xl:max-w-[1060px]">
+        <div className="relative aspect-square w-[min(78vh,88vw)] max-w-[820px] overflow-visible">
           {/* Vitruvian image — sits inside the sphere */}
           <motion.div
             initial={{ opacity: 0, scale: 0.92 }}
@@ -166,12 +164,15 @@ export function VitruvianStage() {
           </motion.div>
 
           {/* three.js sphere — rendered ON TOP of figure with low opacity so the
-              wireframe visually wraps the Vitruvian inside it. */}
-          <div className="pointer-events-none absolute inset-0 z-20">
-            <Suspense fallback={null}>
-              <VitruvianScene />
-            </Suspense>
-          </div>
+              wireframe visually wraps the Vitruvian inside it. Skipped entirely
+              when the user prefers reduced motion (perf + a11y). */}
+          {!reduce ? (
+            <div className="pointer-events-none absolute inset-0 z-20" aria-hidden="true">
+              <Suspense fallback={null}>
+                <VitruvianScene paused={!!active} />
+              </Suspense>
+            </div>
+          ) : null}
 
           {/* outer rotating circle hairlines */}
           <motion.div
@@ -223,7 +224,7 @@ export function VitruvianStage() {
 
           {/* leader lines */}
           <div className="absolute inset-0 z-30">
-            <OrbitLines items={items} innerR={radii.inner} outerR={radii.outer} tailLen={radii.tail} />
+            <OrbitLines items={items} innerR={INNER_R} outerR={OUTER_R} tailLen={TAIL_LEN} />
           </div>
 
           {/* labels (desktop only — visible at md+) */}
@@ -232,9 +233,9 @@ export function VitruvianStage() {
               <OrbitLabel
                 key={item.id}
                 item={item}
-                innerR={radii.inner}
-                outerR={radii.outer}
-                tailLen={radii.tail}
+                innerR={INNER_R}
+                outerR={OUTER_R}
+                tailLen={TAIL_LEN}
                 index={i}
                 onOpen={onOpen}
               />
@@ -261,21 +262,31 @@ export function VitruvianStage() {
         </p>
       </motion.div>
 
-      {/* mobile orbit fallback */}
-      <div className="relative z-10 mt-6 flex flex-wrap items-center justify-center gap-2 md:hidden">
-        {items.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => onOpen(item.id)}
-            className="flex items-baseline gap-2 rounded-full border border-border bg-background/70 px-3 py-1.5 backdrop-blur-md"
-          >
-            <span className="font-mono text-[0.6rem] uppercase tracking-widest text-sepia">{item.numeral}</span>
-            <span className="font-display text-base">{item.latin}</span>
-            <span className="font-mono-mar">· {item.english}</span>
-          </button>
-        ))}
-      </div>
+      {/* mobile nav — stacked manuscript index. Easier to scan than the
+          orbit chips: each row reads like a table of contents entry. */}
+      <nav aria-label="Sections (mobile)" className="relative z-10 mt-6 w-full md:hidden">
+        <ul className="mx-auto flex w-full max-w-md flex-col divide-y divide-border/60 rounded-sm border border-border/60 bg-background/70 backdrop-blur-md">
+          {items.map((item) => (
+            <li key={item.id}>
+              <button
+                type="button"
+                onClick={() => onOpen(item.id)}
+                aria-haspopup="dialog"
+                className="group flex w-full items-center gap-4 px-4 py-3 text-left transition-colors hover:bg-sepia/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40"
+              >
+                <span className="font-mono w-6 shrink-0 text-[0.65rem] uppercase tracking-widest text-sepia">
+                  {item.numeral}
+                </span>
+                <span className="flex min-w-0 flex-1 flex-col">
+                  <span className="font-display text-lg leading-tight">{item.latin}</span>
+                  <span className="font-mono-mar text-[0.65rem]">{item.english}</span>
+                </span>
+                <ChevronRight className="h-4 w-4 shrink-0 text-sepia transition-transform group-hover:translate-x-0.5" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
       {/* footer icons */}
       <div className="relative z-10 mt-6 flex w-full items-center justify-center">
