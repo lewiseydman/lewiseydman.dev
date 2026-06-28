@@ -26,10 +26,10 @@ function WireSphere() {
         <mesh>
           <icosahedronGeometry args={[2.0, 1]} />
           <meshBasicMaterial
-            color="#1f1812"
+            color="#3a2a1f"
             wireframe
             transparent
-            opacity={0.06}
+            opacity={0.04}
           />
         </mesh>
       </group>
@@ -39,20 +39,20 @@ function WireSphere() {
         <mesh>
           <icosahedronGeometry args={[1.65, 3]} />
           <meshBasicMaterial
-            color="#1f1812"
+            color="#3a2a1f"
             wireframe
             transparent
-            opacity={0.07}
+            opacity={0.05}
           />
         </mesh>
         {/* equatorial rings */}
         <mesh rotation={[Math.PI / 2, 0, 0]}>
           <torusGeometry args={[1.85, 0.002, 8, 128]} />
-          <meshBasicMaterial color="#1f1812" transparent opacity={0.14} />
+          <meshBasicMaterial color="#3a2a1f" transparent opacity={0.08} />
         </mesh>
         <mesh rotation={[0, 0, Math.PI / 3]}>
           <torusGeometry args={[1.78, 0.002, 8, 128]} />
-          <meshBasicMaterial color="#1f1812" transparent opacity={0.10} />
+          <meshBasicMaterial color="#3a2a1f" transparent opacity={0.06} />
         </mesh>
       </group>
     </>

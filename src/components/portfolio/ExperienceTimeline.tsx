@@ -69,8 +69,8 @@ export function ExperienceTimeline() {
           A mechanical chronology &mdash; in eight working years.
         </p>
         <a
-          href="/resume.pdf"
-          download
+          href="/Lewis_Eydman_Resume.pdf"
+          download="Lewis_Eydman_Resume.pdf"
           className="font-mono-mar group inline-flex items-center gap-2 rounded-full border border-sepia/60 bg-background px-4 py-2 text-sepia transition-all hover:border-sepia hover:bg-sepia hover:text-parchment"
         >
           <Download className="h-3.5 w-3.5 transition-transform group-hover:translate-y-0.5" />

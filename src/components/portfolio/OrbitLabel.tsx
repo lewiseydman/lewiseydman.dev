@@ -17,11 +17,13 @@ type Props = {
   innerR: number;
   /** Radius where the node sits, as a 0-1 fraction. */
   outerR: number;
+  /** Tail length as 0-1 fraction. */
+  tailLen?: number;
   index: number;
   onOpen: (id: string) => void;
 };
 
-export function OrbitLabel({ item, innerR, outerR, index, onOpen }: Props) {
+export function OrbitLabel({ item, innerR, outerR, tailLen = 0.17, index, onOpen }: Props) {
   const reduce = useReducedMotion();
   const rad = (item.angle * Math.PI) / 180;
   const cos = Math.cos(rad);
@@ -35,8 +37,6 @@ export function OrbitLabel({ item, innerR, outerR, index, onOpen }: Props) {
   const x2 = cx + cos * outerR;
   const y2 = cy + sin * outerR;
 
-  // tail goes horizontally outward from the node toward the page edge
-  const tailLen = 0.17;
   const tx = item.side === "right" ? x2 + tailLen : x2 - tailLen;
 
   // label HTML position (use the tail end)
@@ -120,10 +120,12 @@ export function OrbitLines({
   items,
   innerR,
   outerR,
+  tailLen = 0.17,
 }: {
   items: OrbitItem[];
   innerR: number;
   outerR: number;
+  tailLen?: number;
 }) {
   const reduce = useReducedMotion();
   return (
@@ -142,7 +144,6 @@ export function OrbitLines({
         const y1 = cy + sin * innerR;
         const x2 = cx + cos * outerR;
         const y2 = cy + sin * outerR;
-        const tailLen = 0.17;
         const tx = item.side === "right" ? x2 + tailLen : x2 - tailLen;
 
         return (

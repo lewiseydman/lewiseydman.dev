@@ -67,9 +67,26 @@ const sections: Record<
 const INNER_R = 0.32;
 const OUTER_R = 0.48;
 
+function useRadii() {
+  const [v, setV] = useState({ inner: INNER_R, outer: OUTER_R, tail: 0.13 });
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth;
+      if (w >= 1536) setV({ inner: 0.34, outer: 0.5, tail: 0.17 });
+      else if (w >= 1280) setV({ inner: 0.33, outer: 0.49, tail: 0.14 });
+      else setV({ inner: 0.32, outer: 0.47, tail: 0.11 });
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+  return v;
+}
+
 export function VitruvianStage() {
   const reduce = useReducedMotion();
   const [active, setActive] = useState<string | null>(null);
+  const radii = useRadii();
 
   // sync with hash
   useEffect(() => {
@@ -132,7 +149,7 @@ export function VitruvianStage() {
 
       {/* stage */}
       <div className="relative my-6 flex w-full flex-1 items-center justify-center">
-        <div className="relative aspect-square w-[min(78vh,88vw)] max-w-[820px] overflow-visible">
+        <div className="relative aspect-square w-[min(82vh,72vw)] max-w-[920px] overflow-visible 2xl:max-w-[1060px]">
           {/* Vitruvian image — sits inside the sphere */}
           <motion.div
             initial={{ opacity: 0, scale: 0.92 }}
@@ -206,13 +223,21 @@ export function VitruvianStage() {
 
           {/* leader lines */}
           <div className="absolute inset-0 z-30">
-            <OrbitLines items={items} innerR={INNER_R} outerR={OUTER_R} />
+            <OrbitLines items={items} innerR={radii.inner} outerR={radii.outer} tailLen={radii.tail} />
           </div>
 
           {/* labels (desktop only — visible at md+) */}
           <div className="absolute inset-0 z-40 hidden md:block">
             {items.map((item, i) => (
-              <OrbitLabel key={item.id} item={item} innerR={INNER_R} outerR={OUTER_R} index={i} onOpen={onOpen} />
+              <OrbitLabel
+                key={item.id}
+                item={item}
+                innerR={radii.inner}
+                outerR={radii.outer}
+                tailLen={radii.tail}
+                index={i}
+                onOpen={onOpen}
+              />
             ))}
           </div>
         </div>

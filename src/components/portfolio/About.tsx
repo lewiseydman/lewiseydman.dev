@@ -28,6 +28,24 @@ const disciplines = [
   },
 ];
 
+const stats: Array<[string, string]> = [
+  ["7+", "Years shipping"],
+  ["20+", "Products launched"],
+  ["4", "Industries served"],
+  ["100%", "On-time delivery"],
+];
+
+const interests = [
+  "Cycling",
+  "Film photography",
+  "Bouldering",
+  "Generative art",
+  "Specialty coffee",
+  "Open source",
+  "Sci-fi literature",
+  "Sketching",
+];
+
 export function About() {
   return (
     <div className="flex flex-col gap-10">
@@ -116,21 +134,48 @@ export function About() {
               ))}
             </div>
 
-            <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
-              {[
-                ["07", "Years shipping"],
-                ["+19%", "Sign-up uplift"],
-                ["3", "Disciplines woven"],
-                ["∞", "Notebooks filled"],
-              ].map(([n, l]) => (
-                <div key={l} className="flex flex-col">
-                  <span className="font-display text-4xl text-foreground">{n}</span>
-                  <span className="font-mono-mar mt-2">{l}</span>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
+
+      {/* full-width stats band */}
+      <div className="border-t border-border pt-8">
+        <div className="mb-5 flex items-center gap-3">
+          <span className="font-mono-mar">Quantities · Summa</span>
+          <span className="hairline h-px flex-1" />
+        </div>
+        <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
+          {stats.map(([n, l]) => (
+            <div key={l} className="flex flex-col">
+              <span className="font-display text-4xl text-foreground md:text-5xl">{n}</span>
+              <span className="font-mono-mar mt-2">{l}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* hobbies & interests */}
+      <div className="border-t border-border pt-8">
+        <div className="mb-5 flex items-center gap-3">
+          <span className="font-mono-mar">Marginalia · Beyond the desk</span>
+          <span className="hairline h-px flex-1" />
+        </div>
+        <div className="grid gap-6 md:grid-cols-[0.85fr_1.15fr] md:gap-14">
+          <p className="font-display text-xl italic leading-relaxed text-sepia md:text-2xl">
+            Curious by trade — the same instinct that drives the work fills the
+            weekends.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {interests.map((t) => (
+              <span
+                key={t}
+                className="rounded-full border border-border px-3 py-1 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground"
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
