@@ -7,21 +7,21 @@ const experience = [
     role: "Communications Manager",
     org: "100Green · Ware, UK",
     notes:
-      "Own the energy quote journey end-to-end — research, roadmap, Figma, React build, Ofgem compliance. +19% sign-ups May–Jun 2026.",
+      "Own the energy quote journey end-to-end — roadmap, Figma, React build, Ofgem compliance, A/B tests across web and email. +19% sign-ups May–Jun 2026.",
   },
   {
     year: "Jun 2021 — Apr 2024",
     role: "Frontend Developer",
     org: "ITS · UK",
     notes:
-      "Product-leaning frontend on an agile team. Scalable React/JSON-LD across PLPs/PDPs, a new email framework, Playwright/Cypress E2E. +37.5% conversion.",
+      "Product-leaning frontend on an agile team. Scalable React + JSON-LD across PLPs/PDPs, new email framework (Klaviyo/Dotdigital), Playwright + Cypress E2E. +37.5% conversion.",
   },
   {
     year: "Jul 2019 — Jun 2021",
     role: "Designer",
     org: "ITS · UK",
     notes:
-      "Co-led the BigCommerce migration. Built the data-driven design templates the marketing, design, and dev teams still work from.",
+      "Co-led the BigCommerce migration. Built the data-driven design templates the marketing, design, and dev teams still work from today.",
   },
   {
     year: "Jul 2019 — Now",

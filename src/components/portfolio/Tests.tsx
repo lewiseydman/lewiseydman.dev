@@ -75,7 +75,8 @@ export function Tests() {
               Small <span className="italic text-sepia">disputationes</span> &mdash; experiments,
               studies, and things I have found beautiful lately.
             </p>
-            <ol className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
+            {/* specimen-sheet gallery — uniform square thumbnails */}
+            <ol className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
               {tests.map((t, i) => (
                 <motion.li
                   key={t.id}
@@ -86,9 +87,9 @@ export function Tests() {
                   <button
                     type="button"
                     onClick={() => setOpenId(t.id)}
-                    className="group flex h-full w-full flex-col gap-4 bg-background p-5 text-left transition-colors hover:bg-card md:p-6"
+                    className="group flex h-full w-full flex-col gap-3 text-left"
                   >
-                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border bg-card">
+                    <div className="relative aspect-square w-full overflow-hidden rounded-sm border border-border bg-card">
                       <img
                         src={thumb}
                         alt=""
@@ -96,14 +97,20 @@ export function Tests() {
                         className="h-full w-full object-cover mix-blend-multiply transition-transform duration-700 group-hover:scale-[1.03] dark:mix-blend-screen"
                       />
                       <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
+                      <span className="absolute left-2 top-2 rounded-full border border-border bg-background/85 px-2 py-0.5 font-mono text-[0.55rem] uppercase tracking-widest text-sepia">
+                        {t.domain}
+                      </span>
+                      <span className="absolute right-2 top-2 font-mono-mar bg-background/85 px-2 py-0.5">
+                        № {t.num}
+                      </span>
                     </div>
-                    <div className="flex items-baseline justify-between">
-                      <span className="font-mono-mar">{`Disputatio · ${t.num}`}</span>
-                      <span className="font-mono-mar">{t.domain}</span>
-                    </div>
-                    <h3 className="font-display text-2xl md:text-3xl">{t.title}</h3>
-                    <p className="text-sm leading-relaxed text-muted-foreground">{t.summary}</p>
-                    <div className="mt-auto h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
+                    <h3 className="font-display text-lg leading-tight tracking-[-0.01em] transition-colors group-hover:text-sepia md:text-xl">
+                      {t.title}
+                    </h3>
+                    <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+                      {t.summary}
+                    </p>
+                    <div className="mt-1 h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
                   </button>
                 </motion.li>
               ))}

@@ -2,6 +2,9 @@ import { Download, ExternalLink } from "lucide-react";
 import { SectionDialog } from "./SectionDialog";
 
 const PDF_URL = "/Lewis_Eydman_Resume.pdf";
+// Adobe Open Parameters — honored by Chrome/Edge/Adobe Reader, ignored by Safari.
+// navpanes=0 hides the sidebar; pagemode=none removes thumbnails/outline; zoom=100 opens at 100%.
+const PDF_VIEW = `${PDF_URL}#view=FitH&zoom=100&pagemode=none&toolbar=1&navpanes=0`;
 
 type Props = {
   open: boolean;
@@ -46,13 +49,13 @@ export function ResumeDialog({ open, onOpenChange }: Props) {
 
         <div className="relative overflow-hidden rounded-sm border border-border bg-card">
           <object
-            data={`${PDF_URL}#view=FitH`}
+            data={PDF_VIEW}
             type="application/pdf"
             aria-label="Résumé PDF preview"
             className="block h-[70vh] w-full"
           >
             <iframe
-              src={PDF_URL}
+              src={PDF_VIEW}
               title="Résumé of Lewis Eydman"
               className="block h-[70vh] w-full border-0"
             />

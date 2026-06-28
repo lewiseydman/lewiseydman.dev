@@ -75,6 +75,7 @@ const blogs: Blog[] = [
 export function Blogs() {
   const [openId, setOpenId] = useState<string | null>(null);
   const open = blogs.find((b) => b.id === openId) ?? null;
+  const [lead, ...rest] = blogs;
 
   return (
     <div className="flex flex-col gap-8">
@@ -86,56 +87,96 @@ export function Blogs() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3 }}
-            className="flex flex-col gap-8"
+            className="flex flex-col gap-10"
           >
             <p className="font-display text-2xl leading-snug md:text-3xl">
               Essays from the workshop &mdash;{" "}
               <span className="italic text-sepia">on craft, teams, and the long view.</span>
             </p>
-            <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
-              {blogs.map((b, i) => (
-                <motion.button
-                  key={b.id}
-                  type="button"
-                  onClick={() => setOpenId(b.id)}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: i * 0.06 }}
-                  className="group flex flex-col gap-4 bg-background p-5 text-left transition-colors hover:bg-card md:p-6"
-                >
-                  <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border bg-card">
-                    <img
-                      src={thumb}
-                      alt=""
-                      loading="lazy"
-                      className="h-full w-full object-cover mix-blend-multiply transition-transform duration-700 group-hover:scale-[1.03] dark:mix-blend-screen"
-                    />
-                    <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
-                    <div className="absolute left-2 top-2 font-mono-mar bg-background/80 px-2 py-0.5">
-                      Folio · {String(i + 1).padStart(2, "0")}
+
+            {/* lead article — magazine-style featured */}
+            <motion.button
+              type="button"
+              onClick={() => setOpenId(lead.id)}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="group grid gap-6 rounded-sm border border-border bg-background p-6 text-left transition-colors hover:bg-card md:grid-cols-[1.1fr_1fr] md:gap-10 md:p-8"
+            >
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-sm border border-border bg-card">
+                <img
+                  src={thumb}
+                  alt=""
+                  loading="lazy"
+                  className="h-full w-full object-cover mix-blend-multiply transition-transform duration-700 group-hover:scale-[1.03] dark:mix-blend-screen"
+                />
+                <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
+                <div className="absolute left-2 top-2 font-mono-mar bg-background/80 px-2 py-0.5">
+                  Lead · Folio 01
+                </div>
+              </div>
+              <div className="flex flex-col justify-center gap-4">
+                <div className="font-mono-mar flex items-center gap-3">
+                  <span>{lead.date}</span>
+                  <span className="hairline h-px w-6" />
+                  <span>{lead.read}</span>
+                </div>
+                <h3 className="font-display text-3xl leading-tight tracking-[-0.015em] transition-colors group-hover:text-sepia md:text-5xl">
+                  {lead.title}
+                </h3>
+                <p className="font-display text-lg italic text-sepia md:text-xl">{lead.dek}</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {lead.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.button>
+
+            {/* secondary grid */}
+            <div className="flex flex-col gap-5">
+              <div className="flex items-center gap-3">
+                <span className="font-mono-mar">Et cetera · More from the codex</span>
+                <span className="hairline h-px flex-1" />
+              </div>
+              <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
+                {rest.map((b, i) => (
+                  <motion.button
+                    key={b.id}
+                    type="button"
+                    onClick={() => setOpenId(b.id)}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: i * 0.06 }}
+                    className="group flex flex-col gap-3 bg-background p-6 text-left transition-colors hover:bg-card"
+                  >
+                    <div className="font-mono-mar flex items-center justify-between">
+                      <span>Folio · {String(i + 2).padStart(2, "0")}</span>
+                      <span>{b.read}</span>
                     </div>
-                  </div>
-                  <div className="flex items-baseline justify-between gap-3">
-                    <span className="font-mono-mar">{b.date}</span>
-                    <span className="font-mono-mar">{b.read}</span>
-                  </div>
-                  <h3 className="font-display text-2xl leading-tight tracking-[-0.01em] transition-colors group-hover:text-sepia md:text-3xl">
-                    {b.title}
-                  </h3>
-                  <p className="text-sm leading-relaxed text-muted-foreground">{b.dek}</p>
-                  <div className="mt-auto flex flex-wrap gap-2 pt-1">
-                    {b.tags.map((t) => (
-                      <span
-                        key={t}
-                        className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
-                </motion.button>
-              ))}
+                    <h3 className="font-display text-xl leading-tight tracking-[-0.01em] transition-colors group-hover:text-sepia md:text-2xl">
+                      {b.title}
+                    </h3>
+                    <p className="text-sm leading-relaxed text-muted-foreground">{b.dek}</p>
+                    <div className="mt-auto flex flex-wrap gap-2 pt-2">
+                      {b.tags.map((t) => (
+                        <span
+                          key={t}
+                          className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
+                  </motion.button>
+                ))}
+              </div>
             </div>
           </motion.div>
         ) : (

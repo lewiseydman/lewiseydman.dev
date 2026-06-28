@@ -36,13 +36,13 @@ const stats: Array<[string, string]> = [
 ];
 
 const interests = [
-  "Cycling",
-  "Film photography",
-  "Bouldering",
-  "Generative art",
-  "Specialty coffee",
+  "Coding",
+  "Gaming",
+  "Making music",
+  "Muay Thai",
   "Open source",
-  "Sci-fi literature",
+  "Landscaping",
+  "Generative art",
   "Sketching",
 ];
 
@@ -173,6 +173,60 @@ export function About() {
                 {t}
               </span>
             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Principia — short manifesto + monogram, two-column folio */}
+      <div className="border-t border-border pt-8">
+        <div className="mb-5 flex items-center gap-3">
+          <span className="font-mono-mar">Principia · Working creed</span>
+          <span className="hairline h-px flex-1" />
+        </div>
+        <div className="grid gap-8 md:grid-cols-[1.4fr_0.6fr] md:gap-14">
+          <div className="flex flex-col gap-4 border-l border-sepia/30 pl-6">
+            <p className="font-display text-lg leading-relaxed text-foreground md:text-xl">
+              Outcomes over roadmaps. Evidence over instinct.{" "}
+              <span className="italic text-sepia">
+                Draw the thing before you write the brief — the drawing always knows more.
+              </span>{" "}
+              The best products are the ones nobody had to be talked into. Build for the person in
+              the system, not the slide in the deck.
+            </p>
+            <p className="font-mono-mar">
+              Measured · Accountable · Curious · Made with the workshop door open.
+            </p>
+          </div>
+          <div className="relative flex items-center justify-center">
+            <div className="absolute inset-0 blueprint-grid-fine opacity-30" />
+            <svg viewBox="0 0 120 120" className="relative h-32 w-32 text-sepia">
+              <g fill="none" stroke="currentColor" strokeWidth="0.6">
+                <circle cx="60" cy="60" r="48" />
+                <circle cx="60" cy="60" r="36" strokeDasharray="1 3" />
+                <path d="M60 18 L60 102 M18 60 L102 60" strokeWidth="0.3" />
+              </g>
+              <text
+                x="60"
+                y="68"
+                textAnchor="middle"
+                className="font-display"
+                fontSize="28"
+                fill="currentColor"
+              >
+                LE
+              </text>
+              <text
+                x="60"
+                y="86"
+                textAnchor="middle"
+                fontSize="5"
+                letterSpacing="2"
+                fill="currentColor"
+                opacity="0.7"
+              >
+                MMXXVI
+              </text>
+            </svg>
           </div>
         </div>
       </div>

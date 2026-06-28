@@ -147,7 +147,7 @@ export function VitruvianStage() {
 
       {/* stage */}
       <div className="relative my-6 flex w-full flex-1 items-center justify-center">
-        <div className="relative aspect-square w-[min(78vh,88vw)] max-w-[820px] overflow-visible">
+        <div className="relative aspect-square w-[min(70vh,68vw)] max-w-[760px] overflow-visible">
           {/* Vitruvian image — sits inside the sphere */}
           <motion.div
             initial={{ opacity: 0, scale: 0.92 }}
