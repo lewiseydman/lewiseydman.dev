@@ -3,28 +3,32 @@ import { Download } from "lucide-react";
 
 const experience = [
   {
-    year: "2024 — Now",
-    role: "Senior Product Manager",
-    org: "Independent Studio",
-    notes: "Advising founders on product, design systems, and the careful build of small teams.",
+    year: "Apr 2025 — Now",
+    role: "Communications Manager",
+    org: "100Green · Ware, UK",
+    notes:
+      "Own the energy quote journey end-to-end — research, roadmap, Figma, React build, Ofgem compliance. +19% sign-ups May–Jun 2026.",
   },
   {
-    year: "2021 — 2024",
-    role: "Head of Product",
-    org: "Aviary (acq.)",
-    notes: "Founded, designed, and shipped a scheduling primitive for distributed teams.",
+    year: "Jun 2021 — Apr 2024",
+    role: "Frontend Developer",
+    org: "ITS · UK",
+    notes:
+      "Product-leaning frontend on an agile team. Scalable React/JSON-LD across PLPs/PDPs, a new email framework, Playwright/Cypress E2E. +37.5% conversion.",
   },
   {
-    year: "2018 — 2021",
-    role: "Senior PM · Design Tech",
-    org: "Helios",
-    notes: "Led the operator console rewrite. Embedded with engineering for two of the three years.",
+    year: "Jul 2019 — Jun 2021",
+    role: "Designer",
+    org: "ITS · UK",
+    notes:
+      "Co-led the BigCommerce migration. Built the data-driven design templates the marketing, design, and dev teams still work from.",
   },
   {
-    year: "2015 — 2018",
-    role: "Product Designer & Engineer",
-    org: "Atlas",
-    notes: "Began as a designer, became a hybrid. First taste of the polymath approach.",
+    year: "Jul 2019 — Now",
+    role: "Freelance Designer & Developer",
+    org: "Independent",
+    notes:
+      "Custom web apps from research to deployment — Figma prototypes, React frontends, CI/CD, plus open-source contribution on the side.",
   },
 ];
 
