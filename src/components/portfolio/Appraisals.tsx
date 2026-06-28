@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Quote } from "lucide-react";
 
 type Testimonial = {
   quote: string;
@@ -54,35 +53,31 @@ export function Appraisals() {
           a few words from former colleagues, clients, and the people I&rsquo;ve built for.
         </span>
       </p>
-      <ul className="columns-1 gap-6 md:columns-2 [&>li]:mb-6 [&>li]:break-inside-avoid">
+      <ul className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
         {testimonials.map((t, i) => (
           <motion.li
             key={i}
             initial={{ opacity: 0, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: i * 0.06 }}
-            className="relative flex flex-col gap-5 rounded-sm border border-border bg-background p-7 md:p-8"
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: i * 0.05 }}
+            className="group flex flex-col gap-5 bg-background p-6 md:p-7"
           >
-            <Quote
-              aria-hidden
-              className="absolute -left-1 -top-2 h-10 w-10 rotate-180 text-sepia/30"
-              strokeWidth={1}
-            />
-            <div className="flex items-baseline justify-between pl-1">
+            <div className="flex items-baseline justify-between">
               <span className="font-mono-mar">{`Laus · ${String(i + 1).padStart(2, "0")}`}</span>
               <span className="font-mono-mar">{t.relation}</span>
             </div>
-            <blockquote className="relative font-display text-xl italic leading-snug text-foreground md:text-2xl">
+            <blockquote className="font-display text-xl italic leading-snug text-foreground md:text-2xl">
+              <span className="text-sepia">&ldquo;</span>
               {t.quote}
+              <span className="text-sepia">&rdquo;</span>
             </blockquote>
-            <div className="hairline mt-2 h-px w-12" />
-            <figcaption className="flex flex-col gap-0.5">
+            <div className="mt-auto flex flex-col gap-0.5 border-t border-border pt-4">
               <span className="font-display text-base text-foreground md:text-lg">{t.name}</span>
               <span className="font-mono-mar">
                 {t.role} · {t.org}
               </span>
-            </figcaption>
+            </div>
+            <div className="h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
           </motion.li>
         ))}
       </ul>

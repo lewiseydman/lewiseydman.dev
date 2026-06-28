@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronRight, ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import thumb from "@/assets/thumb-opera.jpg";
 
@@ -167,152 +167,180 @@ function Sketch({ kind }: { kind: Project["sketch"] }) {
 }
 
 export function SelectedWork() {
-  const [openId, setOpenId] = useState<string>(projects[0].id);
-  const open = projects.find((p) => p.id === openId) ?? projects[0];
+  const [openId, setOpenId] = useState<string | null>(null);
+  const open = projects.find((p) => p.id === openId) ?? null;
 
   return (
     <div className="flex flex-col gap-8">
-      <p className="font-display text-2xl leading-snug md:text-3xl">
-        Case studies &mdash;{" "}
-        <span className="italic text-sepia">products built, shipped, and learned from.</span>
-      </p>
-      <div className="grid gap-8 md:grid-cols-[18rem_1fr] md:gap-10">
-        {/* index rail */}
-        <nav aria-label="Project index" className="md:border-r md:border-border md:pr-6">
-          <div className="mb-3 flex items-center gap-3">
-            <span className="font-mono-mar">Index Operum</span>
-            <span className="hairline h-px flex-1" />
-          </div>
-          <ul className="flex flex-col">
-            {projects.map((p) => {
-              const active = p.id === openId;
-              return (
-                <li key={p.id}>
-                  <button
-                    type="button"
-                    onClick={() => setOpenId(p.id)}
-                    className={`group relative flex w-full items-start gap-3 border-b border-border/60 py-3 text-left transition-colors ${
-                      active ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    <span className="font-mono-mar w-6 shrink-0 pt-1">{p.num}</span>
-                    <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-                      <span className="font-display text-lg leading-tight tracking-[-0.01em]">
-                        {p.title}
-                      </span>
-                      <span className="font-mono-mar">{p.year} · {p.role.split(" · ")[0]}</span>
-                    </span>
-                    <ChevronRight
-                      className={`mt-1 h-3.5 w-3.5 shrink-0 text-sepia transition-all ${
-                        active ? "translate-x-1 opacity-100" : "opacity-0 group-hover:opacity-60"
-                      }`}
+      <AnimatePresence mode="wait">
+        {!open ? (
+          <motion.div
+            key="index"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.3 }}
+            className="flex flex-col gap-8"
+          >
+            <p className="font-display text-2xl leading-snug md:text-3xl">
+              Case studies &mdash;{" "}
+              <span className="italic text-sepia">products built, shipped, and learned from.</span>
+            </p>
+            <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
+              {projects.map((p, i) => (
+                <motion.button
+                  key={p.id}
+                  type="button"
+                  onClick={() => setOpenId(p.id)}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: i * 0.06 }}
+                  className="group relative flex flex-col gap-5 bg-background p-6 text-left transition-colors hover:bg-card md:p-7"
+                >
+                  <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border bg-card">
+                    <img
+                      src={thumb}
+                      alt=""
+                      loading="lazy"
+                      className="h-full w-full object-cover mix-blend-multiply transition-transform duration-700 group-hover:scale-[1.03] dark:mix-blend-screen"
                     />
-                    {active ? (
-                      <span className="absolute -left-px bottom-0 top-0 w-px bg-sepia" />
-                    ) : null}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-
-        {/* right pane — case study */}
-        <div className="min-w-0">
-          <AnimatePresence mode="wait">
-            <motion.article
-              key={open.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.3 }}
-              className="flex flex-col gap-8"
-            >
-              <header className="flex flex-col gap-3 border-b border-border pb-6">
-                <div className="font-mono-mar flex flex-wrap items-center gap-3">
-                  <span>Opus · {open.num}</span>
-                  <span className="hairline h-px w-8" />
-                  <span>{open.year}</span>
-                  <span className="hairline h-px w-8" />
-                  <span>{open.role}</span>
-                </div>
-                <h2 className="font-display text-3xl tracking-[-0.015em] md:text-5xl">{open.title}</h2>
-                <p className="font-display text-lg italic text-sepia md:text-2xl">{open.blurb}</p>
-              </header>
-              <div className="relative aspect-[16/9] w-full overflow-hidden rounded-sm border border-border bg-card">
-                <img
-                  src={thumb}
-                  alt={open.title}
-                  className="h-full w-full object-cover mix-blend-multiply dark:mix-blend-screen"
-                />
-                <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
-              </div>
-              <div className="grid gap-6 md:grid-cols-2">
-                {open.study.map((s) => (
-                  <div key={s.heading} className="flex flex-col gap-2 border-l border-border pl-4">
-                    <span className="font-mono-mar">{s.heading}</span>
-                    <p className="text-[1rem] leading-[1.7] text-foreground">{s.body}</p>
+                    <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
+                    <div className="absolute left-2 top-2 font-mono-mar bg-background/80 px-2 py-0.5">
+                      Opus · {p.num}
+                    </div>
+                    <div className="absolute right-2 top-2 font-mono-mar bg-background/80 px-2 py-0.5">
+                      {p.year}
+                    </div>
                   </div>
-                ))}
-              </div>
-              {open.deepDive.length > 0 ? (
-                <section className="flex flex-col gap-6 border-t border-border pt-8">
-                  <div className="flex items-baseline justify-between">
-                    <h3 className="font-display text-2xl tracking-[-0.01em] md:text-3xl">
-                      Notebook <span className="italic text-sepia">— in greater depth</span>
+                  <div className="flex flex-col gap-1">
+                    <h3 className="font-display text-2xl tracking-[-0.01em] transition-colors group-hover:text-sepia md:text-3xl">
+                      {p.title}
                     </h3>
-                    <span className="font-mono-mar">Marginalia</span>
+                    <p className="font-mono-mar">{p.role}</p>
                   </div>
-                  <div className="flex flex-col">
-                    {open.deepDive.map((d, i) => (
-                      <div
-                        key={d.heading}
-                        className={`flex flex-col gap-3 py-6 ${
-                          i !== 0 ? "border-t border-sepia/20" : ""
-                        }`}
-                      >
-                        <span className="font-mono-mar">{d.heading}</span>
-                        <p className="max-w-prose text-[1.05rem] leading-[1.75] text-foreground">
-                          {d.body}
-                        </p>
-                      </div>
-                    ))}
+                  <p className="text-sm leading-relaxed text-muted-foreground">{p.blurb}</p>
+                  <div className="mt-auto flex items-end justify-between gap-3 pt-1">
+                    <div className="flex flex-col gap-0.5">
+                      <span className="font-mono-mar">Outcome</span>
+                      <span className="font-display italic text-sepia">{p.outcome}</span>
+                    </div>
+                    <div className="flex flex-wrap justify-end gap-1.5">
+                      {p.tags.map((t) => (
+                        <span
+                          key={t}
+                          className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </section>
-              ) : null}
-              <div className="flex flex-wrap items-end justify-between gap-6 border-t border-border pt-6">
-                <div className="flex flex-col">
-                  <span className="font-mono-mar">Outcome</span>
-                  <span className="font-display text-2xl italic text-sepia">{open.outcome}</span>
+                  <div className="h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+        ) : (
+          <motion.article
+            key={open.id}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.35 }}
+            className="flex flex-col gap-8"
+          >
+            <button
+              type="button"
+              onClick={() => setOpenId(null)}
+              className="font-mono-mar group flex items-center gap-2 self-start hover:text-foreground"
+            >
+              <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-0.5" />
+              Back to Opera
+            </button>
+            <header className="flex flex-col gap-3 border-b border-border pb-6">
+              <div className="font-mono-mar flex items-center gap-3">
+                <span>Opus · {open.num}</span>
+                <span className="hairline h-px w-8" />
+                <span>{open.year}</span>
+                <span className="hairline h-px w-8" />
+                <span>{open.role}</span>
+              </div>
+              <h2 className="font-display text-4xl tracking-[-0.015em] md:text-5xl">{open.title}</h2>
+              <p className="font-display text-xl italic text-sepia md:text-2xl">{open.blurb}</p>
+            </header>
+            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-sm border border-border bg-card">
+              <img
+                src={thumb}
+                alt={open.title}
+                className="h-full w-full object-cover mix-blend-multiply dark:mix-blend-screen"
+              />
+              <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
+            </div>
+            <div className="grid gap-6 md:grid-cols-2">
+              {open.study.map((s) => (
+                <div key={s.heading} className="flex flex-col gap-2 border-l border-border pl-4">
+                  <span className="font-mono-mar">{s.heading}</span>
+                  <p className="text-[1rem] leading-[1.7] text-foreground">{s.body}</p>
                 </div>
-                <div className="flex flex-wrap items-center justify-end gap-3">
-                  {open.liveUrl ? (
-                    <a
-                      href={open.liveUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="font-mono-mar group inline-flex items-center gap-2 rounded-full border border-sepia/60 bg-background px-4 py-2 text-sepia transition-all hover:border-sepia hover:bg-sepia hover:text-parchment"
+              ))}
+            </div>
+            {open.deepDive.length > 0 ? (
+              <section className="flex flex-col gap-6 border-t border-border pt-8">
+                <div className="flex items-baseline justify-between">
+                  <h3 className="font-display text-2xl tracking-[-0.01em] md:text-3xl">
+                    Notebook <span className="italic text-sepia">— in greater depth</span>
+                  </h3>
+                  <span className="font-mono-mar">Marginalia</span>
+                </div>
+                <div className="flex flex-col">
+                  {open.deepDive.map((d, i) => (
+                    <div
+                      key={d.heading}
+                      className={`flex flex-col gap-3 py-6 ${
+                        i !== 0 ? "border-t border-sepia/20" : ""
+                      }`}
                     >
-                      Visit live product
-                      <ExternalLink className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                    </a>
-                  ) : null}
-                  <div className="flex flex-wrap justify-end gap-2">
-                    {open.tags.map((t) => (
-                      <span
-                        key={t}
-                        className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
+                      <span className="font-mono-mar">{d.heading}</span>
+                      <p className="max-w-prose text-[1.05rem] leading-[1.75] text-foreground">
+                        {d.body}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+            <div className="flex flex-wrap items-end justify-between gap-6 border-t border-border pt-6">
+              <div className="flex flex-col">
+                <span className="font-mono-mar">Outcome</span>
+                <span className="font-display text-2xl italic text-sepia">{open.outcome}</span>
+              </div>
+              <div className="flex flex-wrap items-center justify-end gap-3">
+                {open.liveUrl ? (
+                  <a
+                    href={open.liveUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-mono-mar group inline-flex items-center gap-2 rounded-full border border-sepia/60 bg-background px-4 py-2 text-sepia transition-all hover:border-sepia hover:bg-sepia hover:text-parchment"
+                  >
+                    Visit live product
+                    <ExternalLink className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </a>
+                ) : null}
+                <div className="flex flex-wrap justify-end gap-2">
+                  {open.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground"
+                    >
+                      {t}
+                    </span>
+                  ))}
                 </div>
               </div>
-            </motion.article>
-          </AnimatePresence>
-        </div>
-      </div>
+            </div>
+          </motion.article>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
