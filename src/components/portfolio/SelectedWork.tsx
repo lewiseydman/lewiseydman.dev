@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import thumb from "@/assets/thumb-opera.jpg";
 
@@ -16,6 +16,8 @@ type Project = {
   tags: string[];
   sketch: "gear" | "wing" | "lens" | "compass";
   study: CaseStudySection[];
+  deepDive: CaseStudySection[];
+  liveUrl?: string;
 };
 
 const projects: Project[] = [
@@ -37,6 +39,12 @@ const projects: Project[] = [
       { heading: "Approach", body: "Reframed the surface around the operator's actual decision tree, not the underlying microservice graph. Built a single canvas of asset health, with optional drill-downs gated behind a 'workshop' mode for power users." },
       { heading: "Outcome", body: "Onboarding time fell from six weeks to eleven days. The veterans were quieter than expected, which we took as a compliment." },
     ],
+    deepDive: [
+      { heading: "Discovery", body: "Two weeks of ride-alongs with operators in three regions. Mapped the actual decision tree on paper before any pixel work — what they reached for in the first thirty seconds of an alert, what they ignored." },
+      { heading: "Architecture", body: "Replaced the polled REST surface with a typed event stream. The frontend became a derived projection of that stream, which made the 'live canvas' affordable to build and reason about." },
+      { heading: "What I'd do differently", body: "Shipped the 'workshop' mode too late. The veterans spent three weeks unhappy before they discovered the escape hatch was sitting behind a keystroke." },
+    ],
+    liveUrl: "https://example.com/helios",
   },
   {
     id: "atlas",
@@ -56,6 +64,11 @@ const projects: Project[] = [
       { heading: "Approach", body: "Stopped competing on coverage and started competing on memory. The map remembered where you had been, what you had written about it, and surfaced it at the right moment." },
       { heading: "Outcome", body: "1.2M MAU in twelve months, with a retention curve that flattened higher than any product I have shipped." },
     ],
+    deepDive: [
+      { heading: "Positioning", body: "The pivot rested on a single research finding: people who already had a 'mapping app' still kept their meaningful places in a notes app. We didn't need to beat Maps — we needed to beat Notes." },
+      { heading: "Cartography", body: "Hand-rolled vector tile pipeline so the map style could be ours. Two iterations to find a treatment that read as 'a personal notebook' rather than 'a software map'." },
+    ],
+    liveUrl: "https://example.com/atlas",
   },
   {
     id: "aviary",
@@ -75,6 +88,11 @@ const projects: Project[] = [
       { heading: "Approach", body: "Sold to engineers, not buyers. Shipped a CLI before the dashboard. Wrote the docs as essays. The product was the documentation." },
       { heading: "Outcome", body: "Acquired three months out of YC W23. The primitive now ships inside two well-known calendars." },
     ],
+    deepDive: [
+      { heading: "Go-to-market", body: "Founder-led sales, low-volume, high-trust. The CLI was the demo. The docs were the brochure. No marketing site until month nine." },
+      { heading: "The acquisition", body: "Two acquirers, opposite strategies. We picked the one that wanted to keep the primitive as a primitive, not absorb it into a suite." },
+    ],
+    liveUrl: "https://example.com/aviary",
   },
   {
     id: "specimen",
@@ -93,6 +111,10 @@ const projects: Project[] = [
       { heading: "Challenge", body: "Build a tool that respected an existing decades-old vocabulary, without forcing the pathologists to teach the software from scratch." },
       { heading: "Approach", body: "Trained a small model on the labs' own historical labels. The tool learned each lab's local dialect and gradually moved annotation work from labelling to confirming." },
       { heading: "Outcome", body: "Adopted by seven research labs. Two co-authored a paper on the methodology." },
+    ],
+    deepDive: [
+      { heading: "Model choice", body: "A small per-lab model beat a large generalist one in every blind trial. The dialect mattered more than the size of the corpus." },
+      { heading: "Clinical trust", body: "Every suggestion the tool made could be traced back to three historical examples from the lab's own archive. Trust came from provenance, not accuracy alone." },
     ],
   },
 ];
@@ -262,20 +284,58 @@ export function SelectedWork() {
                 </div>
               ))}
             </div>
-            <div className="flex items-center justify-between border-t border-border pt-5">
+            {open.deepDive.length > 0 ? (
+              <section className="flex flex-col gap-6 border-t border-border pt-8">
+                <div className="flex items-baseline justify-between">
+                  <h3 className="font-display text-2xl tracking-[-0.01em] md:text-3xl">
+                    Notebook <span className="italic text-sepia">— in greater depth</span>
+                  </h3>
+                  <span className="font-mono-mar">Marginalia</span>
+                </div>
+                <div className="flex flex-col">
+                  {open.deepDive.map((d, i) => (
+                    <div
+                      key={d.heading}
+                      className={`flex flex-col gap-3 py-6 ${
+                        i !== 0 ? "border-t border-sepia/20" : ""
+                      }`}
+                    >
+                      <span className="font-mono-mar">{d.heading}</span>
+                      <p className="max-w-prose text-[1.05rem] leading-[1.75] text-foreground">
+                        {d.body}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+            <div className="flex flex-wrap items-end justify-between gap-6 border-t border-border pt-6">
               <div className="flex flex-col">
                 <span className="font-mono-mar">Outcome</span>
                 <span className="font-display text-2xl italic text-sepia">{open.outcome}</span>
               </div>
-              <div className="flex flex-wrap justify-end gap-2">
-                {open.tags.map((t) => (
-                  <span
-                    key={t}
-                    className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground"
+              <div className="flex flex-wrap items-center justify-end gap-3">
+                {open.liveUrl ? (
+                  <a
+                    href={open.liveUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-mono-mar group inline-flex items-center gap-2 rounded-full border border-sepia/60 bg-background px-4 py-2 text-sepia transition-all hover:border-sepia hover:bg-sepia hover:text-parchment"
                   >
-                    {t}
-                  </span>
-                ))}
+                    Visit live product
+                    <ExternalLink className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </a>
+                ) : null}
+                <div className="flex flex-wrap justify-end gap-2">
+                  {open.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </motion.article>

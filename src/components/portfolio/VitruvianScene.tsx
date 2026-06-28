@@ -22,15 +22,14 @@ function WireSphere() {
 
   return (
     <>
-      {/* outer wireframe icosahedron — matches Vitruvian ink outline */}
       <group ref={outer}>
         <mesh>
           <icosahedronGeometry args={[2.0, 1]} />
           <meshBasicMaterial
-            color="#2e251c"
+            color="#1f1812"
             wireframe
             transparent
-            opacity={0.1}
+            opacity={0.06}
           />
         </mesh>
       </group>
@@ -40,20 +39,20 @@ function WireSphere() {
         <mesh>
           <icosahedronGeometry args={[1.65, 3]} />
           <meshBasicMaterial
-            color="#2e251c"
+            color="#1f1812"
             wireframe
             transparent
-            opacity={0.12}
+            opacity={0.07}
           />
         </mesh>
         {/* equatorial rings */}
         <mesh rotation={[Math.PI / 2, 0, 0]}>
           <torusGeometry args={[1.85, 0.002, 8, 128]} />
-          <meshBasicMaterial color="#2e251c" transparent opacity={0.25} />
+          <meshBasicMaterial color="#1f1812" transparent opacity={0.14} />
         </mesh>
         <mesh rotation={[0, 0, Math.PI / 3]}>
           <torusGeometry args={[1.78, 0.002, 8, 128]} />
-          <meshBasicMaterial color="#2e251c" transparent opacity={0.18} />
+          <meshBasicMaterial color="#1f1812" transparent opacity={0.10} />
         </mesh>
       </group>
     </>

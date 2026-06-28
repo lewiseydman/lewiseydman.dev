@@ -36,7 +36,7 @@ export function OrbitLabel({ item, innerR, outerR, index, onOpen }: Props) {
   const y2 = cy + sin * outerR;
 
   // tail goes horizontally outward from the node toward the page edge
-  const tailLen = 0.14;
+  const tailLen = 0.17;
   const tx = item.side === "right" ? x2 + tailLen : x2 - tailLen;
 
   // label HTML position (use the tail end)
@@ -50,7 +50,9 @@ export function OrbitLabel({ item, innerR, outerR, index, onOpen }: Props) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, delay: 0.4 + index * 0.12 }}
-      className="group absolute z-20 flex -translate-y-1/2 cursor-pointer items-center gap-2 outline-none"
+      className={`group absolute z-20 flex -translate-y-1/2 cursor-pointer items-center gap-2 outline-none ${
+        item.side === "right" ? "pl-6" : "pr-6"
+      }`}
       style={{
         left: labelLeft,
         top: labelTop,
@@ -97,8 +99,8 @@ export function OrbitLabel({ item, innerR, outerR, index, onOpen }: Props) {
       <span
         className="pointer-events-none absolute h-2.5 w-2.5 rounded-full border border-sepia bg-background transition-all group-hover:scale-150 group-hover:bg-sepia"
         style={{
-          left: item.side === "right" ? "-0.6rem" : "auto",
-          right: item.side === "left" ? "-0.6rem" : "auto",
+          left: item.side === "right" ? "-0.35rem" : "auto",
+          right: item.side === "left" ? "-0.35rem" : "auto",
           top: "50%",
           transform: "translateY(-50%)",
         }}
@@ -140,7 +142,7 @@ export function OrbitLines({
         const y1 = cy + sin * innerR;
         const x2 = cx + cos * outerR;
         const y2 = cy + sin * outerR;
-        const tailLen = 0.14;
+        const tailLen = 0.17;
         const tx = item.side === "right" ? x2 + tailLen : x2 - tailLen;
 
         return (
