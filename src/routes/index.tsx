@@ -4,19 +4,40 @@ import { VitruvianStage } from "@/components/portfolio/VitruvianStage";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Lewis Eydman" },
+      { title: "Lewis Eydman — Product Manager bridging design & development" },
       {
         name: "description",
         content:
-          "Lewis Eydman is a Product Manager bridging UX/UI design and full-stack development, in the tradition of the renaissance polymath.",
+          "Portfolio of Lewis Eydman — Product Manager fluent in UX/UI design and full-stack development. Selected work, writings, experiments and résumé.",
       },
       { property: "og:title", content: "Lewis Eydman — Product Manager" },
       {
         property: "og:description",
         content: "Portfolio of Lewis Eydman — Product Manager fluent in design and full-stack engineering.",
       },
+      { property: "og:url", content: "https://renaissance-blueprint-muse.lovable.app/" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://renaissance-blueprint-muse.lovable.app/" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: "Lewis Eydman",
+          jobTitle: "Product Manager",
+          url: "https://renaissance-blueprint-muse.lovable.app/",
+          sameAs: [
+            "https://www.linkedin.com/in/lewiseydman/",
+            "https://github.com/lewiseydman",
+            "https://medium.com/@lewiseydman",
+          ],
+        }),
+      },
     ],
   }),
   component: Index,
@@ -24,7 +45,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <main className="relative min-h-screen overflow-x-clip bg-background text-foreground">
+    <main className="relative min-h-dvh overflow-x-clip bg-background text-foreground">
       <VitruvianStage />
     </main>
   );

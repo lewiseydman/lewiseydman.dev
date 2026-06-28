@@ -59,13 +59,15 @@ function WireSphere() {
   );
 }
 
-export default function VitruvianScene() {
+export default function VitruvianScene({ paused = false }: { paused?: boolean }) {
+  const reduce = useReducedMotion();
   return (
     <Canvas
       dpr={[1, 1.75]}
       camera={{ position: [0, 0, 4.5], fov: 45 }}
       gl={{ antialias: true, alpha: true }}
       style={{ background: "transparent" }}
+      frameloop={paused || reduce ? "demand" : "always"}
     >
       <WireSphere />
     </Canvas>
