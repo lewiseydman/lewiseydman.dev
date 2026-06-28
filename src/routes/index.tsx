@@ -4,7 +4,7 @@ import { VitruvianStage } from "@/components/portfolio/VitruvianStage";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Lewis Eydman — Product Manager · Design & Engineering" },
+      { title: "Lewis Eydman" },
       {
         name: "description",
         content:
@@ -13,8 +13,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Lewis Eydman — Product Manager" },
       {
         property: "og:description",
-        content:
-          "Portfolio of Lewis Eydman — Product Manager fluent in design and full-stack engineering.",
+        content: "Portfolio of Lewis Eydman — Product Manager fluent in design and full-stack engineering.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
