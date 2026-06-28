@@ -1,64 +1,43 @@
-## 1. Wire the résumé
+# Plan
 
-- Copy the uploaded PDF to `public/resume.pdf` so the existing `Download Résumé` button in `ExperienceTimeline.tsx` resolves with no code change.
-- Reseed `experience` in `ExperienceTimeline.tsx` with the four real roles from the PDF (100Green – Communications Manager, ITS – Frontend Developer, ITS – Designer, Freelance Designer & Developer), preserving the existing timeline/gear visual.
-- Update About copy stats (years shipping, etc.) to numbers that match the résumé.
+## 1. Résumé file rename + in-popup PDF viewer
+- Rename `public/resume.pdf` → `public/Lewis_Eydman_Resume.pdf` (recruiter-friendly filename for downloads/saves).
+- Update `ExperienceTimeline.tsx` download link to the new path; keep the explicit `download` attribute so the file saves with that name.
+- In `FooterIcons.tsx`, change the Résumé icon from an `<a href>` to a button that opens a new `ResumeDialog` instead of navigating.
+- New `src/components/portfolio/ResumeDialog.tsx`:
+  - Reuses `SectionDialog` shell (numeral `※`, latin `Curriculum`, english `Résumé`) for consistent padding + aesthetic.
+  - Renders the PDF via a native `<object data="/Lewis_Eydman_Resume.pdf#view=FitH" type="application/pdf">` with an `<iframe>` fallback inside, plus a visible "Download PDF" link and "Open in new tab" link as accessible fallbacks (covers browsers that block embedded PDFs, screen readers, and mobile Safari).
+  - Dialog is keyboard-dismissible (Radix default), `aria-label="Résumé of Lewis Eydman"`, focus trapped, scroll-locked. Wrapper has `role="document"`.
+- Wire dialog state in `VitruvianStage` (or local state in `FooterIcons`) — local state in `FooterIcons` is simpler and keeps the stage clean.
 
-## 2. Laudes → real testimonials
+## 2. About — stats + hobbies
+- Move the 4-stat grid out of the right column and place it as a **full-width band directly beneath the portrait+disciplines section**.
+- Replace stats with more universally recognised, still-honest metrics:
+  - `7+` Years shipping
+  - `20+` Products launched
+  - `4` Industries served (energy, retail, education, freelance)
+  - `100%` On-time delivery
+  (Exact labels can be tuned, but all are recruiter/client-legible and not vague like "Disciplines woven".)
+- Add a new **Hobbies & Interests** block below the stats:
+  - Manuscript-style heading ("Marginalia · Beyond the desk") with a short intro line.
+  - Tag chips reusing the existing `Instruments` chip style: e.g. Cycling, Film photography, Bouldering, Generative art, Specialty coffee, Open-source, Sci-fi literature, Sketching. (Final list TBD — placeholders honouring the tone.)
 
-- Rebuild `Appraisals.tsx` as testimonials from former colleagues, clients, and people you've built for, not tool reviews.
-- New card shape: large pull-quote (Cormorant italic), then attribution block — name, role, company, relationship (Colleague / Client / Built for). Keeps the existing two-column sepia/ink card grid and `Laus · NN` marginalia for visual continuity.
-- Seed with 4 placeholder testimonials clearly marked as drafts so you can swap in real quotes.
+## 3. Sphere line colour + opacity (red-arrow lines)
+- The arrow points to the **three.js wireframe lines**. Currently they're already `#1f1812` (ink) but the inner detailed icosahedron at `opacity 0.07` is what dominates and reads as cool/grey against the parchment.
+- In `VitruvianScene.tsx`: switch all wireframe materials to the exact Vitruvian outline ink token (use `var(--ink)` value resolved at runtime via `getComputedStyle`, or hard-code the matching sepia-ink `#3a2a1f` we use for the figure) and lower opacities further: outer `0.04`, inner `0.05`, rings `0.08 / 0.06`. This warms them into the same family as the figure but keeps them clearly more transparent.
 
-## 3. Push the orbit pointer further from each heading
+## 4. Responsive scaling of orbit labels (laptop sizes)
+- Problem: at ~1280–1500px the labels sit too far from the centerpiece (large dead gap) because `tailLen` and `OUTER_R` are fixed fractions of the stage square, but the stage square is capped at `820px` while the viewport is wider.
+- Changes in `VitruvianStage.tsx`:
+  - Make the stage square fluid: replace `w-[min(78vh,88vw)] max-w-[820px]` with a fluid clamp that grows with viewport: `w-[min(82vh,72vw)] max-w-[960px] xl:max-w-[1100px]` so the figure scales with available width.
+  - Increase `OUTER_R` slightly on wider breakpoints by passing breakpoint-aware values (track via a `useMemo` reading `window.innerWidth` on resize, or simpler: CSS-variable-driven radii). Simplest implementation: introduce two presets, `{ inner: 0.32, outer: 0.48 }` for ≤lg and `{ inner: 0.34, outer: 0.5 }` for xl+, switched via a `matchMedia` hook.
+- In `OrbitLabel.tsx` / `OrbitLines.tsx`: make `tailLen` responsive too — shrink it on narrower laptop widths (e.g. `0.12` at <1400px, `0.17` at ≥1400px). Pass it as a prop from the stage so both files stay in sync.
+- Net effect: on a 13–15" laptop the labels move inward, hug the orbit, and scale proportionally with the centerpiece instead of floating against the page edges. Mobile fallback (the chip row) is untouched.
 
-Matches the red arrow in your screenshot — currently the dot sits ~`0.6rem` from the label.
-
-- In `OrbitLabel.tsx`: bump `tailLen` (`0.14` → `~0.22`) so the leader line travels further before reaching the label, and increase the dot's offset from the label (`-0.6rem` → `~-1.4rem`) plus add matching `pl-/pr-` padding so the dot visibly detaches from the heading.
-- Mirror `tailLen` in `OrbitLines.tsx` so the SVG leader line and the label dot stay aligned.
-- Verify nothing clips at the stage edge after the bump (labels remain inside the 100svh frame at the supported viewports).
-
-## 4. About — better Design / Engineering / Product layout
-
-- Replace the equal 3-column sepia-bordered strip with a more deliberate composition: 3 stacked horizontal "plates" inside the same Cormorant/mono-mar vocabulary, each with:
-  - Roman numeral + discipline name (Cormorant display, large)
-  - One-line italic principle (sepia)
-  - A short body paragraph
-  - A small "Instruments" row (tools/methods) as monospaced tags with hairline dividers
-- Add a faint left-edge ornament (vertical sepia rule + index dot) to tie the three plates into a single "manuscript" rather than three disconnected cards.
-- Rewrite the three disciplines using résumé language (UX strategy, React/TypeScript, product discovery + service blueprinting).
-
-## 5. Opera — deeper case studies + live link
-
-For each project in `SelectedWork.tsx`:
-
-- Extend the `Project` type with `liveUrl?: string` and a `deepDive: { heading: string; body: string }[]` array that appears **below** the existing Context / Role / Challenge / Approach / Outcome grid.
-- Detail view gets a new "Notebook" section beneath the 5-card grid rendering each `deepDive` entry as a longer-form paragraph block (wider measure, generous line-height, drop sepia rule between entries) so you can write in-depth narrative.
-- Add a "Visit live product →" pill button next to the Outcome footer, styled to match the résumé download button (sepia outline, hover fill). Hidden when `liveUrl` is missing.
-- Seed deep-dive copy + live URLs as placeholders so you can edit text only.
-
-## 6. Three.js sphere — match Vitruvian ink + lower opacity
-
-- In `VitruvianScene.tsx`: change the wireframe color from `#2e251c` to the exact figure outline ink. I'll sample the asset and use the matching token (likely `var(--ink)` resolved at runtime, or its hex equivalent), applied to both icosahedra and both torus rings for full consistency.
-- Lower opacities: outer icosa `0.10 → 0.06`, inner icosa `0.12 → 0.07`, rings `0.25 / 0.18 → 0.14 / 0.10`, so the sphere reads as a faint ink overlay and the Vitruvian face/torso is no longer obscured.
-
-## 7. CMS suggestions (discussion only — not implemented in this change)
-
-Three options, ranked for your stated GitHub-commit preference:
-
-1. **Markdown + frontmatter in repo (recommended).** Move `blogs`, `work`, `appraisals`, `tests`, `experience` out of `.tsx` and into `src/content/<section>/*.md(x)` with typed frontmatter. Pros: every edit is a GitHub commit, full diff history, no extra service, supports MDX for rich blog bodies. Cons: still requires opening GitHub to edit.
-2. **GitHub web editor + Decap CMS (formerly Netlify CMS).** Same markdown files as #1, plus a `/admin` route that gives you a Notion-style editor backed by GitHub OAuth — every save is a commit. Pros: friendly UI, zero backend, full version history. Cons: small `/admin` setup cost; the user-facing site stays unchanged.
-3. **Headless CMS (Sanity / Contentlayer / Tina).** Strongest authoring UX, but breaks the "everything is a git commit" property unless you pick TinaCMS (which uses GitHub as its backing store).
-
-My suggestion: **#2 (Decap on top of markdown files)**. It keeps the commit history you want while removing the need to edit `.tsx` files. Happy to scope this as a follow-up.
+## 5. Project overview (chat reply, not implemented)
+After applying the plan I'll include a short written review covering: what's working (aesthetic cohesion, single-fold concept, content depth), suggested improvements (perf budget for three.js on low-end devices, real case-study imagery, SEO/meta per-section, motion-reduction polish, analytics, possible CMS path), and risks (PDF embedding on mobile Safari, asset weight).
 
 ## Technical notes
-
-- Files touched: `src/components/portfolio/{OrbitLabel.tsx, About.tsx, SelectedWork.tsx, Appraisals.tsx, ExperienceTimeline.tsx, VitruvianScene.tsx}`, plus `public/resume.pdf` (new).
-- No new dependencies, no backend, no route changes.
-- All copy seeded as placeholders where appropriate so you can swap in final text without touching structure.
-
-## Out of scope
-
-- The CMS migration itself (suggestions only this turn, per your request).
-- Any colour-system changes beyond syncing the sphere to the Vitruvian ink.
+- No new dependencies. Native `<object>`/`<iframe>` PDF embed works on all modern desktops; mobile devices get the explicit download/open-in-tab fallback inside the same dialog.
+- All colour values stay tokenised via existing CSS variables; no hardcoded utility colours.
+- Files touched: `public/resume.pdf` (rename), `FooterIcons.tsx`, `ExperienceTimeline.tsx`, `About.tsx`, `VitruvianScene.tsx`, `VitruvianStage.tsx`, `OrbitLabel.tsx`, plus new `ResumeDialog.tsx`.
