@@ -2,6 +2,8 @@ import { Download, ExternalLink } from "lucide-react";
 import { SectionDialog } from "./SectionDialog";
 
 const PDF_URL = "/Lewis_Eydman_Resume.pdf";
+// Open with the thumbnail sidebar visible and 100% zoom by default
+const PDF_VIEW = "#pagemode=thumbs&zoom=100";
 
 type Props = {
   open: boolean;
@@ -46,13 +48,13 @@ export function ResumeDialog({ open, onOpenChange }: Props) {
 
         <div className="relative overflow-hidden rounded-sm border border-border bg-card">
           <object
-            data={`${PDF_URL}#view=FitH`}
+            data={`${PDF_URL}${PDF_VIEW}`}
             type="application/pdf"
             aria-label="Résumé PDF preview"
             className="block h-[70vh] w-full"
           >
             <iframe
-              src={PDF_URL}
+              src={`${PDF_URL}${PDF_VIEW}`}
               title="Résumé of Lewis Eydman"
               className="block h-[70vh] w-full border-0"
             />
