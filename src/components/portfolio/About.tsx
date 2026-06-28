@@ -3,19 +3,28 @@ import portrait from "@/assets/portrait.png";
 
 const disciplines = [
   {
+    numeral: "I",
     label: "Design",
-    body: "Systems thinking, interaction design, type. From wireframe to motion spec.",
-    tools: "Figma · Linear · Framer",
+    principle: "From research to motion spec.",
+    body:
+      "Service blueprinting, UX strategy and user-centred design — the patient mapping of journeys before pixels. WCAG-aware, prototype-driven, accountable to evidence.",
+    tools: ["Figma", "Service Blueprints", "UCD", "Prototyping"],
   },
   {
+    numeral: "II",
     label: "Engineering",
-    body: "TypeScript across the stack. React, Node, Postgres, and the edge.",
-    tools: "TS · React · Postgres",
+    principle: "Shipping the thing I just sketched.",
+    body:
+      "React + TypeScript frontends, JSON-LD architecture, automated CI/CD. Comfortable in the system and the component — Playwright/Cypress at the seams.",
+    tools: ["React", "TypeScript", "Node", "Playwright"],
   },
   {
+    numeral: "III",
     label: "Product",
-    body: "Discovery, strategy, and the patient orchestration of cross-disciplinary teams.",
-    tools: "Roadmaps · Research · Rituals",
+    principle: "Outcomes over roadmaps.",
+    body:
+      "Discovery, prioritisation and stakeholder orchestration. Translate ambiguous business goals into measurable releases — A/B tested, analytics-led, regulation-aware.",
+    tools: ["Discovery", "Roadmaps", "Analytics", "A/B Testing"],
   },
 ];
 
@@ -63,28 +72,54 @@ export function About() {
               technical trade-off.
             </motion.p>
 
-            <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border sm:grid-cols-3">
+            <div className="relative flex flex-col">
+              {/* manuscript spine */}
+              <div className="pointer-events-none absolute bottom-2 left-[0.45rem] top-2 w-px bg-sepia/30" />
               {disciplines.map((d, i) => (
                 <motion.div
                   key={d.label}
                   initial={{ opacity: 0, y: 12 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.1 * i }}
-                  className="flex flex-col gap-3 bg-background p-6"
+                  transition={{ duration: 0.55, delay: 0.08 * i }}
+                  className="relative flex gap-6 border-b border-border py-7 last:border-b-0"
                 >
-                  <span className="font-mono-mar">{`§ ${String(i + 1).padStart(2, "0")}`}</span>
-                  <h3 className="font-display text-2xl">{d.label}</h3>
-                  <p className="text-sm leading-relaxed text-muted-foreground">{d.body}</p>
-                  <span className="font-mono-mar mt-auto pt-3">{d.tools}</span>
+                  {/* spine dot */}
+                  <span className="absolute left-0 top-[2.1rem] flex h-[0.9rem] w-[0.9rem] items-center justify-center">
+                    <span className="h-2 w-2 rounded-full border border-sepia bg-background" />
+                  </span>
+                  <div className="w-16 shrink-0 pl-7 pt-1">
+                    <span className="font-mono-mar block">§ {d.numeral}</span>
+                  </div>
+                  <div className="flex flex-1 flex-col gap-2">
+                    <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                      <h3 className="font-display text-3xl tracking-[-0.01em] md:text-4xl">{d.label}</h3>
+                      <p className="font-display text-base italic text-sepia md:text-lg">— {d.principle}</p>
+                    </div>
+                    <p className="max-w-prose text-sm leading-relaxed text-muted-foreground">{d.body}</p>
+                    <div className="mt-1 flex flex-wrap items-center gap-2 pt-1">
+                      <span className="font-mono-mar">Instruments</span>
+                      <span className="hairline h-px w-6" />
+                      <div className="flex flex-wrap gap-1.5">
+                        {d.tools.map((t) => (
+                          <span
+                            key={t}
+                            className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground"
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </motion.div>
               ))}
             </div>
 
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
               {[
-                ["08", "Years shipping"],
-                ["40+", "Products advised"],
+                ["07", "Years shipping"],
+                ["+19%", "Sign-up uplift"],
                 ["3", "Disciplines woven"],
                 ["∞", "Notebooks filled"],
               ].map(([n, l]) => (
