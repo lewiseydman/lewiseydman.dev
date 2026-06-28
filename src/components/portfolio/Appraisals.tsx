@@ -1,35 +1,46 @@
 import { motion } from "framer-motion";
 
-const appraisals = [
+type Testimonial = {
+  quote: string;
+  name: string;
+  role: string;
+  org: string;
+  relation: "Colleague" | "Client" | "Built for";
+};
+
+// Placeholder drafts — swap in real quotes when ready.
+const testimonials: Testimonial[] = [
   {
-    subject: "Linear",
-    verdict: "Master of restraint",
-    note: "A working argument that opinionated tools age better than configurable ones.",
+    quote:
+      "Lewis is the rare PM who can sketch the interface in the morning, write the React in the afternoon, and still argue the roadmap with the board.",
+    name: "Placeholder Name",
+    role: "Head of Engineering",
+    org: "100Green",
+    relation: "Colleague",
   },
   {
-    subject: "Figma's editor",
-    verdict: "Quietly polymathic",
-    note: "Engineering choices that read as design choices and vice versa.",
+    quote:
+      "He took an ambiguous business problem and returned a wireframe, a prototype, and the analytics that proved it. We shipped in weeks, not quarters.",
+    name: "Placeholder Name",
+    role: "Founder",
+    org: "Independent client",
+    relation: "Client",
   },
   {
-    subject: "Things 3",
-    verdict: "The patient classic",
-    note: "Twenty years of refusing to add features I would have added in week one.",
+    quote:
+      "The clearest thinker about service design I've worked with. Every decision was traceable back to a user — and to a number.",
+    name: "Placeholder Name",
+    role: "Senior Designer",
+    org: "ITS",
+    relation: "Colleague",
   },
   {
-    subject: "Are.na",
-    verdict: "An honest workshop",
-    note: "A reminder that the best software still resembles a commonplace book.",
-  },
-  {
-    subject: "Arc Browser",
-    verdict: "Brave, occasionally lost",
-    note: "Proof that ambition without restraint is a feature, until it isn't.",
-  },
-  {
-    subject: "iA Writer",
-    verdict: "The narrow doorway",
-    note: "One opinion, defended for fifteen years. The clearest writing surface I own.",
+    quote:
+      "Lewis built our entire web presence from research to deployment. Two years on, it still feels considered — nothing has had to be rebuilt.",
+    name: "Placeholder Name",
+    role: "Director",
+    org: "Freelance engagement",
+    relation: "Built for",
   },
 ];
 
@@ -37,30 +48,42 @@ export function Appraisals() {
   return (
     <div className="flex flex-col gap-8">
       <p className="font-display text-2xl leading-snug md:text-3xl">
-        Marginalia &mdash;{" "}
-        <span className="italic text-sepia">short verdicts on tools that have shaped my taste.</span>
+        Laudes &mdash;{" "}
+        <span className="italic text-sepia">
+          a few words from former colleagues, clients, and the people I&rsquo;ve built for.
+        </span>
       </p>
       <ul className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
-        {appraisals.map((a, i) => (
+        {testimonials.map((t, i) => (
           <motion.li
-            key={a.subject}
+            key={i}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: i * 0.05 }}
-            className="group flex flex-col gap-3 bg-background p-6 md:p-7"
+            className="group flex flex-col gap-5 bg-background p-6 md:p-7"
           >
             <div className="flex items-baseline justify-between">
               <span className="font-mono-mar">{`Laus · ${String(i + 1).padStart(2, "0")}`}</span>
+              <span className="font-mono-mar">{t.relation}</span>
             </div>
-            <div className="flex flex-col gap-1">
-              <h3 className="font-display text-2xl md:text-3xl">{a.subject}</h3>
-              <p className="font-display text-lg italic text-sepia md:text-xl">&mdash; {a.verdict}</p>
+            <blockquote className="font-display text-xl italic leading-snug text-foreground md:text-2xl">
+              <span className="text-sepia">&ldquo;</span>
+              {t.quote}
+              <span className="text-sepia">&rdquo;</span>
+            </blockquote>
+            <div className="mt-auto flex flex-col gap-0.5 border-t border-border pt-4">
+              <span className="font-display text-base text-foreground md:text-lg">{t.name}</span>
+              <span className="font-mono-mar">
+                {t.role} · {t.org}
+              </span>
             </div>
-            <p className="text-sm leading-relaxed text-muted-foreground">{a.note}</p>
-            <div className="mt-1 h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
+            <div className="h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
           </motion.li>
         ))}
       </ul>
+      <p className="font-mono-mar">
+        * Placeholder quotes — replace in <code>src/components/portfolio/Appraisals.tsx</code>.
+      </p>
     </div>
   );
 }
