@@ -229,7 +229,7 @@ export function About() {
           <p className="font-display text-xl italic leading-relaxed text-sepia md:text-2xl">
             Curious by trade — the same instinct that drives the work fills the weekends.
           </p>
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap content-start items-start gap-1.5 self-start">
             {interests.map((t) => (
               <span
                 key={t}
