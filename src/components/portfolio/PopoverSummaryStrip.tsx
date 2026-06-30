@@ -29,7 +29,7 @@ export function PopoverSummaryStrip({ items, label = "Folio" }: Props) {
           {items.length} {items.length === 1 ? "entry" : "entries"}
         </span>
       </div>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide lg:grid lg:grid-cols-3 lg:overflow-visible lg:pb-0">
         {items.map((item, i) => {
           const Tag = item.onClick ? "button" : "div";
           return (
@@ -38,6 +38,7 @@ export function PopoverSummaryStrip({ items, label = "Folio" }: Props) {
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: i * 0.04 }}
+              className="min-w-[260px] flex-1 snap-start"
             >
               <Tag
                 {...(item.onClick
