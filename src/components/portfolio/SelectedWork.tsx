@@ -175,7 +175,7 @@ export function SelectedWork() {
     <div className="flex flex-col gap-8">
       <PopoverSummaryStrip
         label="Opera · index"
-        items={projects.map((p) => ({
+        items={projects.slice(0, 3).map((p) => ({
           kicker: `Opus · ${p.num}`,
           title: p.title,
           dek: p.role,
