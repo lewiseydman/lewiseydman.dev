@@ -36,11 +36,11 @@ const stats: Array<[string, string]> = [
 const interests = [
   "Coding",
   "Gaming",
+  "Specialty coffee",
   "Making music",
   "Muay Thai",
-  "Landscaping",
-  "Specialty coffee",
-  "Open source",
+  "DIY",
+  "Homelabing",
   "Sketching",
 ];
 
