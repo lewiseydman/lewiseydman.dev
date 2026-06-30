@@ -233,7 +233,7 @@ export function About() {
             {interests.map((t) => (
               <span
                 key={t}
-                className="rounded-full border border-border px-3 pt-1 pb-0 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground"
+                className="rounded-full border border-border px-3 py-1 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground"
               >
                 {t}
               </span>
