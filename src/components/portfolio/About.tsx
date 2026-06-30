@@ -204,7 +204,7 @@ export function About() {
                 </div>
                 <p className="max-w-prose text-sm leading-relaxed text-muted-foreground">{d.body}</p>
                 <div className="mt-1 flex flex-wrap items-center gap-2 pt-1">
-                  <span className="font-mono-mar">Instruments</span>
+                  <span className="font-mono-mar">Skills</span>
                   <span className="hairline h-px w-6" />
                   <div className="flex flex-wrap gap-1.5">
                     {d.tools.map((t) => (
