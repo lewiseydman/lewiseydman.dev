@@ -135,31 +135,7 @@ export function About() {
 
       {/* Portrait + Disciplines (manuscript block — kept) */}
       <section className="grid gap-10 border-t border-border pt-10 md:grid-cols-[0.85fr_1.15fr] md:gap-14">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.9 }}
-          className="relative"
-        >
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm border border-border bg-card paper-grain">
-            <img
-              src={portrait}
-              alt="Sketch portrait of Lewis Eydman"
-              loading="lazy"
-              className="h-full w-full object-contain mix-blend-multiply dark:mix-blend-screen dark:invert"
-            />
-            <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay pointer-events-none" />
-            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-              <span className="font-mono-mar">Stud. · retrato</span>
-              <span className="font-mono-mar">N° 06</span>
-            </div>
-          </div>
-          <div className="mt-4 flex items-center justify-between">
-            <span className="font-mono-mar">Plate I</span>
-            <span className="font-mono-mar">London · MMXXVI</span>
-          </div>
-        </motion.div>
+        <PortraitBlock />
 
         <div className="relative flex flex-col">
           <div className="pointer-events-none absolute bottom-2 left-[0.45rem] top-2 w-px bg-sepia/30" />
