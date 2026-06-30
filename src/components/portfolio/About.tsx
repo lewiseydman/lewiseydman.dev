@@ -13,17 +13,17 @@ const disciplines = [
   },
   {
     numeral: "II",
-    label: "Engineering",
-    principle: "Shipping the thing I just sketched.",
-    body: "React + TypeScript frontends, JSON-LD architecture, automated CI/CD. Comfortable in the system and the component — Playwright/Cypress at the seams.",
-    tools: ["React", "TypeScript", "Node", "Playwright"],
-  },
-  {
-    numeral: "III",
     label: "Product",
     principle: "Outcomes over roadmaps.",
     body: "Discovery, prioritisation and stakeholder orchestration. Translate ambiguous business goals into measurable releases — A/B tested, analytics-led, regulation-aware.",
     tools: ["Discovery", "Roadmaps", "Analytics", "A/B Testing"],
+  },
+  {
+    numeral: "III",
+    label: "Engineering",
+    principle: "Shipping the thing I just sketched.",
+    body: "React + TypeScript frontends, JSON-LD architecture, automated CI/CD. Comfortable in the system and the component — Playwright/Cypress at the seams.",
+    tools: ["React", "TypeScript", "Node", "Playwright"],
   },
 ];
 
