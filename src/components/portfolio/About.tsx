@@ -27,10 +27,10 @@ const disciplines = [
 ];
 
 const stats: Array<[string, string]> = [
-  ["7+", "Years shipping"],
-  ["20+", "Products launched"],
-  ["4", "Industries served"],
-  ["100%", "On-time delivery"],
+  ["7+", "Years of creating"],
+  ["10+", "Products launched"],
+  ["3", "Industries served"],
+  ["100%", "Dedication"],
 ];
 
 const interests = [
