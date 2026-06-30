@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useRef, useState } from "react";
 
 export type SummaryItem = {
   kicker: string;
@@ -20,6 +21,45 @@ type Props = {
  * screenshots while keeping the renaissance-monochrome palette.
  */
 export function PopoverSummaryStrip({ items, label = "Folio" }: Props) {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragState = useRef({ startX: 0, scrollLeft: 0, moved: false });
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = scrollerRef.current;
+    if (!e.isPrimary || !el) return;
+    // Only hijack on devices with a fine pointer (mouse / trackpad)
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+    setIsDragging(true);
+    dragState.current = {
+      startX: e.clientX,
+      scrollLeft: el.scrollLeft,
+      moved: false,
+    };
+    el.setPointerCapture(e.pointerId);
+  };
+
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDragging || !scrollerRef.current) return;
+    const dx = e.clientX - dragState.current.startX;
+    if (Math.abs(dx) > 3) dragState.current.moved = true;
+    scrollerRef.current.scrollLeft = dragState.current.scrollLeft - dx;
+  };
+
+  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    scrollerRef.current?.releasePointerCapture(e.pointerId);
+  };
+
+  const suppressClickIfDragged = (e: React.MouseEvent) => {
+    if (dragState.current.moved) {
+      e.preventDefault();
+      e.stopPropagation();
+      dragState.current.moved = false;
+    }
+  };
+
   return (
     <div className="flex flex-col gap-3 border-b border-border pb-8">
       <div className="font-mono-mar flex items-center gap-3">
@@ -29,7 +69,17 @@ export function PopoverSummaryStrip({ items, label = "Folio" }: Props) {
           {items.length} {items.length === 1 ? "entry" : "entries"}
         </span>
       </div>
-      <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide lg:grid lg:grid-cols-3 lg:overflow-visible lg:pb-0">
+      <div
+        ref={scrollerRef}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        onClickCapture={suppressClickIfDragged}
+        className={`flex gap-3 overflow-x-auto pb-2 scrollbar-hide lg:grid lg:grid-cols-3 lg:overflow-visible lg:pb-0 ${
+          isDragging ? "cursor-grabbing select-none" : "lg:cursor-auto cursor-grab"
+        }`}
+      >
         {items.map((item, i) => {
           const Tag = item.onClick ? "button" : "div";
           return (
