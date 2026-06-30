@@ -222,7 +222,7 @@ export function About() {
       {/* Marginalia / Interests */}
       <section className="border-t border-border pt-8">
         <div className="mb-5 flex items-center gap-3">
-          <span className="font-mono-mar">Marginalia · Beyond the desk</span>
+          <span className="font-mono-mar">Vita Lateralis · Interests</span>
           <span className="hairline h-px flex-1" />
         </div>
         <div className="grid gap-6 md:grid-cols-[0.85fr_1.15fr] md:gap-14">
