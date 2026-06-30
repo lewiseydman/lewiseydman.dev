@@ -71,26 +71,6 @@ function Gear({ teeth = 8 }: { teeth?: number }) {
 export function ExperienceTimeline() {
   return (
     <div className="flex flex-col gap-10">
-      <PopoverSummaryStrip
-        label="Cursus · highlights"
-        items={[
-          {
-            kicker: "Now",
-            title: experience[0].role,
-            dek: experience[0].org,
-          },
-          {
-            kicker: "Most recent",
-            title: experience[1].role,
-            dek: experience[1].org,
-          },
-          {
-            kicker: "Earliest",
-            title: experience[2].role,
-            dek: experience[2].org,
-          },
-        ]}
-      />
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-5">
         <p className="font-display text-xl italic text-sepia md:text-2xl">
           A mechanical chronology &mdash; in eight working years.
@@ -106,57 +86,53 @@ export function ExperienceTimeline() {
       </div>
 
       <div className="relative">
-          {/* central spine */}
-          <div className="absolute left-[1.25rem] top-0 bottom-0 w-px hairline md:left-1/2" />
+        {/* central spine */}
+        <div className="absolute left-[1.25rem] top-0 bottom-0 w-px hairline md:left-1/2" />
 
-          <ol className="space-y-16 md:space-y-24">
-            {experience.map((e, i) => {
-              const left = i % 2 === 0;
-              return (
-                <motion.li
-                  key={e.year}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.7 }}
-                  className="relative grid grid-cols-[3rem_1fr] gap-6 md:grid-cols-2 md:gap-12"
+        <ol className="space-y-16 md:space-y-24">
+          {experience.map((e, i) => {
+            const left = i % 2 === 0;
+            return (
+              <motion.li
+                key={e.year}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.7 }}
+                className="relative grid grid-cols-[3rem_1fr] gap-6 md:grid-cols-2 md:gap-12"
+              >
+                {/* gear node */}
+                <div className="absolute left-[1.25rem] -translate-x-1/2 md:left-1/2">
+                  <div className="rounded-full bg-background p-1">
+                    <Gear teeth={6 + (i % 3) * 2} />
+                  </div>
+                </div>
+
+                {/* card */}
+                <div
+                  className={`col-start-2 md:row-start-1 ${
+                    left ? "md:col-start-1 md:pr-16 md:text-right" : "md:col-start-2 md:pl-16"
+                  }`}
                 >
-                  {/* gear node */}
-                  <div className="absolute left-[1.25rem] -translate-x-1/2 md:left-1/2">
-                    <div className="rounded-full bg-background p-1">
-                      <Gear teeth={6 + (i % 3) * 2} />
-                    </div>
+                  <div className="flex flex-col gap-3">
+                    <span className="font-mono-mar">{e.year}</span>
+                    <h3 className="font-display text-2xl md:text-3xl">{e.role}</h3>
+                    <p className="font-display italic text-sepia md:text-lg">{e.org}</p>
+                    <p className={`max-w-md text-sm leading-relaxed text-muted-foreground ${left ? "md:ml-auto" : ""}`}>
+                      {e.notes}
+                    </p>
                   </div>
-
-                  {/* card */}
-                  <div
-                    className={`col-start-2 md:row-start-1 ${
-                      left ? "md:col-start-1 md:pr-16 md:text-right" : "md:col-start-2 md:pl-16"
-                    }`}
-                  >
-                    <div className="flex flex-col gap-3">
-                      <span className="font-mono-mar">{e.year}</span>
-                      <h3 className="font-display text-2xl md:text-3xl">{e.role}</h3>
-                      <p className="font-display italic text-sepia md:text-lg">{e.org}</p>
-                      <p
-                        className={`max-w-md text-sm leading-relaxed text-muted-foreground ${
-                          left ? "md:ml-auto" : ""
-                        }`}
-                      >
-                        {e.notes}
-                      </p>
-                    </div>
-                  </div>
-                  {/* hairline leader */}
-                  <div
-                    className={`hidden md:block absolute top-5 ${
-                      left ? "right-1/2 mr-12" : "left-1/2 ml-12"
-                    } h-px w-12 hairline`}
-                  />
-                </motion.li>
-              );
-            })}
-          </ol>
+                </div>
+                {/* hairline leader */}
+                <div
+                  className={`hidden md:block absolute top-5 ${
+                    left ? "right-1/2 mr-12" : "left-1/2 ml-12"
+                  } h-px w-12 hairline`}
+                />
+              </motion.li>
+            );
+          })}
+        </ol>
       </div>
 
       {/* education footer */}
@@ -167,10 +143,7 @@ export function ExperienceTimeline() {
         </div>
         <ul className="grid gap-4 md:grid-cols-3">
           {education.map((e) => (
-            <li
-              key={e.title}
-              className="flex flex-col gap-1 rounded-sm border border-border bg-card/40 p-4"
-            >
+            <li key={e.title} className="flex flex-col gap-1 rounded-sm border border-border bg-card/40 p-4">
               <span className="font-mono-mar">{e.year}</span>
               <span className="font-display text-lg leading-tight">{e.title}</span>
               <span className="font-display italic text-sepia">{e.org}</span>
