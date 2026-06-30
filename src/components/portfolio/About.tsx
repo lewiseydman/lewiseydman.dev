@@ -206,7 +206,7 @@ export function About() {
       {/* Stats */}
       <section className="border-t border-border pt-8">
         <div className="mb-5 flex items-center gap-3">
-          <span className="font-mono-mar">Quantities · Summa</span>
+          <span className="font-mono-mar">Summa · Experience</span>
           <span className="hairline h-px flex-1" />
         </div>
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
