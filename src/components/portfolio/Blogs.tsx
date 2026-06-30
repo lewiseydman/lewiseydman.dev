@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowUp, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowUp, ArrowUpRight, Plus } from "lucide-react";
 import { useState } from "react";
 import thumb from "@/assets/thumb-codex.jpg";
 import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
@@ -78,6 +78,10 @@ export function Blogs() {
   const open = blogs.find((b) => b.id === openId) ?? null;
 
   const [hero, ...rest] = blogs;
+  const INITIAL_ARCHIVE = 2;
+  const [archiveCount, setArchiveCount] = useState(INITIAL_ARCHIVE);
+  const visibleRest = rest.slice(0, archiveCount);
+  const remaining = rest.length - visibleRest.length;
 
   return (
     <div className="flex flex-col gap-10">
@@ -163,7 +167,7 @@ export function Blogs() {
                 <span className="hairline h-px flex-1" />
               </div>
               <ul className="flex flex-col">
-                {rest.map((b, i) => (
+                {visibleRest.map((b, i) => (
                   <motion.li
                     key={b.id}
                     initial={{ opacity: 0, y: 6 }}
@@ -203,6 +207,24 @@ export function Blogs() {
                   </motion.li>
                 ))}
               </ul>
+              {remaining > 0 && (
+                <div className="flex items-center gap-3 pt-2">
+                  <span className="hairline h-px flex-1" />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setArchiveCount((c) => Math.min(c + 3, rest.length))
+                    }
+                    className="font-mono-mar group inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-sepia transition-colors hover:border-sepia/60 hover:bg-sepia/[0.04] hover:text-foreground"
+                  >
+                    <Plus className="h-3 w-3 transition-transform group-hover:rotate-90" />
+                    Reveal {Math.min(3, remaining)} earlier folio
+                    {Math.min(3, remaining) === 1 ? "" : "s"}
+                    <span className="text-muted-foreground">· {remaining} remaining</span>
+                  </button>
+                  <span className="hairline h-px flex-1" />
+                </div>
+              )}
             </section>
           </motion.div>
         ) : (
