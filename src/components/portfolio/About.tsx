@@ -91,7 +91,7 @@ export function About() {
           {[
             {
               kicker: "Current",
-              body: "Communications Manager at 100Green (UK).",
+              body: "Communications Manager @ 100Green",
             },
             {
               kicker: "Experience",
