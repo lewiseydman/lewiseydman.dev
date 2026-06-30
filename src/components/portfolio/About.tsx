@@ -30,7 +30,7 @@ const stats: Array<[string, string]> = [
   ["7+", "Years of creating"],
   ["10+", "Products launched"],
   ["3", "Industries served"],
-  ["100%", "Passion & ddicatiom"],
+  ["100%", "Passion & dedicatiom"],
 ];
 
 const interests = [
