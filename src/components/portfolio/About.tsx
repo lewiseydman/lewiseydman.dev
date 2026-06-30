@@ -95,7 +95,7 @@ export function About() {
             },
             {
               kicker: "Experience",
-              body: "7+ years across product, design and engineering.",
+              body: "7+ years across design, development and product",
             },
             {
               kicker: "Background",
