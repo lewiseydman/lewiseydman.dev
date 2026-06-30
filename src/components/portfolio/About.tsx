@@ -7,24 +7,21 @@ const disciplines = [
     numeral: "I",
     label: "Design",
     principle: "From research to motion spec.",
-    body:
-      "Service blueprinting, UX strategy and user-centred design — the patient mapping of journeys before pixels. WCAG-aware, prototype-driven, accountable to evidence.",
+    body: "Service blueprinting, UX strategy and user-centred design — the patient mapping of journeys before pixels. WCAG-aware, prototype-driven, accountable to evidence.",
     tools: ["Figma", "Service Blueprints", "UCD", "Prototyping"],
   },
   {
     numeral: "II",
     label: "Engineering",
     principle: "Shipping the thing I just sketched.",
-    body:
-      "React + TypeScript frontends, JSON-LD architecture, automated CI/CD. Comfortable in the system and the component — Playwright/Cypress at the seams.",
+    body: "React + TypeScript frontends, JSON-LD architecture, automated CI/CD. Comfortable in the system and the component — Playwright/Cypress at the seams.",
     tools: ["React", "TypeScript", "Node", "Playwright"],
   },
   {
     numeral: "III",
     label: "Product",
     principle: "Outcomes over roadmaps.",
-    body:
-      "Discovery, prioritisation and stakeholder orchestration. Translate ambiguous business goals into measurable releases — A/B tested, analytics-led, regulation-aware.",
+    body: "Discovery, prioritisation and stakeholder orchestration. Translate ambiguous business goals into measurable releases — A/B tested, analytics-led, regulation-aware.",
     tools: ["Discovery", "Roadmaps", "Analytics", "A/B Testing"],
   },
 ];
@@ -64,45 +61,21 @@ const howIWork = [
 export function About() {
   return (
     <div className="flex flex-col gap-12">
-      <PopoverSummaryStrip
-        label="Vita · summary"
-        items={[
-          {
-            kicker: "Practice",
-            title: "Product, design & engineering",
-            dek: "One opinionated practice — sketch, ship, measure.",
-          },
-          {
-            kicker: "Systems",
-            title: "React · Design systems",
-            dek: "Full-stack tools, JSON-LD, CI/CD pipelines.",
-          },
-          {
-            kicker: "Currently",
-            title: "Communications Manager",
-            dek: "Owning the quote journey at 100Green.",
-          },
-        ]}
-      />
-
       {/* Editorial intro */}
       <section className="flex flex-col gap-5">
         <span className="font-mono-mar">Lewis Eydman · De Ipso</span>
         <h2 className="font-display text-4xl leading-[1.05] tracking-[-0.015em] md:text-5xl">
-          Product, engineering, and design in one{" "}
-          <span className="italic text-sepia">opinionated practice.</span>
+          Product, engineering, and design in one <span className="italic text-sepia">opinionated practice.</span>
         </h2>
         <div className="grid gap-6 text-[0.95rem] leading-[1.7] text-muted-foreground md:grid-cols-2 md:gap-10">
           <p>
-            I&rsquo;m a product manager who can sketch the interface in the morning,
-            ship the React in the afternoon, and argue both sides of the technical
-            trade-off. I care about helping ambitious teams present their products
+            I&rsquo;m a product manager who can sketch the interface in the morning, ship the React in the afternoon,
+            and argue both sides of the technical trade-off. I care about helping ambitious teams present their products
             with clarity, taste and a strong point of view.
           </p>
           <p>
-            My background blends service design, UI/UX and full-stack engineering.
-            Currently building at 100Green — energy-quote journeys, regulatory
-            compliance, and the unglamorous work that turns a sign-up form into a
+            My background blends service design, UI/UX and full-stack engineering. Currently building at 100Green —
+            energy-quote journeys, regulatory compliance, and the unglamorous work that turns a sign-up form into a
             measurable business outcome.
           </p>
         </div>
@@ -129,13 +102,8 @@ export function About() {
               body: "Service design, UI/UX, full-stack React.",
             },
           ].map((c) => (
-            <div
-              key={c.kicker}
-              className="flex flex-col gap-3 rounded-sm border border-border bg-card/40 p-5"
-            >
-              <span className="font-mono text-[0.6rem] uppercase tracking-widest text-sepia">
-                {c.kicker}
-              </span>
+            <div key={c.kicker} className="flex flex-col gap-3 rounded-sm border border-border bg-card/40 p-5">
+              <span className="font-mono text-[0.6rem] uppercase tracking-widest text-sepia">{c.kicker}</span>
               <p className="text-[0.95rem] leading-relaxed text-foreground">{c.body}</p>
             </div>
           ))}
@@ -149,15 +117,10 @@ export function About() {
           { title: "How I work", items: howIWork },
         ].map((col) => (
           <div key={col.title} className="flex flex-col gap-4">
-            <h3 className="font-display text-2xl tracking-[-0.01em] md:text-3xl">
-              {col.title}
-            </h3>
+            <h3 className="font-display text-2xl tracking-[-0.01em] md:text-3xl">{col.title}</h3>
             <ul className="flex flex-col">
               {col.items.map((line, i) => (
-                <li
-                  key={line}
-                  className="flex items-baseline gap-4 border-b border-border py-3 last:border-b-0"
-                >
+                <li key={line} className="flex items-baseline gap-4 border-b border-border py-3 last:border-b-0">
                   <span className="font-mono w-8 shrink-0 text-[0.65rem] uppercase tracking-widest text-sepia">
                     {String(i + 1).padStart(2, "0")}
                   </span>
@@ -217,9 +180,7 @@ export function About() {
               <div className="flex flex-1 flex-col gap-2">
                 <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
                   <h3 className="font-display text-3xl tracking-[-0.01em] md:text-4xl">{d.label}</h3>
-                  <p className="font-display text-base italic text-sepia md:text-lg">
-                    — {d.principle}
-                  </p>
+                  <p className="font-display text-base italic text-sepia md:text-lg">— {d.principle}</p>
                 </div>
                 <p className="max-w-prose text-sm leading-relaxed text-muted-foreground">{d.body}</p>
                 <div className="mt-1 flex flex-wrap items-center gap-2 pt-1">
@@ -266,8 +227,7 @@ export function About() {
         </div>
         <div className="grid gap-6 md:grid-cols-[0.85fr_1.15fr] md:gap-14">
           <p className="font-display text-xl italic leading-relaxed text-sepia md:text-2xl">
-            Curious by trade — the same instinct that drives the work fills the
-            weekends.
+            Curious by trade — the same instinct that drives the work fills the weekends.
           </p>
           <div className="flex flex-wrap gap-2">
             {interests.map((t) => (
