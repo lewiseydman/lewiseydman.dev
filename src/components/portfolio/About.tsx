@@ -151,7 +151,7 @@ export function About() {
             <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay pointer-events-none" />
             <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
               <span className="font-mono-mar">Stud. · retrato</span>
-              <span className="font-mono-mar">N° 042</span>
+              <span className="font-mono-mar">N° 06</span>
             </div>
           </div>
           <div className="mt-4 flex items-center justify-between">
