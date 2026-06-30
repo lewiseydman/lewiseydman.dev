@@ -229,11 +229,11 @@ export function About() {
           <p className="font-display text-xl italic leading-relaxed text-sepia md:text-2xl">
             Curious by trade — the same instinct that drives the work fills the weekends.
           </p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {interests.map((t) => (
               <span
                 key={t}
-                className="rounded-full border border-border px-3 py-1 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground"
+                className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground"
               >
                 {t}
               </span>
