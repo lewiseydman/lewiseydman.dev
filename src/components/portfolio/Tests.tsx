@@ -63,7 +63,7 @@ export function Tests() {
   return (
     <div className="flex flex-col gap-8">
       <PopoverSummaryStrip
-        label="Disputationes · index"
+        label="Disputationes · Featured"
         items={tests.slice(0, 3).map((t) => ({
           kicker: `Disputatio · ${t.num}`,
           title: t.title,
@@ -82,8 +82,8 @@ export function Tests() {
             className="flex flex-col gap-8"
           >
             <p className="font-display text-2xl leading-snug md:text-3xl">
-              Small <span className="italic text-sepia">disputationes</span> &mdash; experiments,
-              studies, and things I have found beautiful lately.
+              Small <span className="italic text-sepia">disputationes</span> &mdash; experiments, studies, and things I
+              have found beautiful lately.
             </p>
             <ol className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
               {tests.map((t, i) => (
