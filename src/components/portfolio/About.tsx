@@ -128,7 +128,7 @@ export function About() {
       {/* At a glance band */}
       <section className="flex flex-col gap-5">
         <div className="flex items-center gap-3">
-          <span className="font-mono-mar">At a glance · Summa</span>
+          <span className="font-mono-mar">At a glance</span>
           <span className="hairline h-px flex-1" />
         </div>
         <div className="grid gap-4 md:grid-cols-3">
