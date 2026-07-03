@@ -155,6 +155,25 @@ function Sketch({ kind }: { kind: Project["sketch"] }) {
 export function SelectedWork() {
   const [openId, setOpenId] = useState<string | null>(null);
   const open = projects.find((p) => p.id === openId) ?? null;
+  const [notebookExpanded, setNotebookExpanded] = useState(false);
+  const notebookRef = useRef<HTMLDivElement>(null);
+  const [notebookOverflows, setNotebookOverflows] = useState(false);
+
+  // Reset the notebook collapsed state whenever we open a different project,
+  // and re-measure whether the content overflows its collapsed max-height.
+  useLayoutEffect(() => {
+    setNotebookExpanded(false);
+  }, [openId]);
+
+  useLayoutEffect(() => {
+    if (!open) return;
+    const el = notebookRef.current;
+    if (!el) return;
+    // Compare full content height against the collapsed cap.
+    setNotebookOverflows(el.scrollHeight > 22 * 16 + 4);
+  }, [open, openId]);
+
+  const COLLAPSED_MAX = "22rem";
 
   return (
     <div className="flex flex-col gap-8">
