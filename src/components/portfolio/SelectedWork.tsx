@@ -288,35 +288,7 @@ export function SelectedWork() {
               />
               <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
             </div>
-            <div className="grid gap-6 md:grid-cols-2">
-              {open.study.map((s) => (
-                <div key={s.heading} className="flex flex-col gap-2 border-l border-border pl-4">
-                  <span className="font-mono-mar">{s.heading}</span>
-                  <p className="text-[1rem] leading-[1.7] text-foreground">{s.body}</p>
-                </div>
-              ))}
-            </div>
-            {open.deepDive.length > 0 ? (
-              <section className="flex flex-col gap-6 border-t border-border pt-8">
-                <div className="flex items-baseline justify-between">
-                  <h3 className="font-display text-2xl tracking-[-0.01em] md:text-3xl">
-                    Notebook <span className="italic text-sepia">— in greater depth</span>
-                  </h3>
-                  <span className="font-mono-mar">Marginalia</span>
-                </div>
-                <div className="flex flex-col">
-                  {open.deepDive.map((d, i) => (
-                    <div
-                      key={d.heading}
-                      className={`flex flex-col gap-3 py-6 ${i !== 0 ? "border-t border-sepia/20" : ""}`}
-                    >
-                      <span className="font-mono-mar">{d.heading}</span>
-                      <p className="max-w-prose text-[1.05rem] leading-[1.75] text-foreground">{d.body}</p>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            ) : null}
+            {/* Caption strip: Outcome + tags + CTA, directly under the hero */}
             <div className="flex flex-wrap items-end justify-between gap-6 border-t border-border pt-6">
               <div className="flex flex-col">
                 <span className="font-mono-mar">Outcome</span>
@@ -346,6 +318,63 @@ export function SelectedWork() {
                 </div>
               </div>
             </div>
+            {/* Notebook — free-form, collapsible */}
+            <section className="flex flex-col gap-6 border-t border-border pt-8">
+              <div className="flex items-baseline justify-between">
+                <h3 className="font-display text-2xl tracking-[-0.01em] md:text-3xl">
+                  Notebook <span className="italic text-sepia">— marginalia</span>
+                </h3>
+                <span className="font-mono-mar">Opus · {open.num}</span>
+              </div>
+              <div className="relative">
+                <div
+                  ref={notebookRef}
+                  style={
+                    notebookExpanded || !notebookOverflows
+                      ? undefined
+                      : { maxHeight: COLLAPSED_MAX, overflow: "hidden" }
+                  }
+                  className="flex flex-col gap-5"
+                >
+                  {open.notebook
+                    .split(/\n\s*\n/)
+                    .filter((p) => p.trim().length > 0)
+                    .map((p, i) => (
+                      <p
+                        key={i}
+                        className="max-w-prose text-[1.05rem] leading-[1.75] text-foreground"
+                      >
+                        {p}
+                      </p>
+                    ))}
+                </div>
+                {!notebookExpanded && notebookOverflows ? (
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent"
+                  />
+                ) : null}
+              </div>
+              {notebookOverflows ? (
+                <button
+                  type="button"
+                  onClick={() => setNotebookExpanded((v) => !v)}
+                  className="font-mono-mar group inline-flex items-center gap-2 self-start rounded-full border border-border px-3 py-1.5 text-sepia transition-colors hover:border-sepia/60 hover:bg-sepia/[0.04] hover:text-foreground"
+                >
+                  {notebookExpanded ? (
+                    <>
+                      <ChevronUp className="h-3 w-3" />
+                      Read less
+                    </>
+                  ) : (
+                    <>
+                      <ChevronDown className="h-3 w-3" />
+                      Read more
+                    </>
+                  )}
+                </button>
+              ) : null}
+            </section>
           </motion.article>
         )}
       </AnimatePresence>
