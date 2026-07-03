@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowUp, ArrowUpRight, Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import thumb from "@/assets/thumb-codex.jpg";
 import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
 
@@ -82,6 +82,37 @@ export function Blogs() {
   const [archiveCount, setArchiveCount] = useState(INITIAL_ARCHIVE);
   const visibleRest = rest.slice(0, archiveCount);
   const remaining = rest.length - visibleRest.length;
+
+  const articleRef = useRef<HTMLElement>(null);
+  const [showTopBtn, setShowTopBtn] = useState(false);
+
+  // Reset scroll to the top of the article whenever a new post opens.
+  useEffect(() => {
+    if (!open) {
+      setShowTopBtn(false);
+      return;
+    }
+    // Defer to next frame so the article has mounted.
+    const id = requestAnimationFrame(() => {
+      articleRef.current?.scrollIntoView({ block: "start", behavior: "auto" });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [openId, open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onScroll = () => setShowTopBtn(window.scrollY > 600);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [open]);
+
+  const scrollToArticleTop = () => {
+    const el = articleRef.current;
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - 16;
+    window.scrollTo({ top, behavior: "smooth" });
+  };
 
   return (
     <div className="flex flex-col gap-10">
