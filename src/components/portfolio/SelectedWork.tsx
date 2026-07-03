@@ -34,16 +34,40 @@ const projects: Project[] = [
     tags: ["B2B", "React", "Real-time"],
     sketch: "gear",
     study: [
-      { heading: "Context", body: "Helios runs a fleet of utility-scale solar sites. The legacy console had grown into a Christmas tree of dashboards — forty-seven widgets, no shared ontology, and a six-week onboarding ramp for new operators." },
-      { heading: "Role", body: "Lead PM with a hand on the design tools. Embedded with two engineers for the first quarter, then handed off as the team scaled." },
-      { heading: "Challenge", body: "Reduce the time-to-first-meaningful-action for a new operator without removing capability for the veterans who liked the old console." },
-      { heading: "Approach", body: "Reframed the surface around the operator's actual decision tree, not the underlying microservice graph. Built a single canvas of asset health, with optional drill-downs gated behind a 'workshop' mode for power users." },
-      { heading: "Outcome", body: "Onboarding time fell from six weeks to eleven days. The veterans were quieter than expected, which we took as a compliment." },
+      {
+        heading: "Context",
+        body: "Helios runs a fleet of utility-scale solar sites. The legacy console had grown into a Christmas tree of dashboards — forty-seven widgets, no shared ontology, and a six-week onboarding ramp for new operators.",
+      },
+      {
+        heading: "Role",
+        body: "Lead PM with a hand on the design tools. Embedded with two engineers for the first quarter, then handed off as the team scaled.",
+      },
+      {
+        heading: "Challenge",
+        body: "Reduce the time-to-first-meaningful-action for a new operator without removing capability for the veterans who liked the old console.",
+      },
+      {
+        heading: "Approach",
+        body: "Reframed the surface around the operator's actual decision tree, not the underlying microservice graph. Built a single canvas of asset health, with optional drill-downs gated behind a 'workshop' mode for power users.",
+      },
+      {
+        heading: "Outcome",
+        body: "Onboarding time fell from six weeks to eleven days. The veterans were quieter than expected, which we took as a compliment.",
+      },
     ],
     deepDive: [
-      { heading: "Discovery", body: "Two weeks of ride-alongs with operators in three regions. Mapped the actual decision tree on paper before any pixel work — what they reached for in the first thirty seconds of an alert, what they ignored." },
-      { heading: "Architecture", body: "Replaced the polled REST surface with a typed event stream. The frontend became a derived projection of that stream, which made the 'live canvas' affordable to build and reason about." },
-      { heading: "What I'd do differently", body: "Shipped the 'workshop' mode too late. The veterans spent three weeks unhappy before they discovered the escape hatch was sitting behind a keystroke." },
+      {
+        heading: "Discovery",
+        body: "Two weeks of ride-alongs with operators in three regions. Mapped the actual decision tree on paper before any pixel work — what they reached for in the first thirty seconds of an alert, what they ignored.",
+      },
+      {
+        heading: "Architecture",
+        body: "Replaced the polled REST surface with a typed event stream. The frontend became a derived projection of that stream, which made the 'live canvas' affordable to build and reason about.",
+      },
+      {
+        heading: "What I'd do differently",
+        body: "Shipped the 'workshop' mode too late. The veterans spent three weeks unhappy before they discovered the escape hatch was sitting behind a keystroke.",
+      },
     ],
     liveUrl: "https://example.com/helios",
   },
@@ -59,15 +83,36 @@ const projects: Project[] = [
     tags: ["Consumer", "Maps", "iOS"],
     sketch: "compass",
     study: [
-      { heading: "Context", body: "Atlas had been positioned as a 'better Google Maps'. It was not. We pivoted to a personal atlas — a place for the user's own places, routes, and notes, on top of a competent but unambitious map." },
-      { heading: "Role", body: "PM and prototyper. I built the first version of the note surface in SwiftUI over a weekend; the team then made it production-grade." },
-      { heading: "Challenge", body: "Find a wedge in a market dominated by two free incumbents with infinite distribution." },
-      { heading: "Approach", body: "Stopped competing on coverage and started competing on memory. The map remembered where you had been, what you had written about it, and surfaced it at the right moment." },
-      { heading: "Outcome", body: "1.2M MAU in twelve months, with a retention curve that flattened higher than any product I have shipped." },
+      {
+        heading: "Context",
+        body: "Atlas had been positioned as a 'better Google Maps'. It was not. We pivoted to a personal atlas — a place for the user's own places, routes, and notes, on top of a competent but unambitious map.",
+      },
+      {
+        heading: "Role",
+        body: "PM and prototyper. I built the first version of the note surface in SwiftUI over a weekend; the team then made it production-grade.",
+      },
+      {
+        heading: "Challenge",
+        body: "Find a wedge in a market dominated by two free incumbents with infinite distribution.",
+      },
+      {
+        heading: "Approach",
+        body: "Stopped competing on coverage and started competing on memory. The map remembered where you had been, what you had written about it, and surfaced it at the right moment.",
+      },
+      {
+        heading: "Outcome",
+        body: "1.2M MAU in twelve months, with a retention curve that flattened higher than any product I have shipped.",
+      },
     ],
     deepDive: [
-      { heading: "Positioning", body: "The pivot rested on a single research finding: people who already had a 'mapping app' still kept their meaningful places in a notes app. We didn't need to beat Maps — we needed to beat Notes." },
-      { heading: "Cartography", body: "Hand-rolled vector tile pipeline so the map style could be ours. Two iterations to find a treatment that read as 'a personal notebook' rather than 'a software map'." },
+      {
+        heading: "Positioning",
+        body: "The pivot rested on a single research finding: people who already had a 'mapping app' still kept their meaningful places in a notes app. We didn't need to beat Maps — we needed to beat Notes.",
+      },
+      {
+        heading: "Cartography",
+        body: "Hand-rolled vector tile pipeline so the map style could be ours. Two iterations to find a treatment that read as 'a personal notebook' rather than 'a software map'.",
+      },
     ],
     liveUrl: "https://example.com/atlas",
   },
@@ -83,15 +128,30 @@ const projects: Project[] = [
     tags: ["SaaS", "Workflow"],
     sketch: "wing",
     study: [
-      { heading: "Context", body: "Async teams keep reinventing scheduling, badly. We built a primitive — a small, opinionated, embeddable scheduler — that other tools could lean on instead of building their own." },
+      {
+        heading: "Context",
+        body: "Async teams keep reinventing scheduling, badly. We built a primitive — a small, opinionated, embeddable scheduler — that other tools could lean on instead of building their own.",
+      },
       { heading: "Role", body: "Founder. Designed, built, and sold the first hundred customers myself before hiring." },
       { heading: "Challenge", body: "Convince teams to adopt a primitive when the market wanted a full product." },
-      { heading: "Approach", body: "Sold to engineers, not buyers. Shipped a CLI before the dashboard. Wrote the docs as essays. The product was the documentation." },
-      { heading: "Outcome", body: "Acquired three months out of YC W23. The primitive now ships inside two well-known calendars." },
+      {
+        heading: "Approach",
+        body: "Sold to engineers, not buyers. Shipped a CLI before the dashboard. Wrote the docs as essays. The product was the documentation.",
+      },
+      {
+        heading: "Outcome",
+        body: "Acquired three months out of YC W23. The primitive now ships inside two well-known calendars.",
+      },
     ],
     deepDive: [
-      { heading: "Go-to-market", body: "Founder-led sales, low-volume, high-trust. The CLI was the demo. The docs were the brochure. No marketing site until month nine." },
-      { heading: "The acquisition", body: "Two acquirers, opposite strategies. We picked the one that wanted to keep the primitive as a primitive, not absorb it into a suite." },
+      {
+        heading: "Go-to-market",
+        body: "Founder-led sales, low-volume, high-trust. The CLI was the demo. The docs were the brochure. No marketing site until month nine.",
+      },
+      {
+        heading: "The acquisition",
+        body: "Two acquirers, opposite strategies. We picked the one that wanted to keep the primitive as a primitive, not absorb it into a suite.",
+      },
     ],
     liveUrl: "https://example.com/aviary",
   },
@@ -107,15 +167,30 @@ const projects: Project[] = [
     tags: ["Health", "ML", "Tooling"],
     sketch: "lens",
     study: [
-      { heading: "Context", body: "Pathologists were drowning in unannotated microscopy. The off-the-shelf tools assumed a software user; pathologists are clinicians who tolerate software." },
+      {
+        heading: "Context",
+        body: "Pathologists were drowning in unannotated microscopy. The off-the-shelf tools assumed a software user; pathologists are clinicians who tolerate software.",
+      },
       { heading: "Role", body: "PM, with a strong opinion about the annotation surface." },
-      { heading: "Challenge", body: "Build a tool that respected an existing decades-old vocabulary, without forcing the pathologists to teach the software from scratch." },
-      { heading: "Approach", body: "Trained a small model on the labs' own historical labels. The tool learned each lab's local dialect and gradually moved annotation work from labelling to confirming." },
+      {
+        heading: "Challenge",
+        body: "Build a tool that respected an existing decades-old vocabulary, without forcing the pathologists to teach the software from scratch.",
+      },
+      {
+        heading: "Approach",
+        body: "Trained a small model on the labs' own historical labels. The tool learned each lab's local dialect and gradually moved annotation work from labelling to confirming.",
+      },
       { heading: "Outcome", body: "Adopted by seven research labs. Two co-authored a paper on the methodology." },
     ],
     deepDive: [
-      { heading: "Model choice", body: "A small per-lab model beat a large generalist one in every blind trial. The dialect mattered more than the size of the corpus." },
-      { heading: "Clinical trust", body: "Every suggestion the tool made could be traced back to three historical examples from the lab's own archive. Trust came from provenance, not accuracy alone." },
+      {
+        heading: "Model choice",
+        body: "A small per-lab model beat a large generalist one in every blind trial. The dialect mattered more than the size of the corpus.",
+      },
+      {
+        heading: "Clinical trust",
+        body: "Every suggestion the tool made could be traced back to three historical examples from the lab's own archive. Trust came from provenance, not accuracy alone.",
+      },
     ],
   },
 ];
@@ -174,7 +249,7 @@ export function SelectedWork() {
   return (
     <div className="flex flex-col gap-8">
       <PopoverSummaryStrip
-        label="Opera · index"
+        label="Opera · Featured"
         items={projects.slice(0, 3).map((p) => ({
           kicker: `Opus · ${p.num}`,
           title: p.title,
@@ -194,8 +269,7 @@ export function SelectedWork() {
             className="flex flex-col gap-8"
           >
             <p className="font-display text-2xl leading-snug md:text-3xl">
-              Case studies &mdash;{" "}
-              <span className="italic text-sepia">products built, shipped, and learned from.</span>
+              Case studies &mdash; <span className="italic text-sepia">products built, shipped, and learned from.</span>
             </p>
             <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
               {projects.map((p, i) => (
@@ -219,9 +293,7 @@ export function SelectedWork() {
                     <div className="absolute left-2 top-2 font-mono-mar bg-background/80 px-2 py-0.5">
                       Opus · {p.num}
                     </div>
-                    <div className="absolute right-2 top-2 font-mono-mar bg-background/80 px-2 py-0.5">
-                      {p.year}
-                    </div>
+                    <div className="absolute right-2 top-2 font-mono-mar bg-background/80 px-2 py-0.5">{p.year}</div>
                   </div>
                   <div className="flex flex-col gap-1">
                     <h3 className="font-display text-2xl tracking-[-0.01em] transition-colors group-hover:text-sepia md:text-3xl">
@@ -307,14 +379,10 @@ export function SelectedWork() {
                   {open.deepDive.map((d, i) => (
                     <div
                       key={d.heading}
-                      className={`flex flex-col gap-3 py-6 ${
-                        i !== 0 ? "border-t border-sepia/20" : ""
-                      }`}
+                      className={`flex flex-col gap-3 py-6 ${i !== 0 ? "border-t border-sepia/20" : ""}`}
                     >
                       <span className="font-mono-mar">{d.heading}</span>
-                      <p className="max-w-prose text-[1.05rem] leading-[1.75] text-foreground">
-                        {d.body}
-                      </p>
+                      <p className="max-w-prose text-[1.05rem] leading-[1.75] text-foreground">{d.body}</p>
                     </div>
                   ))}
                 </div>
