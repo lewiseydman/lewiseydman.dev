@@ -1,59 +1,35 @@
-## 1. New résumé wiring
+## 1. Fix PopoverSummaryStrip pill clicks
 
-- Replace `public/Lewis_Eydman_Resume.pdf` with the newly uploaded PDF (overwrite same filename so existing links keep working).
-- `ExperienceTimeline.tsx`: tighten copy to match the refreshed résumé (100Green Communications Manager, ITS Frontend Dev, ITS Designer, Freelance, Phipps Group career-break note in the trailing card, Google UX Design + NUA Graphic Communication in a compact "Education" footer beneath the timeline).
+**Problem:** The pointer-capture drag logic on the scroller intercepts clicks on the inner `<button>` pills, so `onClick` never fires — that's why the pills don't navigate to the item.
 
-## 2. Résumé PDF viewer (footer button)
+**Fix:** In `src/components/portfolio/PopoverSummaryStrip.tsx`:
+- Don't call `setPointerCapture` up-front. Only start "drag mode" (and capture) once movement exceeds a small threshold (~4px).
+- Keep `suppressClickIfDragged` so a real drag still cancels the click.
+- Result: a plain click passes through to the pill button and calls its `onClick`, while dragging still scrolls.
 
-In `ResumeDialog.tsx`, change the embed URL fragment from `#view=FitH` to `#pagemode=thumbs&zoom=100` on both `<object data>` and the `<iframe src>` so the document opens with the thumbnail sidebar visible and at 100% zoom by default (matching what the user means by "sidebar"). Keep "Open in new tab" and "Download" actions untouched.
+## 2. Opera (Selected Work) — restructure case study view
 
-## 3. Shared "pill summary strip" for every popover
+In `src/components/portfolio/SelectedWork.tsx`, inside the open-project view:
 
-Reference screenshots show a row of summary pills with a small label + one-line dek directly beneath the popover header (e.g. *Practice / Systems / Currently*, *Jonathan / Collaboration / Delivery*, featured blog thumbnails, featured Works thumbnails). Implement once, reuse everywhere.
+- **Move the whole Outcome + bottom row directly under the main thumbnail.** Take the existing footer block (Outcome label/value on the left, Visit live product button + tags on the right) and render it as a single row immediately after the hero `<img>` container, before any notebook content. Keep the same layout (`flex flex-wrap items-end justify-between`) and the `border-t border-border pt-6` separator so it reads as a caption strip under the image.
+- **Collapse the two notebook sections into one free-form Notebook.**
+  - Change the internal `Project` type: replace `study: CaseStudySection[]` and `deepDive: CaseStudySection[]` with a single `notebook: string` (paragraphs separated by `\n\n`) so each project can be as short or long as needed.
+  - Migrate existing content by concatenating the current sections' bodies into one `notebook` string per project.
+  - Render the notebook inside a container with `max-height` (~22rem) and a bottom fade mask when collapsed. Add a "Read more / Read less" toggle (local `useState` per open project) that removes the max-height and mask when expanded. Hide the toggle if the content is short enough not to overflow.
+- Remove the old Study grid, the Deep-dive section, and the now-duplicated footer row at the bottom.
 
-- New component: `src/components/portfolio/PopoverSummaryStrip.tsx`. Accepts an array of items: `{ kicker, title, dek, thumb? }`. Renders a horizontal row (2–4 cards) inside the dialog body — pill-shaped, hairline border, optional 40×24 thumbnail at the left, small uppercase kicker, bold title, muted one-line dek. Hover lift + sepia underline. Wraps to a single column on mobile.
-- Update `SectionDialog.tsx` to accept an optional `summary` slot rendered above the section body but inside the unified padded container (no padding drift).
-- Wire each section to pass a `summary`:
-  - **About**: `Practice` (Product, design, and engineering in one practice), `Systems` (React, design systems, full-stack tooling), `Currently` (Communications Manager at 100Green).
-  - **Opera (Work)**: one pill per project with its existing thumb + Latin `Opus · I/II/III/IV`, title, blurb (mirrors the screenshot's Works strip).
-  - **Codex (Blog)**: three featured/most-recent posts with thumbnails (mirrors screenshot's Blog strip).
-  - **Disputatio (Tests)**: each disputatio's number + title + domain.
-  - **Laudes (Testimonials)**: first 3 testimonials, name + relation + truncated quote.
-  - **Cursus (Experience)**: three timeline highlights (Now / Most-recent shipped / Earliest).
+## 3. Blog post layout + back-to-top
 
-## 4. Differentiate Blog popover from Work / Tests
+In `src/components/portfolio/Blogs.tsx`, in the open-article view:
 
-Today, Blogs/Works/Tests all use the same "grid of image cards → back-link detail" layout, which is why they read the same. Rework `Blogs.tsx` into an editorial magazine layout:
+- **Drop the sidebar grid.** Change the article layout to a single centered column (`max-w-[68ch]`) so the body gets full width on desktop and mobile.
+- **Horizontal meta bar above the body.** Above the title, render one horizontal row (Author · Published · Length · Tags) using small `font-mono-mar` labels + values separated by hairline dividers. On mobile it wraps but stays inline where possible (`flex flex-wrap gap-x-4 gap-y-2`).
+- **Back button** ("Back to Codex") stays at the top-left of the article, above the meta bar.
+- **Back-to-top:** remove the sidebar link. Add a floating button fixed to the bottom-right (`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40`) that appears only after the user scrolls (`useEffect` scroll listener + local `visible` state, threshold ~600px). Clicking it smooth-scrolls to the top of the article container (ref on the `<motion.article>`), not the whole page — returning to the top of the blog post the user is viewing. Uses the existing sepia-outlined pill styling with `ArrowUp`.
+- Reset the visible state and scroll to the article top whenever `openId` changes so opening a new article starts at its top.
 
-- **Hero feature**: the most recent post takes a full-width card — large 16:7 image on the left, large display title + dek on the right, byline (Lewis Eydman · date · read time), tag chips, "Read essay →" CTA. Distinctive from Works' grid.
-- **Beneath**: an "Archive" list (no thumbnails) of remaining posts as numbered table rows — `№`, date, title (display serif), dek (muted), read time, right-aligned tag — hairline dividers between rows. Reads like the contents page of a journal, nothing like the image-grid pattern Works uses.
-- **Detail view**: keep the existing typeset article but add a left-aligned editorial sidebar (sticky on desktop) with date, author, read time, tags, and a tiny "↑ Top / ← Back to Codex" rail. Body widens to ~64ch with a real drop cap and pull-quote treatment (italic display, hairline left border) every few paragraphs.
-- Reuse PopoverSummaryStrip for the three featured posts above the hero.
+## Technical notes
 
-## 5. About section restructure
-
-Rework `About.tsx` to follow the reference hierarchy while keeping our renaissance tone:
-
-- Open with a single editorial headline + two-column dek (mirrors "Product, engineering, and design in one opinionated practice" with the existing tone of voice). Author kicker line above (`LEWIS EYDMAN`).
-- **At a glance** band: 3 stat-cards (`Current` = role at 100Green, `Experience` = 7+ years across design, engineering, product, `Background` = service design, UI/UX, full-stack). Same hairline-card treatment as the screenshot.
-- **What I do** + **How I work** as a two-column numbered list (4 items each, `01 02 03 04` in mono):
-  - *What I do*: Product strategy & roadmaps · UX & service design · Frontend & full-stack engineering · Stakeholder & delivery leadership.
-  - *How I work*: Outcomes over rigid roadmaps · Evidence-led, A/B-tested · Sketch first, ship the prototype · Accessible & regulation-aware by default.
-- Move existing **Disciplines** (Design / Engineering / Product manuscript block), **Quantities** (stats), and **Marginalia** (interests, refreshed with résumé-accurate items: coding, gaming, making music, Muay Thai, landscaping, etc.) below the new structure so nothing valuable is lost.
-- Numerals + Latin kickers stay; the layout is the only thing being restructured.
-
-## 6. Files touched
-
-- `public/Lewis_Eydman_Resume.pdf` (replace)
-- `src/components/portfolio/ResumeDialog.tsx`
-- `src/components/portfolio/SectionDialog.tsx`
-- `src/components/portfolio/PopoverSummaryStrip.tsx` (new)
-- `src/components/portfolio/About.tsx`
-- `src/components/portfolio/Blogs.tsx`
-- `src/components/portfolio/SelectedWork.tsx` (pass summary)
-- `src/components/portfolio/Tests.tsx` (pass summary)
-- `src/components/portfolio/Appraisals.tsx` (pass summary)
-- `src/components/portfolio/ExperienceTimeline.tsx` (pass summary + résumé copy refresh)
-- `src/components/portfolio/VitruvianStage.tsx` (pipe `summary` prop into each `SectionDialog` invocation)
-
-No backend, routing, or design-token changes — all work stays in presentation components.
+- No new dependencies; all state is local `useState` / `useEffect`.
+- Type changes are limited to the internal `Project` type in `SelectedWork.tsx`; no exported API changes.
+- Keep the renaissance-monochrome tokens (`sepia`, `border-border`, `font-mono-mar`, `font-display`) — no new colors.

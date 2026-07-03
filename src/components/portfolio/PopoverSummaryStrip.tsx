@@ -23,33 +23,60 @@ type Props = {
 export function PopoverSummaryStrip({ items, label = "Folio" }: Props) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const dragState = useRef({ startX: 0, scrollLeft: 0, moved: false });
+  const dragState = useRef({
+    startX: 0,
+    scrollLeft: 0,
+    moved: false,
+    active: false,
+    pointerId: 0,
+  });
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = scrollerRef.current;
     if (!e.isPrimary || !el) return;
     // Only hijack on devices with a fine pointer (mouse / trackpad)
     if (!window.matchMedia("(pointer: fine)").matches) return;
-    setIsDragging(true);
     dragState.current = {
       startX: e.clientX,
       scrollLeft: el.scrollLeft,
       moved: false,
+      active: true,
+      pointerId: e.pointerId,
     };
-    el.setPointerCapture(e.pointerId);
   };
 
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDragging || !scrollerRef.current) return;
+    const el = scrollerRef.current;
+    if (!dragState.current.active || !el) return;
     const dx = e.clientX - dragState.current.startX;
-    if (Math.abs(dx) > 3) dragState.current.moved = true;
-    scrollerRef.current.scrollLeft = dragState.current.scrollLeft - dx;
+    // Only start actually dragging once the pointer has moved past a small
+    // threshold — otherwise a plain click on a pill would be swallowed by
+    // pointer capture and never fire its onClick.
+    if (!dragState.current.moved && Math.abs(dx) > 4) {
+      dragState.current.moved = true;
+      setIsDragging(true);
+      try {
+        el.setPointerCapture(e.pointerId);
+      } catch {
+        /* noop */
+      }
+    }
+    if (dragState.current.moved) {
+      el.scrollLeft = dragState.current.scrollLeft - dx;
+    }
   };
 
   const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDragging) return;
-    setIsDragging(false);
-    scrollerRef.current?.releasePointerCapture(e.pointerId);
+    if (!dragState.current.active) return;
+    dragState.current.active = false;
+    if (isDragging) {
+      setIsDragging(false);
+      try {
+        scrollerRef.current?.releasePointerCapture(e.pointerId);
+      } catch {
+        /* noop */
+      }
+    }
   };
 
   const suppressClickIfDragged = (e: React.MouseEvent) => {
