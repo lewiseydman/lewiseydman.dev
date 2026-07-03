@@ -82,9 +82,6 @@ export function Appraisals() {
           </motion.li>
         ))}
       </ul>
-      <p className="font-mono-mar">
-        * Placeholder quotes — replace in <code>src/components/portfolio/Appraisals.tsx</code>.
-      </p>
     </div>
   );
 }
