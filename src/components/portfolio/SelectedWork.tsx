@@ -1,10 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ExternalLink } from "lucide-react";
-import { useState } from "react";
+import { ArrowLeft, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
+import { useLayoutEffect, useRef, useState } from "react";
 import thumb from "@/assets/thumb-opera.jpg";
 import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
-
-type CaseStudySection = { heading: string; body: string };
 
 type Project = {
   id: string;
@@ -16,8 +14,7 @@ type Project = {
   blurb: string;
   tags: string[];
   sketch: "gear" | "wing" | "lens" | "compass";
-  study: CaseStudySection[];
-  deepDive: CaseStudySection[];
+  notebook: string;
   liveUrl?: string;
 };
 
