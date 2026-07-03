@@ -244,36 +244,41 @@ export function Blogs() {
           </motion.div>
         ) : (
           <motion.article
+            ref={articleRef}
             key={open.id}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.35 }}
-            className="grid gap-10 md:grid-cols-[14rem_1fr]"
+            className="flex flex-col gap-8"
           >
-            {/* Editorial sidebar */}
-            <aside className="flex flex-col gap-5 md:sticky md:top-2 md:self-start md:border-r md:border-border md:pr-6">
-              <button
-                type="button"
-                onClick={() => setOpenId(null)}
-                className="font-mono-mar group flex items-center gap-2 self-start hover:text-foreground"
-              >
-                <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-0.5" />
-                Back to Codex
-              </button>
-              <div className="flex flex-col gap-1">
+            <button
+              type="button"
+              onClick={() => setOpenId(null)}
+              className="font-mono-mar group flex items-center gap-2 self-start hover:text-foreground"
+            >
+              <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-0.5" />
+              Back to Codex
+            </button>
+
+            {/* Horizontal meta bar */}
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-3 border-y border-border py-4">
+              <div className="flex flex-col">
                 <span className="font-mono-mar">Author</span>
-                <span className="font-display text-base">Lewis Eydman</span>
+                <span className="font-display text-base leading-tight">Lewis Eydman</span>
               </div>
-              <div className="flex flex-col gap-1">
+              <span className="hairline hidden h-8 w-px sm:block" />
+              <div className="flex flex-col">
                 <span className="font-mono-mar">Published</span>
-                <span className="font-display text-base">{open.date}</span>
+                <span className="font-display text-base leading-tight">{open.date}</span>
               </div>
-              <div className="flex flex-col gap-1">
+              <span className="hairline hidden h-8 w-px sm:block" />
+              <div className="flex flex-col">
                 <span className="font-mono-mar">Length</span>
-                <span className="font-display text-base">{open.read}</span>
+                <span className="font-display text-base leading-tight">{open.read}</span>
               </div>
-              <div className="flex flex-col gap-2">
+              <span className="hairline hidden h-8 w-px sm:block" />
+              <div className="flex min-w-0 flex-col gap-1">
                 <span className="font-mono-mar">Tags</span>
                 <div className="flex flex-wrap gap-1.5">
                   {open.tags.map((t) => (
@@ -286,16 +291,10 @@ export function Blogs() {
                   ))}
                 </div>
               </div>
-              <a
-                href="#top"
-                className="font-mono-mar mt-2 inline-flex items-center gap-2 text-sepia hover:text-foreground"
-              >
-                <ArrowUp className="h-3 w-3" /> Back to top
-              </a>
-            </aside>
+            </div>
 
-            {/* Body */}
-            <div className="flex max-w-[64ch] flex-col gap-7">
+            {/* Body — full width for readability */}
+            <div className="mx-auto flex w-full max-w-[68ch] flex-col gap-7">
               <header className="flex flex-col gap-3 border-b border-border pb-6">
                 <span className="font-mono-mar">Essay · {open.date}</span>
                 <h1 className="font-display text-4xl leading-[1.05] tracking-[-0.015em] md:text-5xl">{open.title}</h1>
@@ -331,6 +330,19 @@ export function Blogs() {
               <div className="hairline mt-4 h-px w-full" />
               <p className="font-mono-mar self-center">&mdash; Fin &mdash;</p>
             </div>
+
+            {/* Floating back-to-top */}
+            {showTopBtn ? (
+              <button
+                type="button"
+                onClick={scrollToArticleTop}
+                aria-label="Back to top of post"
+                className="font-mono-mar group fixed bottom-4 right-4 z-40 inline-flex items-center gap-2 rounded-full border border-sepia/60 bg-background/90 px-3.5 py-2 text-sepia shadow-md backdrop-blur transition-all hover:border-sepia hover:bg-sepia hover:text-parchment sm:bottom-6 sm:right-6"
+              >
+                <ArrowUp className="h-3 w-3 transition-transform group-hover:-translate-y-0.5" />
+                Back to top
+              </button>
+            ) : null}
           </motion.article>
         )}
       </AnimatePresence>
