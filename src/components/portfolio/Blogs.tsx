@@ -106,16 +106,6 @@ export function Blogs() {
             transition={{ duration: 0.3 }}
             className="flex flex-col gap-12"
           >
-            {/* Editorial header */}
-            <div className="flex flex-wrap items-end justify-between gap-4 border-b border-border pb-4">
-              <div className="flex items-baseline gap-4">
-                <span className="font-mono-mar">№ Codex · Vol. I</span>
-                <span className="hairline h-px w-12" />
-                <span className="font-mono-mar">Essays from the workshop</span>
-              </div>
-              <span className="font-mono-mar">{blogs.length} entries</span>
-            </div>
-
             {/* Hero feature */}
             <motion.button
               type="button"
@@ -180,17 +170,13 @@ export function Blogs() {
                       onClick={() => setOpenId(b.id)}
                       className="group grid w-full grid-cols-[2.5rem_5.5rem_1fr_auto] items-baseline gap-4 py-5 text-left transition-colors hover:bg-sepia/[0.04] md:grid-cols-[3rem_7rem_1fr_5rem_8rem]"
                     >
-                      <span className="font-mono-mar text-sepia">
-                        № {String(i + 2).padStart(2, "0")}
-                      </span>
+                      <span className="font-mono-mar text-sepia">№ {String(i + 2).padStart(2, "0")}</span>
                       <span className="font-mono-mar">{b.date}</span>
                       <span className="flex min-w-0 flex-col gap-1">
                         <span className="font-display text-2xl leading-tight tracking-[-0.005em] transition-colors group-hover:text-sepia md:text-3xl">
                           {b.title}
                         </span>
-                        <span className="truncate text-sm leading-snug text-muted-foreground">
-                          {b.dek}
-                        </span>
+                        <span className="truncate text-sm leading-snug text-muted-foreground">{b.dek}</span>
                       </span>
                       <span className="font-mono-mar hidden md:inline">{b.read}</span>
                       <span className="hidden justify-end gap-1.5 md:flex">
@@ -212,9 +198,7 @@ export function Blogs() {
                   <span className="hairline h-px flex-1" />
                   <button
                     type="button"
-                    onClick={() =>
-                      setArchiveCount((c) => Math.min(c + 3, rest.length))
-                    }
+                    onClick={() => setArchiveCount((c) => Math.min(c + 3, rest.length))}
                     className="font-mono-mar group inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-sepia transition-colors hover:border-sepia/60 hover:bg-sepia/[0.04] hover:text-foreground"
                   >
                     <Plus className="h-3 w-3 transition-transform group-hover:rotate-90" />
@@ -283,9 +267,7 @@ export function Blogs() {
             <div className="flex max-w-[64ch] flex-col gap-7">
               <header className="flex flex-col gap-3 border-b border-border pb-6">
                 <span className="font-mono-mar">Essay · {open.date}</span>
-                <h1 className="font-display text-4xl leading-[1.05] tracking-[-0.015em] md:text-5xl">
-                  {open.title}
-                </h1>
+                <h1 className="font-display text-4xl leading-[1.05] tracking-[-0.015em] md:text-5xl">{open.title}</h1>
                 <p className="font-display text-xl italic text-sepia md:text-2xl">{open.dek}</p>
               </header>
               {open.body.map((p, i) => {
