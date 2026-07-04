@@ -1,8 +1,9 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowUp, ArrowUpRight, Plus } from "lucide-react";
+import { ArrowLeft, ArrowUp, ArrowUpRight, Loader2, Plus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import thumb from "@/assets/thumb-codex.jpg";
 import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
+import { useExpandWithLoading } from "@/hooks/use-expand-with-loading";
 
 type Blog = {
   id: string;
@@ -82,6 +83,7 @@ export function Blogs() {
   const [archiveCount, setArchiveCount] = useState(INITIAL_ARCHIVE);
   const visibleRest = rest.slice(0, archiveCount);
   const remaining = rest.length - visibleRest.length;
+  const { isLoading: isRevealing, trigger: triggerReveal } = useExpandWithLoading();
 
   const articleRef = useRef<HTMLElement>(null);
   const [showTopBtn, setShowTopBtn] = useState(false);
@@ -187,10 +189,11 @@ export function Blogs() {
                 <span className="font-mono-mar">Archivum · earlier folios</span>
                 <span className="hairline h-px flex-1" />
               </div>
-              <ul className="flex flex-col">
+              <motion.ul layout className="flex flex-col">
                 {visibleRest.map((b, i) => (
                   <motion.li
                     key={b.id}
+                    layout
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: i * 0.05 }}
@@ -223,16 +226,25 @@ export function Blogs() {
                     </button>
                   </motion.li>
                 ))}
-              </ul>
+              </motion.ul>
               {remaining > 0 && (
                 <div className="flex items-center gap-3 pt-2">
                   <span className="hairline h-px flex-1" />
                   <button
                     type="button"
-                    onClick={() => setArchiveCount((c) => Math.min(c + 3, rest.length))}
-                    className="font-mono-mar group inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-sepia transition-colors hover:border-sepia/60 hover:bg-sepia/[0.04] hover:text-foreground"
+                    disabled={isRevealing}
+                    onClick={() =>
+                      triggerReveal(() =>
+                        setArchiveCount((c) => Math.min(c + 3, rest.length)),
+                      )
+                    }
+                    className="font-mono-mar group inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-sepia transition-colors hover:border-sepia/60 hover:bg-sepia/[0.04] hover:text-foreground disabled:cursor-wait disabled:opacity-70"
                   >
-                    <Plus className="h-3 w-3 transition-transform group-hover:rotate-90" />
+                    {isRevealing ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <Plus className="h-3 w-3 transition-transform group-hover:rotate-90" />
+                    )}
                     Reveal {Math.min(3, remaining)} earlier folio
                     {Math.min(3, remaining) === 1 ? "" : "s"}
                     <span className="text-muted-foreground">· {remaining} remaining</span>
