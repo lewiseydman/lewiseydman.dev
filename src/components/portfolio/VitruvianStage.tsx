@@ -289,7 +289,7 @@ export function VitruvianStage() {
       </nav>
 
       {/* footer icons */}
-      <div className="relative z-10 mt-6 flex w-full items-center justify-center">
+      <div className="relative z-10 mt-8 flex w-full items-center justify-center">
         <FooterIcons />
       </div>
 
