@@ -249,7 +249,7 @@ export function VitruvianStage() {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.6 }}
-        className="relative z-10 mt-2 flex flex-col items-center gap-2 text-center"
+        className="relative z-10 mt-2 flex flex-col items-center gap-4 text-center"
       >
         <span className="font-mono-mar">Proportio · Hominis · Fig. 01</span>
         <h1 className="font-display text-5xl tracking-[-0.01em] md:text-5xl">
