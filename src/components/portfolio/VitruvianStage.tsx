@@ -252,7 +252,7 @@ export function VitruvianStage() {
         className="relative z-10 mt-2 flex flex-col items-center gap-2 text-center"
       >
         <span className="font-mono-mar">Proportio · Hominis · Fig. 01</span>
-        <h1 className="font-display text-4xl tracking-[-0.01em] md:text-4xl">
+        <h1 className="font-display text-5xl tracking-[-0.01em] md:text-5xl">
           Lewis <span className="italic text-sepia">Eydman</span>
         </h1>
         <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
