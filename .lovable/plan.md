@@ -1,35 +1,44 @@
-## 1. Fix PopoverSummaryStrip pill clicks
+## Shared expand-with-loading pattern
 
-**Problem:** The pointer-capture drag logic on the scroller intercepts clicks on the inner `<button>` pills, so `onClick` never fires — that's why the pills don't navigate to the item.
+Both buttons ("Reveal earlier folios" in Codex, "Read more" in Opera) will use one shared hook and one shared animation approach, so the interaction feels identical sitewide.
 
-**Fix:** In `src/components/portfolio/PopoverSummaryStrip.tsx`:
-- Don't call `setPointerCapture` up-front. Only start "drag mode" (and capture) once movement exceeds a small threshold (~4px).
-- Keep `suppressClickIfDragged` so a real drag still cancels the click.
-- Result: a plain click passes through to the pill button and calls its `onClick`, while dragging still scrolls.
+### 1. Shared hook: `useExpandWithLoading`
+**New file:** `src/hooks/use-expand-with-loading.ts`
 
-## 2. Opera (Selected Work) — restructure case study view
+- Exports a hook `useExpandWithLoading(delay = 400)` returning `{ isLoading, trigger }`.
+- `trigger(action)` sets `isLoading = true`, waits `delay` ms, runs `action()`, then clears `isLoading`.
+- Cleans up its timeout on unmount.
 
-In `src/components/portfolio/SelectedWork.tsx`, inside the open-project view:
+This is the single source of truth for the "click → brief spinner → expand" feel across the site.
 
-- **Move the whole Outcome + bottom row directly under the main thumbnail.** Take the existing footer block (Outcome label/value on the left, Visit live product button + tags on the right) and render it as a single row immediately after the hero `<img>` container, before any notebook content. Keep the same layout (`flex flex-wrap items-end justify-between`) and the `border-t border-border pt-6` separator so it reads as a caption strip under the image.
-- **Collapse the two notebook sections into one free-form Notebook.**
-  - Change the internal `Project` type: replace `study: CaseStudySection[]` and `deepDive: CaseStudySection[]` with a single `notebook: string` (paragraphs separated by `\n\n`) so each project can be as short or long as needed.
-  - Migrate existing content by concatenating the current sections' bodies into one `notebook` string per project.
-  - Render the notebook inside a container with `max-height` (~22rem) and a bottom fade mask when collapsed. Add a "Read more / Read less" toggle (local `useState` per open project) that removes the max-height and mask when expanded. Hide the toggle if the content is short enough not to overflow.
-- Remove the old Study grid, the Deep-dive section, and the now-duplicated footer row at the bottom.
+### 2. Shared button treatment
+Both buttons already share the same visual (rounded-full pill, `border-border`, `text-sepia`, `font-mono-mar`). We keep that, and standardise:
 
-## 3. Blog post layout + back-to-top
+- Icon: `Loader2` from `lucide-react` with `animate-spin` while `isLoading`; otherwise the button's normal icon (`Plus` in Codex, `ChevronDown` / `ChevronUp` in Opera).
+- Disabled state while loading (`disabled={isLoading}` + `disabled:opacity-70 disabled:cursor-wait`).
+- Label stays the same; only the leading icon swaps.
 
-In `src/components/portfolio/Blogs.tsx`, in the open-article view:
+### 3. Shared smooth expansion
+Both places grow a container. We use the same Framer Motion primitive in both:
 
-- **Drop the sidebar grid.** Change the article layout to a single centered column (`max-w-[68ch]`) so the body gets full width on desktop and mobile.
-- **Horizontal meta bar above the body.** Above the title, render one horizontal row (Author · Published · Length · Tags) using small `font-mono-mar` labels + values separated by hairline dividers. On mobile it wraps but stays inline where possible (`flex flex-wrap gap-x-4 gap-y-2`).
-- **Back button** ("Back to Codex") stays at the top-left of the article, above the meta bar.
-- **Back-to-top:** remove the sidebar link. Add a floating button fixed to the bottom-right (`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40`) that appears only after the user scrolls (`useEffect` scroll listener + local `visible` state, threshold ~600px). Clicking it smooth-scrolls to the top of the article container (ref on the `<motion.article>`), not the whole page — returning to the top of the blog post the user is viewing. Uses the existing sepia-outlined pill styling with `ArrowUp`.
-- Reset the visible state and scroll to the article top whenever `openId` changes so opening a new article starts at its top.
+- Wrap the expanding content in `<motion.div layout />` inside an `AnimatePresence` where needed, or animate `height: "auto"` via `animate={{ height: isExpanded ? "auto" : COLLAPSED_PX }}` with `transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}` and `overflow-hidden`.
+- Framer Motion is already a dependency in both files, so no new packages.
 
-## Technical notes
+### 4. Apply in Codex
+**File:** `src/components/portfolio/Blogs.tsx`
+- Import the hook and `Loader2`.
+- Replace the direct `setArchiveCount` call with `trigger(() => setArchiveCount(c => Math.min(c + 3, rest.length)))`.
+- Swap the `Plus` icon for `Loader2 animate-spin` when `isLoading`.
+- Wrap the `<ul>` archive list in a `motion.div` with `layout` so the section height animates smoothly as rows appear.
 
-- No new dependencies; all state is local `useState` / `useEffect`.
-- Type changes are limited to the internal `Project` type in `SelectedWork.tsx`; no exported API changes.
-- Keep the renaissance-monochrome tokens (`sepia`, `border-border`, `font-mono-mar`, `font-display`) — no new colors.
+### 5. Apply in Opera
+**File:** `src/components/portfolio/SelectedWork.tsx`
+- Import the hook and `Loader2`.
+- Replace the direct `setNotebookExpanded` toggle with `trigger(() => setNotebookExpanded(v => !v))`.
+- Swap the `ChevronDown` / `ChevronUp` icon for `Loader2 animate-spin` while `isLoading`.
+- Replace the inline `style={{ maxHeight, overflow }}` on the notebook container with a `motion.div` animating `height` between the collapsed cap (measured in px from `notebookRef`) and the full `scrollHeight`, with the same transition config as Codex.
+
+### Technical notes
+- No new npm dependencies.
+- No exported API changes; all state remains local to each component, plus the new shared hook.
+- Renaissance-monochrome tokens (`sepia`, `border-border`, `font-mono-mar`) unchanged.
