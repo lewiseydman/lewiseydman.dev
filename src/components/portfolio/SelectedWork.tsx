@@ -1,8 +1,9 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
+import { ArrowLeft, ChevronDown, ChevronUp, ExternalLink, Loader2 } from "lucide-react";
 import { useLayoutEffect, useRef, useState } from "react";
 import thumb from "@/assets/thumb-opera.jpg";
 import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
+import { useExpandWithLoading } from "@/hooks/use-expand-with-loading";
 
 type Project = {
   id: string;
@@ -158,6 +159,8 @@ export function SelectedWork() {
   const [notebookExpanded, setNotebookExpanded] = useState(false);
   const notebookRef = useRef<HTMLDivElement>(null);
   const [notebookOverflows, setNotebookOverflows] = useState(false);
+  const [notebookFullHeight, setNotebookFullHeight] = useState<number>(0);
+  const { isLoading: isExpanding, trigger: triggerExpand } = useExpandWithLoading();
 
   // Reset the notebook collapsed state whenever we open a different project,
   // and re-measure whether the content overflows its collapsed max-height.
@@ -170,10 +173,11 @@ export function SelectedWork() {
     const el = notebookRef.current;
     if (!el) return;
     // Compare full content height against the collapsed cap.
+    setNotebookFullHeight(el.scrollHeight);
     setNotebookOverflows(el.scrollHeight > 22 * 16 + 4);
   }, [open, openId]);
 
-  const COLLAPSED_MAX = "22rem";
+  const COLLAPSED_MAX_PX = 22 * 16;
 
   return (
     <div className="flex flex-col gap-8">
@@ -327,27 +331,30 @@ export function SelectedWork() {
                 <span className="font-mono-mar">Opus · {open.num}</span>
               </div>
               <div className="relative">
-                <div
-                  ref={notebookRef}
-                  style={
-                    notebookExpanded || !notebookOverflows
-                      ? undefined
-                      : { maxHeight: COLLAPSED_MAX, overflow: "hidden" }
-                  }
-                  className="flex flex-col gap-5"
+                <motion.div
+                  animate={{
+                    height:
+                      !notebookOverflows || notebookExpanded
+                        ? notebookFullHeight || "auto"
+                        : COLLAPSED_MAX_PX,
+                  }}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  style={{ overflow: "hidden" }}
                 >
-                  {open.notebook
-                    .split(/\n\s*\n/)
-                    .filter((p) => p.trim().length > 0)
-                    .map((p, i) => (
-                      <p
-                        key={i}
-                        className="max-w-prose text-[1.05rem] leading-[1.75] text-foreground"
-                      >
-                        {p}
-                      </p>
-                    ))}
-                </div>
+                  <div ref={notebookRef} className="flex flex-col gap-5">
+                    {open.notebook
+                      .split(/\n\s*\n/)
+                      .filter((p) => p.trim().length > 0)
+                      .map((p, i) => (
+                        <p
+                          key={i}
+                          className="max-w-prose text-[1.05rem] leading-[1.75] text-foreground"
+                        >
+                          {p}
+                        </p>
+                      ))}
+                  </div>
+                </motion.div>
                 {!notebookExpanded && notebookOverflows ? (
                   <div
                     aria-hidden
@@ -358,10 +365,16 @@ export function SelectedWork() {
               {notebookOverflows ? (
                 <button
                   type="button"
-                  onClick={() => setNotebookExpanded((v) => !v)}
-                  className="font-mono-mar group inline-flex items-center gap-2 self-start rounded-full border border-border px-3 py-1.5 text-sepia transition-colors hover:border-sepia/60 hover:bg-sepia/[0.04] hover:text-foreground"
+                  disabled={isExpanding}
+                  onClick={() => triggerExpand(() => setNotebookExpanded((v) => !v))}
+                  className="font-mono-mar group inline-flex items-center gap-2 self-start rounded-full border border-border px-3 py-1.5 text-sepia transition-colors hover:border-sepia/60 hover:bg-sepia/[0.04] hover:text-foreground disabled:cursor-wait disabled:opacity-70"
                 >
-                  {notebookExpanded ? (
+                  {isExpanding ? (
+                    <>
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                      {notebookExpanded ? "Read less" : "Read more"}
+                    </>
+                  ) : notebookExpanded ? (
                     <>
                       <ChevronUp className="h-3 w-3" />
                       Read less
