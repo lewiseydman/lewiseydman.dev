@@ -6,7 +6,7 @@ const experience = [
   {
     year: "Apr 2025 — Now",
     role: "Communications Manager",
-    org: "100Green · Ware, UK",
+    org: "100Green · UK",
     notes:
       "Own the energy quote journey end-to-end — research, roadmap, Figma, React build, A/B testing, Ofgem compliance. +19% sign-ups May–Jun 2026.",
   },
