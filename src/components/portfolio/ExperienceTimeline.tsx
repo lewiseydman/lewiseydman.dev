@@ -26,15 +26,15 @@ const experience = [
   },
   {
     year: "Jul 2019 — Now",
-    role: "Freelance Designer & Developer",
-    org: "Independent",
+    role: "Designer & Developer",
+    org: "Self-employed · UK",
     notes:
-      "Custom web apps from research to deployment — Figma prototypes, React frontends, CI/CD, plus open-source contribution on the side. Career-break with Phipps Group (landscaping) sharpened the delivery instincts.",
+      "Custom digital products from research to deployment. Designing UI, Figma prototypes, React frontends, CI/CD, plus open-source contribution. Including a career-break with Phipps Group (landscaping) to reconnect with people and nature.",
   },
 ];
 
 const education = [
-  { year: "2014 — 2016", title: "Graphic Design Ext. Diploma", org: "Harlow College" },
+  { year: "2014 — 2016", title: "Graphic Design Diploma", org: "College" },
   { year: "2016 — 2019", title: "BA Graphic Communication", org: "Norwich University of the Arts" },
   { year: "2024", title: "Google UX Design", org: "Google" },
 ];
