@@ -296,21 +296,15 @@ function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }
         </div>
         <div className="relative">
           <div
-            className={
-              overflows && !expanded
-                ? "notebook-collapsed relative overflow-hidden"
-                : "grid grid-rows-[1fr] transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
-            }
-            style={overflows && !expanded ? { maxHeight: "22rem" } : undefined}
+            className="relative overflow-hidden transition-[max-height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+            style={{ maxHeight: overflows && !expanded ? "22rem" : "9999px" }}
           >
-            <div ref={contentRef} className="min-h-0 overflow-hidden">
-              <div className="flex flex-col gap-5">
-                {paragraphs.map((p, i) => (
-                  <p key={i} className="max-w-prose text-[1.05rem] leading-[1.75] text-foreground">
-                    {p}
-                  </p>
-                ))}
-              </div>
+            <div ref={contentRef} className="flex flex-col gap-5">
+              {paragraphs.map((p, i) => (
+                <p key={i} className="max-w-prose text-[1.05rem] leading-[1.75] text-foreground">
+                  {p}
+                </p>
+              ))}
             </div>
           </div>
           {overflows && !expanded ? (
@@ -344,7 +338,6 @@ function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }
             )}
           </button>
         ) : null}
-        {reduce ? null : null}
       </section>
     </motion.article>
   );
