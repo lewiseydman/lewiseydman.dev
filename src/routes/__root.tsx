@@ -71,7 +71,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Lewis Eydman" },
       {
         name: "description",
-        content: "Lewis Eydman — Product Manager fluent in design and full-stack development",
+        content: "Lewis Eydman — Product Engineer fluent in design and full-stack development",
       },
       { name: "author", content: "Lewis Eydman" },
       { property: "og:site_name", content: "Lewis Eydman" },
