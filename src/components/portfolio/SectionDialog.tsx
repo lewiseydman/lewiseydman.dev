@@ -48,9 +48,15 @@ export function SectionDialog({
               </div>
               <DialogPrimitive.Close
                 aria-label="Close"
-                className="group relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-background/80 text-sepia transition-colors hover:text-foreground"
+                className="group relative flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border bg-background/80 text-sepia shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-brass hover:bg-background hover:text-foreground hover:shadow-[0_4px_12px_color-mix(in_oklab,var(--brass)_15%,transparent)] active:translate-y-0 active:scale-95 active:bg-muted active:shadow-inner focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2"
               >
-                <X className="h-4 w-4" />
+                {/* Decorative external brass ring on hover */}
+                <span className="absolute -inset-1.5 scale-110 rounded-full border border-brass/0 opacity-0 transition-all duration-500 group-hover:scale-100 group-hover:border-brass/30 group-hover:opacity-100" />
+                {/* Inner brass ring on hover */}
+                <span className="absolute inset-[2px] rounded-full border border-transparent transition-all duration-300 group-hover:border-brass/20" />
+                <X className="relative h-4 w-4 transition-transform duration-500 ease-out group-hover:rotate-90 group-active:scale-90" />
+                {/* Feedback pulse on active */}
+                <span className="absolute inset-0 rounded-full bg-brass/5 opacity-0 transition-all duration-200 group-active:scale-125 group-active:opacity-100" />
               </DialogPrimitive.Close>
             </div>
             <DialogPrimitive.Description className="sr-only">
