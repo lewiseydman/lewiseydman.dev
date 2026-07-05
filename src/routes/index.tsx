@@ -19,9 +19,7 @@ export const Route = createFileRoute("/")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [
-      { rel: "canonical", href: "https://renaissance-blueprint-muse.lovable.app/" },
-    ],
+    links: [{ rel: "canonical", href: "https://renaissance-blueprint-muse.lovable.app/" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -32,7 +30,7 @@ export const Route = createFileRoute("/")({
           jobTitle: "Product Manager",
           url: "https://renaissance-blueprint-muse.lovable.app/",
           sameAs: [
-            "https://www.linkedin.com/in/lewiseydman/",
+            "https://linkedin.com/in/lewiseydman/",
             "https://github.com/lewiseydman",
             "https://medium.com/@lewiseydman",
           ],
