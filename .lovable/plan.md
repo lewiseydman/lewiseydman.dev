@@ -1,16 +1,24 @@
 ## Goal
 
-Simplify the wireframe sphere behind the Vitruvian figure so fewer lines cross the body, and shrink it so the shape stays fully inside the stage frame (no clipping at the edges).
+Make the wireframe shell a bit bigger around the figure, simplify it further, and make line weight scale down on smaller screens — while confirming it never clips the stage frame at any viewport or orientation.
+
+## Verification — frame fit
+
+The stage is a fixed square (`aspect-square w-[min(78vh,88vw)] max-w-[820px]`) so the Canvas is always 1:1 regardless of viewport. With `fov=45` and `camera.z=5.5`, the visible half-extent at the origin is `5.5 * tan(22.5°) ≈ 2.28`. A shell of radius ~1.55 occupies ~68% of the frame with ~0.7 unit margin on every side, so it fits at every viewport size and both orientations (portrait/landscape). No clipping risk.
 
 ## Changes
 
 **File: `src/components/portfolio/VitruvianScene.tsx`**
 
-1. **Reduce geometry density** — the inner icosahedron uses detail level `3` (320 faces = hundreds of wireframe edges). Drop to level `1` (20 faces) for a clean, sparse polyhedron silhouette. Remove the second high-detail inner sphere entirely so only one wireframe shell remains.
-2. **Shrink the sphere** — current radii (`2.0` outer, `1.65` inner) extend past the visible frame at the current camera distance, causing clipping on the sides. Reduce to a single shell around `1.35` and/or pull the camera back from `z=4.5` to `z=5.5` so the whole polyhedron fits comfortably inside the square stage with margin.
-3. **Keep it subtle** — retain one faint equatorial ring for the "orbit" feel, drop the second ring to reduce line crossings over the torso.
-4. **Preserve behavior** — slow rotation, sepia color, reduced-motion pause, and `paused` prop all stay unchanged.
+1. **Grow the shell around the man** — bump the icosahedron radius from `1.35` to `1.55` (and the equatorial ring to match). Still comfortably inside the frame per the math above.
+2. **Simplify further** — drop the equatorial torus ring entirely. Keep a single low-poly icosahedron (`detail=1`, 20 faces) as the sole shape. Only one rotating group remains.
+3. **Responsive line weight** — replace the wireframe material with `LineSegments` built from `EdgesGeometry` + `LineBasicMaterial`, so stroke width is controlled by GL line width and, more reliably, by opacity + a viewport-aware scale factor. Pass a `thin` prop (or read `window.innerWidth` via a small resize listener inside the component) that lowers material opacity on narrow screens:
+   - `>= 1024px`: opacity `0.09`
+   - `640–1023px`: opacity `0.06`
+   - `< 640px`: opacity `0.04`
+   This visually reads as thinner/lighter lines on smaller screens without needing GPU line-width support (which most browsers cap at 1px anyway).
+4. **Preserve behavior** — slow rotation, sepia color (`#3a2a1f`), `paused` prop, and reduced-motion handling all stay unchanged.
 
 ## Result
 
-A single, sparse, slowly rotating polyhedron that reads as an orbiting shell — visible around the figure's edges but no longer criss-crossing the body, and fully contained within the stage frame at all viewport sizes.
+One sparse polyhedron, slightly larger around the Vitruvian figure, with lines that visibly lighten as the viewport narrows. Guaranteed to stay inside the square stage at every viewport and orientation.
