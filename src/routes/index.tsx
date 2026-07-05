@@ -27,7 +27,7 @@ export const Route = createFileRoute("/")({
           "@context": "https://schema.org",
           "@type": "Person",
           name: "Lewis Eydman",
-          jobTitle: "Product Manager",
+          jobTitle: "Product Engineer",
           url: "https://renaissance-blueprint-muse.lovable.app/",
           sameAs: [
             "https://linkedin.com/in/lewiseydman/",
