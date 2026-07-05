@@ -24,35 +24,21 @@ function WireSphere() {
     <>
       <group ref={outer}>
         <mesh>
-          <icosahedronGeometry args={[2.0, 1]} />
+          <icosahedronGeometry args={[1.35, 1]} />
           <meshBasicMaterial
             color="#3a2a1f"
             wireframe
             transparent
-            opacity={0.04}
+            opacity={0.06}
           />
         </mesh>
       </group>
 
-      {/* inner more detailed sphere */}
+      {/* single faint equatorial ring for orbit feel */}
       <group ref={inner}>
-        <mesh>
-          <icosahedronGeometry args={[1.65, 3]} />
-          <meshBasicMaterial
-            color="#3a2a1f"
-            wireframe
-            transparent
-            opacity={0.05}
-          />
-        </mesh>
-        {/* equatorial rings */}
         <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[1.85, 0.002, 8, 128]} />
-          <meshBasicMaterial color="#3a2a1f" transparent opacity={0.08} />
-        </mesh>
-        <mesh rotation={[0, 0, Math.PI / 3]}>
-          <torusGeometry args={[1.78, 0.002, 8, 128]} />
-          <meshBasicMaterial color="#3a2a1f" transparent opacity={0.06} />
+          <torusGeometry args={[1.38, 0.002, 8, 128]} />
+          <meshBasicMaterial color="#3a2a1f" transparent opacity={0.09} />
         </mesh>
       </group>
     </>
@@ -64,7 +50,7 @@ export default function VitruvianScene({ paused = false }: { paused?: boolean })
   return (
     <Canvas
       dpr={[1, 1.75]}
-      camera={{ position: [0, 0, 4.5], fov: 45 }}
+      camera={{ position: [0, 0, 5.5], fov: 45 }}
       gl={{ antialias: true, alpha: true }}
       style={{ background: "transparent" }}
       frameloop={paused || reduce ? "demand" : "always"}
