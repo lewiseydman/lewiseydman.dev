@@ -1,10 +1,16 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowUp, ArrowUpRight, Loader2, Plus } from "lucide-react";
+import { ArrowUp, ArrowUpRight, Loader2, Plus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import thumb from "@/assets/thumb-codex.jpg";
+import defaultThumb from "@/assets/thumb-codex.jpg";
 import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
 import { useExpandWithLoading } from "@/hooks/use-expand-with-loading";
 import { scrollDialogToTop } from "@/lib/scroll-dialog-top";
+import { FolioCard } from "./primitives/FolioCard";
+import { TagPill } from "./primitives/TagPill";
+import { BackToIndexButton } from "./primitives/BackToIndexButton";
+import { ReadingProgressBar } from "./primitives/ReadingProgressBar";
+import { useSectionHash } from "@/hooks/use-section-hash";
+import { useThrottledScroll } from "@/hooks/use-throttled-scroll";
 
 type Blog = {
   id: string;
@@ -14,6 +20,7 @@ type Blog = {
   read: string;
   tags: string[];
   body: string[];
+  thumb?: string;
 };
 
 const blogs: Blog[] = [
@@ -76,12 +83,14 @@ const blogs: Blog[] = [
 ];
 
 export function Blogs() {
-  const [openId, setOpenId] = useState<string | null>(null);
+  const { item: hashItem, openItem, closeItem } = useSectionHash();
+  const openId = hashItem && blogs.some((b) => b.id === hashItem) ? hashItem : null;
   const open = blogs.find((b) => b.id === openId) ?? null;
   const openBlog = (id: string) => {
-    setOpenId(id);
+    openItem("codex", id);
     scrollDialogToTop();
   };
+  const back = () => closeItem();
 
   const [hero, ...rest] = blogs;
   const INITIAL_ARCHIVE = 2;
@@ -90,36 +99,30 @@ export function Blogs() {
   const remaining = rest.length - visibleRest.length;
   const { isLoading: isRevealing, trigger: triggerReveal } = useExpandWithLoading();
 
-  const articleRef = useRef<HTMLElement>(null);
-  const [showTopBtn, setShowTopBtn] = useState(false);
+  const heroTriggerRef = useRef<HTMLButtonElement>(null);
+  const restTriggers = useRef<Record<string, HTMLButtonElement | null>>({});
+  const prevOpenId = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!open) {
-      setShowTopBtn(false);
-      return;
+    if (prevOpenId.current && !openId) {
+      const prevId = prevOpenId.current;
+      const trigger =
+        prevId === hero.id ? heroTriggerRef.current : restTriggers.current[prevId];
+      trigger?.focus();
     }
-    const scroller = document.querySelector<HTMLElement>("[data-dialog-scroll]");
-    if (!scroller) return;
-    const onScroll = () => setShowTopBtn(scroller.scrollTop > 600);
-    onScroll();
-    scroller.addEventListener("scroll", onScroll, { passive: true });
-    return () => scroller.removeEventListener("scroll", onScroll);
-  }, [open]);
-
-  const scrollToArticleTop = () => {
-    const scroller = document.querySelector<HTMLElement>("[data-dialog-scroll]");
-    scroller?.scrollTo({ top: 0, behavior: "smooth" });
-  };
+    prevOpenId.current = openId;
+  }, [openId, hero.id]);
 
   return (
     <div className="flex flex-col gap-10">
+      {open ? <ReadingProgressBar /> : null}
       <PopoverSummaryStrip
         label="Codex · featured"
         items={blogs.slice(0, 3).map((b) => ({
           kicker: b.date,
           title: b.title,
           dek: `${b.read} · ${b.tags.join(" · ")}`,
-          thumb,
+          thumb: b.thumb ?? defaultThumb,
           onClick: () => openBlog(b.id),
         }))}
       />
@@ -134,49 +137,63 @@ export function Blogs() {
             transition={{ duration: 0.3 }}
             className="flex flex-col gap-12"
           >
-            {/* Hero feature */}
-            <motion.button
-              type="button"
-              onClick={() => openBlog(hero.id)}
+            {/* Hero feature — article semantics with a proper CTA */}
+            <motion.article
+              aria-labelledby={`codex-hero-${hero.id}`}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               className="group grid w-full gap-8 text-left md:grid-cols-[1.1fr_1fr] md:items-center"
             >
-              <div className="relative aspect-[16/10] overflow-hidden rounded-sm border border-border bg-card md:aspect-[5/4]">
+              <button
+                type="button"
+                ref={heroTriggerRef}
+                onClick={() => openBlog(hero.id)}
+                aria-label={`Read essay: ${hero.title}`}
+                className="relative aspect-[16/10] overflow-hidden rounded-sm border border-border bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 md:aspect-[5/4]"
+              >
                 <img
-                  src={thumb}
+                  src={hero.thumb ?? defaultThumb}
                   alt=""
                   loading="lazy"
+                  decoding="async"
                   className="h-full w-full object-cover mix-blend-multiply transition-transform duration-700 group-hover:scale-[1.02] dark:mix-blend-screen"
                 />
-                <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
+                <div aria-hidden className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
                 <div className="absolute left-3 top-3 font-mono-mar bg-background/85 px-2 py-0.5">
                   Feature · {hero.date}
                 </div>
-              </div>
+              </button>
               <div className="flex flex-col gap-4">
                 <span className="font-mono-mar">Lewis Eydman · {hero.read}</span>
-                <h2 className="font-display text-4xl leading-[1.05] tracking-[-0.015em] transition-colors group-hover:text-sepia md:text-5xl">
-                  {hero.title}
-                </h2>
-                <p className="font-display text-xl italic text-sepia md:text-2xl">{hero.dek}</p>
+                <h3
+                  id={`codex-hero-${hero.id}`}
+                  className="font-display text-3xl leading-[1.05] tracking-[-0.015em] sm:text-4xl md:text-5xl"
+                >
+                  <button
+                    type="button"
+                    onClick={() => openBlog(hero.id)}
+                    className="text-left transition-colors hover:text-sepia focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40"
+                  >
+                    {hero.title}
+                  </button>
+                </h3>
+                <p className="font-display text-lg italic text-sepia sm:text-xl md:text-2xl">{hero.dek}</p>
                 <div className="flex flex-wrap gap-2 pt-1">
                   {hero.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground"
-                    >
-                      {t}
-                    </span>
+                    <TagPill key={t}>{t}</TagPill>
                   ))}
                 </div>
-                <span className="font-mono-mar mt-2 inline-flex items-center gap-2 text-sepia transition-colors group-hover:text-foreground">
+                <button
+                  type="button"
+                  onClick={() => openBlog(hero.id)}
+                  className="font-mono-mar group/cta mt-2 inline-flex min-h-11 items-center gap-2 self-start rounded-full border border-sepia/50 bg-background px-4 py-2.5 text-sepia transition-all hover:border-sepia hover:bg-sepia hover:text-parchment focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40"
+                >
                   Read essay
-                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                </span>
+                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover/cta:-translate-y-0.5 group-hover/cta:translate-x-0.5" />
+                </button>
               </div>
-            </motion.button>
+            </motion.article>
 
             {/* Archive list */}
             <section className="flex flex-col gap-4">
@@ -184,54 +201,33 @@ export function Blogs() {
                 <span className="font-mono-mar">Archivum · earlier folios</span>
                 <span className="hairline h-px flex-1" />
               </div>
-              <motion.div layout className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
+              <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
                 {visibleRest.map((b, i) => (
-                  <motion.button
+                  <FolioCard
                     key={b.id}
-                    layout
-                    type="button"
+                    ref={(el) => {
+                      restTriggers.current[b.id] = el;
+                    }}
                     onClick={() => openBlog(b.id)}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: i * 0.06 }}
-                    className="group flex h-full w-full flex-col gap-4 bg-background p-5 text-left transition-colors hover:bg-card md:p-6"
-                  >
-                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border bg-card">
-                      <img
-                        src={thumb}
-                        alt=""
-                        loading="lazy"
-                        className="h-full w-full object-cover mix-blend-multiply transition-transform duration-700 group-hover:scale-[1.03] dark:mix-blend-screen"
-                      />
-                      <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
-                      <div className="absolute left-2 top-2 font-mono-mar bg-background/80 px-2 py-0.5">
-                        № {String(i + 2).padStart(2, "0")}
-                      </div>
-                      <div className="absolute right-2 top-2 font-mono-mar bg-background/80 px-2 py-0.5">
-                        {b.read}
-                      </div>
-                    </div>
-                    <div className="flex items-baseline justify-between">
-                      <span className="font-mono-mar">{b.date}</span>
-                      <div className="flex flex-wrap justify-end gap-1.5">
+                    ariaLabel={`Read essay: ${b.title}`}
+                    thumb={b.thumb ?? defaultThumb}
+                    alt=""
+                    overlayTopLeft={<>№ {String(i + 2).padStart(2, "0")}</>}
+                    overlayTopRight={<>{b.read}</>}
+                    kicker={b.date}
+                    title={b.title}
+                    body={b.dek}
+                    footer={
+                      <div className="flex flex-wrap gap-1.5">
                         {b.tags.map((t) => (
-                          <span
-                            key={t}
-                            className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground"
-                          >
-                            {t}
-                          </span>
+                          <TagPill key={t}>{t}</TagPill>
                         ))}
                       </div>
-                    </div>
-                    <h3 className="font-display text-2xl leading-tight tracking-[-0.005em] transition-colors group-hover:text-sepia md:text-3xl">
-                      {b.title}
-                    </h3>
-                    <p className="text-sm leading-relaxed text-muted-foreground">{b.dek}</p>
-                    <div className="mt-auto h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
-                  </motion.button>
+                    }
+                    index={i}
+                  />
                 ))}
-              </motion.div>
+              </div>
               {remaining > 0 && (
                 <div className="flex items-center gap-3 pt-2">
                   <span className="hairline h-px flex-1" />
@@ -243,7 +239,7 @@ export function Blogs() {
                         setArchiveCount((c) => Math.min(c + 3, rest.length)),
                       )
                     }
-                    className="font-mono-mar group inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-sepia transition-colors hover:border-sepia/60 hover:bg-sepia/[0.04] hover:text-foreground disabled:cursor-wait disabled:opacity-70"
+                    className="font-mono-mar group inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-3 py-2 text-sepia transition-colors hover:border-sepia/60 hover:bg-sepia/[0.04] hover:text-foreground disabled:cursor-wait disabled:opacity-70"
                   >
                     {isRevealing ? (
                       <Loader2 className="h-3 w-3 animate-spin" />
@@ -252,7 +248,7 @@ export function Blogs() {
                     )}
                     Reveal {Math.min(3, remaining)} earlier folio
                     {Math.min(3, remaining) === 1 ? "" : "s"}
-                    <span className="text-muted-foreground">· {remaining} remaining</span>
+                    <span className="hidden text-muted-foreground sm:inline">· {remaining} remaining</span>
                   </button>
                   <span className="hairline h-px flex-1" />
                 </div>
@@ -260,109 +256,129 @@ export function Blogs() {
             </section>
           </motion.div>
         ) : (
-          <motion.article
-            ref={articleRef}
-            key={open.id}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.35 }}
-            className="flex flex-col gap-8"
-          >
-            <button
-              type="button"
-              onClick={() => setOpenId(null)}
-              className="font-mono-mar group flex items-center gap-2 self-start hover:text-foreground"
-            >
-              <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-0.5" />
-              Back to Codex
-            </button>
-
-            {/* Horizontal meta bar */}
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-3 border-y border-border py-4">
-              <div className="flex flex-col">
-                <span className="font-mono-mar">Author</span>
-                <span className="font-display text-base leading-tight">Lewis Eydman</span>
-              </div>
-              <span className="hairline hidden h-8 w-px sm:block" />
-              <div className="flex flex-col">
-                <span className="font-mono-mar">Published</span>
-                <span className="font-display text-base leading-tight">{open.date}</span>
-              </div>
-              <span className="hairline hidden h-8 w-px sm:block" />
-              <div className="flex flex-col">
-                <span className="font-mono-mar">Length</span>
-                <span className="font-display text-base leading-tight">{open.read}</span>
-              </div>
-              <span className="hairline hidden h-8 w-px sm:block" />
-              <div className="flex min-w-0 flex-col gap-1">
-                <span className="font-mono-mar">Tags</span>
-                <div className="flex flex-wrap gap-1.5">
-                  {open.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Body — full width for readability */}
-            <div className="mx-auto flex w-full max-w-[68ch] flex-col gap-7">
-              <header className="flex flex-col gap-3 border-b border-border pb-6">
-                <span className="font-mono-mar">Essay · {open.date}</span>
-                <h1 className="font-display text-4xl leading-[1.05] tracking-[-0.015em] md:text-5xl">{open.title}</h1>
-                <p className="font-display text-xl italic text-sepia md:text-2xl">{open.dek}</p>
-              </header>
-              {open.body.map((p, i) => {
-                // Pull-quote treatment on every third paragraph (after the first)
-                const isPull = i > 0 && i % 3 === 0;
-                if (isPull) {
-                  return (
-                    <blockquote
-                      key={i}
-                      className="my-2 border-l-2 border-sepia/60 pl-5 font-display text-2xl italic leading-snug text-foreground md:text-3xl"
-                    >
-                      {p}
-                    </blockquote>
-                  );
-                }
-                return (
-                  <p
-                    key={i}
-                    className={
-                      "text-[1.0625rem] leading-[1.8] text-foreground " +
-                      (i === 0
-                        ? "first-letter:font-display first-letter:float-left first-letter:mr-3 first-letter:text-7xl first-letter:leading-[0.9] first-letter:text-sepia"
-                        : "")
-                    }
-                  >
-                    {p}
-                  </p>
-                );
-              })}
-              <div className="hairline mt-4 h-px w-full" />
-              <p className="font-mono-mar self-center">&mdash; Fin &mdash;</p>
-            </div>
-
-            {/* Floating back-to-top */}
-            {showTopBtn ? (
-              <button
-                type="button"
-                onClick={scrollToArticleTop}
-                aria-label="Back to top of post"
-                className="font-mono-mar group fixed bottom-4 right-4 z-40 inline-flex items-center gap-2 rounded-full border border-sepia/60 bg-background/90 px-3.5 py-2 text-sepia shadow-md backdrop-blur transition-all hover:border-sepia hover:bg-sepia hover:text-parchment sm:bottom-6 sm:right-6"
-              >
-                <ArrowUp className="h-3 w-3 transition-transform group-hover:-translate-y-0.5" />
-                Back to top
-              </button>
-            ) : null}
-          </motion.article>
+          <Essay key={open.id} post={open} onBack={back} />
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+function Essay({ post, onBack }: { post: Blog; onBack: () => void }) {
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const [scroller, setScroller] = useState<HTMLElement | null>(null);
+  const [showTopBtn, setShowTopBtn] = useState(false);
+
+  useEffect(() => {
+    // Focus the article title on open for screen-reader flow.
+    titleRef.current?.focus();
+    // Find the dialog scroll container.
+    const el = document.querySelector<HTMLElement>("[data-dialog-scroll]");
+    setScroller(el);
+  }, []);
+
+  useThrottledScroll(scroller, (top) => setShowTopBtn(top > 600), [scroller]);
+
+  const scrollToTop = () => scroller?.scrollTo({ top: 0, behavior: "smooth" });
+
+  const canPullQuote = post.body.length >= 6;
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.35 }}
+      className="flex flex-col gap-8"
+    >
+      {/* Sticky back header */}
+      <div className="sticky top-0 z-10 -mx-5 flex items-center justify-between gap-3 border-b border-border bg-background/85 px-5 py-2 backdrop-blur-md md:-mx-14 md:px-14">
+        <BackToIndexButton onClick={onBack} label="Back to Codex" />
+        <span className="font-mono-mar truncate">{post.date}</span>
+      </div>
+
+      {/* Meta bar — 2-col grid on mobile, flex row on sm+ */}
+      <div className="grid grid-cols-2 gap-x-5 gap-y-3 border-y border-border py-4 sm:flex sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-3">
+        <div className="flex flex-col">
+          <span className="font-mono-mar">Author</span>
+          <span className="font-display text-base leading-tight">Lewis Eydman</span>
+        </div>
+        <span aria-hidden className="hairline hidden h-8 w-px sm:block" />
+        <div className="flex flex-col">
+          <span className="font-mono-mar">Published</span>
+          <span className="font-display text-base leading-tight">{post.date}</span>
+        </div>
+        <span aria-hidden className="hairline hidden h-8 w-px sm:block" />
+        <div className="flex flex-col">
+          <span className="font-mono-mar">Length</span>
+          <span className="font-display text-base leading-tight">{post.read}</span>
+        </div>
+        <span aria-hidden className="hairline hidden h-8 w-px sm:block" />
+        <div className="col-span-2 flex min-w-0 flex-col gap-1 sm:col-span-1">
+          <span className="font-mono-mar">Tags</span>
+          <div className="flex flex-wrap gap-1.5">
+            {post.tags.map((t) => (
+              <TagPill key={t}>{t}</TagPill>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Body */}
+      <div className="mx-auto flex w-full max-w-[68ch] flex-col gap-7">
+        <header className="flex flex-col gap-3 border-b border-border pb-6">
+          <span className="font-mono-mar">Essay · {post.date}</span>
+          <h3
+            ref={titleRef}
+            tabIndex={-1}
+            className="font-display text-3xl leading-[1.05] tracking-[-0.015em] focus:outline-none sm:text-4xl md:text-5xl"
+          >
+            {post.title}
+          </h3>
+          <p className="font-display text-lg italic text-sepia sm:text-xl md:text-2xl">{post.dek}</p>
+        </header>
+        {post.body.map((p, i) => {
+          // Only pull-quote longer essays, and never the first or last paragraph.
+          const isPull =
+            canPullQuote && i > 0 && i < post.body.length - 1 && i % 3 === 0;
+          if (isPull) {
+            return (
+              <blockquote
+                key={i}
+                className="my-2 border-l-2 border-sepia/60 pl-5 font-display text-2xl italic leading-snug text-foreground md:text-3xl"
+              >
+                {p}
+              </blockquote>
+            );
+          }
+          return (
+            <p
+              key={i}
+              className={
+                "text-[1.0625rem] leading-[1.8] text-foreground " +
+                (i === 0
+                  ? "first-letter:font-display first-letter:float-left first-letter:mr-3 first-letter:text-7xl first-letter:leading-[0.9] first-letter:text-sepia"
+                  : "")
+              }
+            >
+              {p}
+            </p>
+          );
+        })}
+        <div className="hairline mt-4 h-px w-full" />
+        <p className="font-mono-mar self-center">&mdash; Fin &mdash;</p>
+      </div>
+
+      {showTopBtn ? (
+        <button
+          type="button"
+          onClick={scrollToTop}
+          aria-label="Back to top of post"
+          className="font-mono-mar group fixed bottom-4 right-4 z-40 inline-flex min-h-11 items-center gap-2 rounded-full border border-sepia/60 bg-background/90 px-3.5 py-2 text-sepia shadow-md backdrop-blur transition-all hover:border-sepia hover:bg-sepia hover:text-parchment sm:bottom-6 sm:right-6"
+        >
+          <ArrowUp className="h-3 w-3 transition-transform group-hover:-translate-y-0.5" />
+          Back to top
+        </button>
+      ) : null}
+    </motion.article>
   );
 }

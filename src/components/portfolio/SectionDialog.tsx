@@ -67,7 +67,7 @@ export function SectionDialog({
           {/* body — unified padding for every section */}
           <div data-dialog-scroll className="relative flex-1 overflow-y-auto">
             <div className="absolute inset-0 paper-grain pointer-events-none opacity-40" />
-            <div className="relative mx-auto w-full max-w-5xl px-8 py-12 md:px-14 md:py-16">{children}</div>
+            <div className="relative mx-auto w-full max-w-5xl px-5 py-8 md:px-14 md:py-16">{children}</div>
           </div>
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>

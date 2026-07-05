@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useState } from "react";
+import { Suspense, lazy, useRef } from "react";
 import { ChevronRight } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import vitruvian from "@/assets/vitruvian.png";
@@ -12,6 +12,8 @@ import { Appraisals } from "./Appraisals";
 import { Tests } from "./Tests";
 import { FooterIcons } from "./FooterIcons";
 import { toRoman } from "@/lib/roman";
+import { useSectionHash } from "@/hooks/use-section-hash";
+import { useIntersectionPause } from "@/hooks/use-intersection-pause";
 
 const CURRENT_YEAR_ROMAN = toRoman(new Date().getFullYear());
 
@@ -74,33 +76,14 @@ const TAIL_LEN = 0.17;
 
 export function VitruvianStage() {
   const reduce = useReducedMotion();
-  const [active, setActive] = useState<string | null>(null);
+  const { section, openSection, closeSection } = useSectionHash();
+  const active = section && sections[section] ? section : null;
+  const stageRef = useRef<HTMLDivElement>(null);
+  const canvasPaused = useIntersectionPause(stageRef, { rootMargin: "150px" });
 
-  // sync with hash
-  useEffect(() => {
-    const apply = () => {
-      const h = window.location.hash.replace("#", "");
-      setActive(h && sections[h] ? h : null);
-    };
-    apply();
-    window.addEventListener("hashchange", apply);
-    return () => window.removeEventListener("hashchange", apply);
-  }, []);
-
-  const onOpen = (id: string) => {
-    if (typeof window !== "undefined") {
-      history.replaceState(null, "", `#${id}`);
-    }
-    setActive(id);
-  };
-
+  const onOpen = (id: string) => openSection(id);
   const onClose = (open: boolean) => {
-    if (!open) {
-      if (typeof window !== "undefined") {
-        history.replaceState(null, "", window.location.pathname);
-      }
-      setActive(null);
-    }
+    if (!open) closeSection();
   };
 
   const activeSection = active ? sections[active] : null;
@@ -150,7 +133,10 @@ export function VitruvianStage() {
 
       {/* stage */}
       <div className="relative my-6 flex w-full flex-1 items-center justify-center">
-        <div className="relative aspect-square w-[min(78vh,88vw)] max-w-[820px] overflow-visible">
+        <div
+          ref={stageRef}
+          className="relative aspect-square w-[min(78vh,88vw)] max-w-[820px] overflow-visible"
+        >
           {/* Vitruvian image — sits inside the sphere */}
           <motion.div
             initial={{ opacity: 0, scale: 0.92 }}
@@ -172,17 +158,18 @@ export function VitruvianStage() {
           {!reduce ? (
             <div className="pointer-events-none absolute inset-0 z-20" aria-hidden="true">
               <Suspense fallback={null}>
-                <VitruvianScene paused={!!active} />
+                <VitruvianScene paused={!!active || canvasPaused} />
               </Suspense>
             </div>
           ) : null}
 
-          {/* outer rotating circle hairlines */}
+          {/* single outer rotating hairline ring */}
           <motion.div
             initial={{ rotate: 0 }}
             animate={reduce ? {} : { rotate: 360 }}
-            transition={{ duration: 180, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 240, repeat: Infinity, ease: "linear" }}
             className="pointer-events-none absolute inset-0 z-0"
+            style={{ willChange: "transform" }}
           >
             <svg viewBox="0 0 400 400" className="h-full w-full text-ink/20">
               <circle
@@ -195,33 +182,6 @@ export function VitruvianStage() {
                 strokeDasharray="2 6"
               />
               <circle cx="200" cy="200" r="180" stroke="currentColor" strokeWidth="0.4" fill="none" />
-              <circle
-                cx="200"
-                cy="200"
-                r="120"
-                stroke="currentColor"
-                strokeWidth="0.4"
-                fill="none"
-                strokeDasharray="1 3"
-              />
-            </svg>
-          </motion.div>
-          <motion.div
-            initial={{ rotate: 0 }}
-            animate={reduce ? {} : { rotate: -360 }}
-            transition={{ duration: 240, repeat: Infinity, ease: "linear" }}
-            className="pointer-events-none absolute inset-[6%] z-0"
-          >
-            <svg viewBox="0 0 400 400" className="h-full w-full text-sepia/30">
-              <circle
-                cx="200"
-                cy="200"
-                r="196"
-                stroke="currentColor"
-                strokeWidth="0.4"
-                fill="none"
-                strokeDasharray="0.5 4"
-              />
             </svg>
           </motion.div>
 
