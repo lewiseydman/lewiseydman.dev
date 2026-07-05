@@ -66,12 +66,12 @@ export function OrbitLabel({ item, innerR, outerR, tailLen = 0.17, index, onOpen
       <div
         className={`flex flex-col ${
           item.side === "right" ? "items-start" : "items-end"
-        }`}
+        } max-w-[9rem]`}
       >
-        <span className="font-mono-mar text-[0.6rem] opacity-70 transition-opacity group-hover:opacity-100">
+        <span className="font-mono-mar whitespace-nowrap text-[0.6rem] opacity-70 transition-opacity group-hover:opacity-100">
           {item.numeral} · {item.english}
         </span>
-        <span className="font-display text-xl leading-tight tracking-[-0.01em] md:text-2xl">
+        <span className="font-display whitespace-nowrap text-lg leading-tight tracking-[-0.01em] lg:text-xl xl:text-2xl">
           <span className="relative inline-block">
             {item.latin}
             <motion.span
