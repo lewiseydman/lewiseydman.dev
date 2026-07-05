@@ -34,9 +34,9 @@ const experience = [
 ];
 
 const education = [
-  { year: "2024", title: "Google UX Design", org: "Google" },
-  { year: "2016 — 2019", title: "BA Graphic Communication", org: "Norwich University of the Arts" },
   { year: "2014 — 2016", title: "Graphic Design Ext. Diploma", org: "Harlow College" },
+  { year: "2016 — 2019", title: "BA Graphic Communication", org: "Norwich University of the Arts" },
+  { year: "2024", title: "Google UX Design", org: "Google" },
 ];
 
 function Gear({ teeth = 8 }: { teeth?: number }) {
