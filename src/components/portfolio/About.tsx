@@ -113,7 +113,7 @@ export function About() {
         </h2>
         <div className="grid gap-6 text-[0.95rem] leading-[1.7] text-muted-foreground md:grid-cols-2 md:gap-10">
           <p>
-            I&rsquo;m a product manager who can sketch the interface in the morning, ship the React in the afternoon,
+            I&rsquo;m a product engineer who can sketch the interface in the morning, ship the React in the afternoon,
             and argue both sides of the technical trade-off. I care about helping ambitious teams present their products
             with clarity, taste and a strong point of view.
           </p>
