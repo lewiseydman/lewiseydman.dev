@@ -29,9 +29,9 @@ const testimonials: Testimonial[] = [
   },
   {
     quote:
-      "The clearest thinker about service design I've worked with. Every decision was traceable back to a user — and to a number.",
-    name: "Placeholder Name",
-    role: "Senior Designer",
+      "I worked with Lewis directly for 2 years. He’s a great co-worker, friend and intelligent colleague. I learnt a lot from his experience. He taught me how to use dot digital, how to design emails, and how to use bigcommerce editing bits of the website. I’d highly recommend him, he’s hardworking and just a genuinely nice person to be around.",
+    name: "Holly Tillier",
+    role: "Designer",
     org: "ITS",
     relation: "Colleague",
   },
