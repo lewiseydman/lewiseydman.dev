@@ -21,11 +21,11 @@ const testimonials: Testimonial[] = [
   },
   {
     quote:
-      "He took an ambiguous business problem and returned a wireframe, a prototype, and the analytics that proved it. We shipped in weeks, not quarters.",
-    name: "Placeholder Name",
-    role: "Founder",
-    org: "Independent client",
-    relation: "Client",
+      "Lewis is a caring, hardworking, and talented individual. He always considers all aspects of project when generating ideas, making sure every stage, is carefully thought through. His experience in design and development made him an invaluable asset to our team.",
+    name: "Monika Marcinkeviciene",
+    role: "Creative Lead",
+    org: "ITS",
+    relation: "Colleague",
   },
   {
     quote:
@@ -72,9 +72,7 @@ export function Appraisals() {
             </blockquote>
             <div className="mt-auto flex flex-col gap-0.5 border-t border-border pt-4">
               <span className="font-display text-base text-foreground md:text-lg">{t.name}</span>
-              <span className="font-mono-mar">
-                {t.org ? `${t.role} · ${t.org}` : t.role}
-              </span>
+              <span className="font-mono-mar">{t.org ? `${t.role} · ${t.org}` : t.role}</span>
             </div>
             <div className="h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
           </motion.li>
