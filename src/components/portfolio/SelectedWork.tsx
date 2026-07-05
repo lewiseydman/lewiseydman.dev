@@ -1,10 +1,15 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ChevronDown, ChevronUp, ExternalLink, Loader2 } from "lucide-react";
-import { useLayoutEffect, useRef, useState } from "react";
-import thumb from "@/assets/thumb-opera.jpg";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { ChevronDown, ChevronUp, ExternalLink, Loader2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import defaultThumb from "@/assets/thumb-opera.jpg";
 import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
 import { useExpandWithLoading } from "@/hooks/use-expand-with-loading";
 import { scrollDialogToTop } from "@/lib/scroll-dialog-top";
+import { FolioCard } from "./primitives/FolioCard";
+import { TagPill, TagPillRow } from "./primitives/TagPill";
+import { BackToIndexButton } from "./primitives/BackToIndexButton";
+import { ReadingProgressBar } from "./primitives/ReadingProgressBar";
+import { useSectionHash } from "@/hooks/use-section-hash";
 
 type Project = {
   id: string;
@@ -18,6 +23,7 @@ type Project = {
   sketch: "gear" | "wing" | "lens" | "compass";
   notebook: string;
   liveUrl?: string;
+  thumb?: string;
 };
 
 const projects: Project[] = [
