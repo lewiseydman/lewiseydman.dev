@@ -133,10 +133,7 @@ export function VitruvianStage() {
 
       {/* stage */}
       <div className="relative my-6 flex w-full flex-1 items-center justify-center">
-        <div
-          ref={stageRef}
-          className="relative aspect-square w-[min(78vh,88vw)] max-w-[820px] overflow-visible"
-        >
+        <div ref={stageRef} className="relative aspect-square w-[min(78vh,88vw)] max-w-[820px] overflow-visible">
           {/* Vitruvian image — sits inside the sphere */}
           <motion.div
             initial={{ opacity: 0, scale: 0.92 }}
@@ -219,9 +216,9 @@ export function VitruvianStage() {
           Lewis <span className="italic text-sepia">Eydman</span>
         </h1>
         <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
-          Product Manager bridging{" "}
-          <span className="text-foreground underline decoration-sepia/40 underline-offset-4">design</span> and{" "}
-          <span className="text-foreground underline decoration-sepia/40 underline-offset-4">development</span>.
+          Product Engineer Bridging{" "}
+          <span className="text-foreground underline decoration-sepia/40 underline-offset-4">Design</span> &{" "}
+          <span className="text-foreground underline decoration-sepia/40 underline-offset-4">Development</span>.
         </p>
       </motion.div>
 
