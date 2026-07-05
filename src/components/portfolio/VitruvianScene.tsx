@@ -1,52 +1,47 @@
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
-import type { Group } from "three";
+import { EdgesGeometry, IcosahedronGeometry, type Group } from "three";
 
-function WireSphere() {
-  const inner = useRef<Group>(null);
+function useResponsiveOpacity() {
+  const [opacity, setOpacity] = useState(0.09);
+  useEffect(() => {
+    const compute = () => {
+      const w = window.innerWidth;
+      setOpacity(w >= 1024 ? 0.09 : w >= 640 ? 0.06 : 0.04);
+    };
+    compute();
+    window.addEventListener("resize", compute);
+    return () => window.removeEventListener("resize", compute);
+  }, []);
+  return opacity;
+}
+
+function WireSphere({ opacity }: { opacity: number }) {
   const outer = useRef<Group>(null);
   const reduce = useReducedMotion();
+  const edges = useMemo(() => new EdgesGeometry(new IcosahedronGeometry(1.55, 1)), []);
 
   useFrame((_, delta) => {
     if (reduce) return;
-    if (inner.current) {
-      inner.current.rotation.y += delta * 0.08;
-      inner.current.rotation.x += delta * 0.02;
-    }
     if (outer.current) {
-      outer.current.rotation.y -= delta * 0.04;
-      outer.current.rotation.z += delta * 0.015;
+      outer.current.rotation.y -= delta * 0.05;
+      outer.current.rotation.x += delta * 0.02;
     }
   });
 
   return (
-    <>
-      <group ref={outer}>
-        <mesh>
-          <icosahedronGeometry args={[1.35, 1]} />
-          <meshBasicMaterial
-            color="#3a2a1f"
-            wireframe
-            transparent
-            opacity={0.06}
-          />
-        </mesh>
-      </group>
-
-      {/* single faint equatorial ring for orbit feel */}
-      <group ref={inner}>
-        <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[1.38, 0.002, 8, 128]} />
-          <meshBasicMaterial color="#3a2a1f" transparent opacity={0.09} />
-        </mesh>
-      </group>
-    </>
+    <group ref={outer}>
+      <lineSegments geometry={edges}>
+        <lineBasicMaterial color="#3a2a1f" transparent opacity={opacity} />
+      </lineSegments>
+    </group>
   );
 }
 
 export default function VitruvianScene({ paused = false }: { paused?: boolean }) {
   const reduce = useReducedMotion();
+  const opacity = useResponsiveOpacity();
   return (
     <Canvas
       dpr={[1, 1.75]}
@@ -55,7 +50,7 @@ export default function VitruvianScene({ paused = false }: { paused?: boolean })
       style={{ background: "transparent" }}
       frameloop={paused || reduce ? "demand" : "always"}
     >
-      <WireSphere />
+      <WireSphere opacity={opacity} />
     </Canvas>
   );
 }
