@@ -48,8 +48,7 @@ export function useSectionHash() {
     [write],
   );
   const closeItem = useCallback(
-    () => setState((prev) => (prev.section ? { section: prev.section, item: null } : prev)) ||
-      write({ section: state.section, item: null }),
+    () => write({ section: state.section, item: null }),
     [write, state.section],
   );
   const closeSection = useCallback(
