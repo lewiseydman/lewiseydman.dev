@@ -3,6 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import thumb from "@/assets/thumb-disputatio.jpg";
 import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
+import { scrollDialogToTop } from "@/lib/scroll-dialog-top";
 
 type Test = {
   id: string;
@@ -60,6 +61,11 @@ export function Tests() {
   const [openId, setOpenId] = useState<string | null>(null);
   const open = tests.find((t) => t.id === openId) ?? null;
 
+  const openTest = (id: string) => {
+    setOpenId(id);
+    scrollDialogToTop();
+  };
+
   return (
     <div className="flex flex-col gap-8">
       <PopoverSummaryStrip
@@ -68,7 +74,8 @@ export function Tests() {
           kicker: `Disputatio · ${t.num}`,
           title: t.title,
           dek: t.domain,
-          onClick: () => setOpenId(t.id),
+          thumb,
+          onClick: () => openTest(t.id),
         }))}
       />
       <AnimatePresence mode="wait">
@@ -95,7 +102,7 @@ export function Tests() {
                 >
                   <button
                     type="button"
-                    onClick={() => setOpenId(t.id)}
+                    onClick={() => openTest(t.id)}
                     className="group flex h-full w-full flex-col gap-4 bg-background p-5 text-left transition-colors hover:bg-card md:p-6"
                   >
                     <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border bg-card">
