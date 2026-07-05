@@ -33,7 +33,7 @@ const tests: Test[] = [
     summary:
       "Most loading spinners lie. This one shows the actual queue position and animates only when work is happening.",
     detail:
-      "A motion experiment exploring what a loading indicator could look like if it were forced to tell the truth. The animation pauses when the worker stalls. Users prefer it; product managers do not.",
+      "A motion experiment exploring what a loading indicator could look like if it were forced to tell the truth. The animation pauses when the worker stalls. Users prefer it; product engineers do not.",
   },
   {
     id: "found-typography",
