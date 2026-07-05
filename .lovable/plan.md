@@ -1,44 +1,35 @@
-## Shared expand-with-loading pattern
+## Cleanup: remove unused files & dependencies
 
-Both buttons ("Reveal earlier folios" in Codex, "Read more" in Opera) will use one shared hook and one shared animation approach, so the interaction feels identical sitewide.
+Scope: delete source files, assets, and npm packages that no reachable file (starting from `src/routes/index.tsx` and `__root.tsx`) imports. No behavior changes.
 
-### 1. Shared hook: `useExpandWithLoading`
-**New file:** `src/hooks/use-expand-with-loading.ts`
+### Unused portfolio components (delete)
+- `src/components/portfolio/Contact.tsx`
+- `src/components/portfolio/Footer.tsx`
+- `src/components/portfolio/Hero.tsx`
+- `src/components/portfolio/Nav.tsx`
+- `src/components/portfolio/InkDraw.tsx`
+- `src/components/portfolio/SectionHeading.tsx` (only imported by `Contact.tsx`)
 
-- Exports a hook `useExpandWithLoading(delay = 400)` returning `{ isLoading, trigger }`.
-- `trigger(action)` sets `isLoading = true`, waits `delay` ms, runs `action()`, then clears `isLoading`.
-- Cleans up its timeout on unmount.
+### Unused MCP scaffolding (delete)
+Never wired into `vite.config.ts`; no imports anywhere.
+- `src/lib/mcp/` (entire directory: `tools/get-profile.ts`, `tools/list-projects.ts`, `tools/list-writings.ts`)
+- Remove `@lovable.dev/mcp-js` from `package.json`
 
-This is the single source of truth for the "click → brief spinner → expand" feel across the site.
+### Unused shadcn/ui components (delete)
+Not imported by any surviving file. Keep only: `button`, `dialog`, `label`, `input`, `separator`, `skeleton`, `toggle`, `tooltip` (verified in-use).
+Delete: `accordion`, `alert`, `alert-dialog`, `aspect-ratio`, `avatar`, `badge`, `breadcrumb`, `calendar`, `card`, `carousel`, `chart`, `checkbox`, `collapsible`, `command`, `context-menu`, `drawer`, `dropdown-menu`, `form`, `hover-card`, `input-otp`, `menubar`, `navigation-menu`, `pagination`, `popover`, `progress`, `radio-group`, `resizable`, `scroll-area`, `select`, `sidebar`, `slider`, `sonner`, `switch`, `table`, `tabs`, `textarea`, `toggle-group`.
 
-### 2. Shared button treatment
-Both buttons already share the same visual (rounded-full pill, `border-border`, `text-sepia`, `font-mono-mar`). We keep that, and standardise:
+### Unused hook (delete)
+- `src/hooks/use-mobile.tsx` (only consumer is `sidebar.tsx`, which is being removed)
 
-- Icon: `Loader2` from `lucide-react` with `animate-spin` while `isLoading`; otherwise the button's normal icon (`Plus` in Codex, `ChevronDown` / `ChevronUp` in Opera).
-- Disabled state while loading (`disabled={isLoading}` + `disabled:opacity-70 disabled:cursor-wait`).
-- Label stays the same; only the leading icon swaps.
+### Dependency prune (`bun remove`)
+Radix packages tied to deleted components, plus other now-unused libs:
+`@radix-ui/react-accordion`, `@radix-ui/react-alert-dialog`, `@radix-ui/react-aspect-ratio`, `@radix-ui/react-avatar`, `@radix-ui/react-checkbox`, `@radix-ui/react-collapsible`, `@radix-ui/react-context-menu`, `@radix-ui/react-dropdown-menu`, `@radix-ui/react-hover-card`, `@radix-ui/react-menubar`, `@radix-ui/react-navigation-menu`, `@radix-ui/react-popover`, `@radix-ui/react-progress`, `@radix-ui/react-radio-group`, `@radix-ui/react-scroll-area`, `@radix-ui/react-select`, `@radix-ui/react-slider`, `@radix-ui/react-switch`, `@radix-ui/react-tabs`, `@radix-ui/react-toggle-group`, `@lovable.dev/mcp-js`, `cmdk`, `date-fns`, `embla-carousel-react`, `input-otp`, `react-day-picker`, `react-hook-form`, `@hookform/resolvers`, `react-resizable-panels`, `recharts`, `sonner`, `vaul`.
 
-### 3. Shared smooth expansion
-Both places grow a container. We use the same Framer Motion primitive in both:
+Kept Radix: `react-dialog`, `react-label`, `react-separator`, `react-slot`, `react-toggle`, `react-tooltip` (still used).
 
-- Wrap the expanding content in `<motion.div layout />` inside an `AnimatePresence` where needed, or animate `height: "auto"` via `animate={{ height: isExpanded ? "auto" : COLLAPSED_PX }}` with `transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}` and `overflow-hidden`.
-- Framer Motion is already a dependency in both files, so no new packages.
+### Kept (verified in use)
+All other `portfolio/*` components, both assets (`portrait.png`, `vitruvian.png`, thumbs), `use-expand-with-loading`, `SectionDialog`, three.js stack, framer-motion, react-icons, lucide-react.
 
-### 4. Apply in Codex
-**File:** `src/components/portfolio/Blogs.tsx`
-- Import the hook and `Loader2`.
-- Replace the direct `setArchiveCount` call with `trigger(() => setArchiveCount(c => Math.min(c + 3, rest.length)))`.
-- Swap the `Plus` icon for `Loader2 animate-spin` when `isLoading`.
-- Wrap the `<ul>` archive list in a `motion.div` with `layout` so the section height animates smoothly as rows appear.
-
-### 5. Apply in Opera
-**File:** `src/components/portfolio/SelectedWork.tsx`
-- Import the hook and `Loader2`.
-- Replace the direct `setNotebookExpanded` toggle with `trigger(() => setNotebookExpanded(v => !v))`.
-- Swap the `ChevronDown` / `ChevronUp` icon for `Loader2 animate-spin` while `isLoading`.
-- Replace the inline `style={{ maxHeight, overflow }}` on the notebook container with a `motion.div` animating `height` between the collapsed cap (measured in px from `notebookRef`) and the full `scrollHeight`, with the same transition config as Codex.
-
-### Technical notes
-- No new npm dependencies.
-- No exported API changes; all state remains local to each component, plus the new shared hook.
-- Renaissance-monochrome tokens (`sepia`, `border-border`, `font-mono-mar`) unchanged.
+### Verification
+After deletion, run the build to confirm nothing imports a removed file.
