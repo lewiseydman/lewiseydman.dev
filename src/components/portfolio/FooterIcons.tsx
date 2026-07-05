@@ -14,7 +14,7 @@ type IconItem = {
 
 const icons: IconItem[] = [
   { Icon: Mail, label: "Email", href: "mailto:lewiseydman@gmail.com" },
-  { Icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/lewiseydman/" },
+  { Icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com/in/lewiseydman/" },
   { Icon: FileText, label: "Résumé", action: "resume" },
   { Icon: Github, label: "GitHub", href: "https://github.com/lewiseydman" },
   { Icon: SiMedium as IconCmp, label: "Medium", href: "https://medium.com/@lewiseydman" },
