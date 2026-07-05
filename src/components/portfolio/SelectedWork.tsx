@@ -4,6 +4,7 @@ import { useLayoutEffect, useRef, useState } from "react";
 import thumb from "@/assets/thumb-opera.jpg";
 import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
 import { useExpandWithLoading } from "@/hooks/use-expand-with-loading";
+import { scrollDialogToTop } from "@/lib/scroll-dialog-top";
 
 type Project = {
   id: string;
@@ -156,6 +157,10 @@ function Sketch({ kind }: { kind: Project["sketch"] }) {
 export function SelectedWork() {
   const [openId, setOpenId] = useState<string | null>(null);
   const open = projects.find((p) => p.id === openId) ?? null;
+  const openProject = (id: string) => {
+    setOpenId(id);
+    scrollDialogToTop();
+  };
   const [notebookExpanded, setNotebookExpanded] = useState(false);
   const notebookRef = useRef<HTMLDivElement>(null);
   const [notebookOverflows, setNotebookOverflows] = useState(false);
@@ -188,7 +193,7 @@ export function SelectedWork() {
           title: p.title,
           dek: p.role,
           thumb,
-          onClick: () => setOpenId(p.id),
+          onClick: () => openProject(p.id),
         }))}
       />
       <AnimatePresence mode="wait">
@@ -209,7 +214,7 @@ export function SelectedWork() {
                 <motion.button
                   key={p.id}
                   type="button"
-                  onClick={() => setOpenId(p.id)}
+                  onClick={() => openProject(p.id)}
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.45, delay: i * 0.06 }}
