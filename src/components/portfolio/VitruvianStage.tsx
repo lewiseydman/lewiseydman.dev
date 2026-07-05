@@ -11,6 +11,9 @@ import { Blogs } from "./Blogs";
 import { Appraisals } from "./Appraisals";
 import { Tests } from "./Tests";
 import { FooterIcons } from "./FooterIcons";
+import { toRoman } from "@/lib/roman";
+
+const CURRENT_YEAR_ROMAN = toRoman(new Date().getFullYear());
 
 const VitruvianScene = lazy(() => import("./VitruvianScene"));
 
@@ -128,7 +131,7 @@ export function VitruvianStage() {
         className="font-mono-mar relative z-10 flex items-center gap-3"
       >
         <span className="hairline h-px w-10" />
-        <span>Folio · Anno MMXXVI</span>
+        <span>Folio · Anno {CURRENT_YEAR_ROMAN}</span>
         <span className="hairline h-px w-10" />
       </motion.div>
 
@@ -228,7 +231,7 @@ export function VitruvianStage() {
           </div>
 
           {/* labels (desktop only — visible at md+) */}
-          <div className="absolute inset-0 z-40 hidden md:block">
+          <div className="absolute inset-0 z-40 hidden lg:block">
             {items.map((item, i) => (
               <OrbitLabel
                 key={item.id}
@@ -264,7 +267,7 @@ export function VitruvianStage() {
 
       {/* mobile nav — stacked manuscript index. Easier to scan than the
           orbit chips: each row reads like a table of contents entry. */}
-      <nav aria-label="Sections (mobile)" className="relative z-10 mt-8 w-full md:hidden">
+      <nav aria-label="Sections (mobile)" className="relative z-10 mt-8 w-full lg:hidden">
         <ul className="mx-auto flex w-full max-w-md flex-col divide-y divide-border/60 rounded-sm border border-border/60 bg-background/70 backdrop-blur-md">
           {items.map((item) => (
             <li key={item.id}>
