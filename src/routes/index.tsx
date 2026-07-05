@@ -4,16 +4,16 @@ import { VitruvianStage } from "@/components/portfolio/VitruvianStage";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Lewis Eydman — Product Manager bridging design & development" },
+      { title: "Lewis Eydman — Product Engineer bridging design & development" },
       {
         name: "description",
         content:
-          "Portfolio of Lewis Eydman — Product Manager fluent in UX/UI design and full-stack development. Selected work, writings, experiments and résumé.",
+          "Portfolio of Lewis Eydman — Product Engineer fluent in UX/UI design and full-stack development. Selected work, writings, experiments and résumé.",
       },
-      { property: "og:title", content: "Lewis Eydman — Product Manager" },
+      { property: "og:title", content: "Lewis Eydman — Product Engineer" },
       {
         property: "og:description",
-        content: "Portfolio of Lewis Eydman — Product Manager fluent in design and full-stack engineering.",
+        content: "Portfolio of Lewis Eydman — Product Engineer fluent in design and full-stack engineering.",
       },
       { property: "og:url", content: "https://renaissance-blueprint-muse.lovable.app/" },
       { property: "og:type", content: "website" },
