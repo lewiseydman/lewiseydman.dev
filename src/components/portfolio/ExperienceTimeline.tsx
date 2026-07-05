@@ -29,7 +29,7 @@ const experience = [
     role: "Designer & Developer",
     org: "Self-employed · UK",
     notes:
-      "Custom digital products from research to deployment. Journey & interface design, Figma prototypes, React frontends, CI/CD, plus open-source contribution. Including a career-break with Phipps Group (landscaping) to reconnect with people and nature.",
+      "Building custom digital products from initial research to final deployment. My expertise spans interface and journey design, Figma prototyping, engineering React frontends, and setting up CI/CD pipelines, alongside active open-source contributions. This period also includes a purposeful career break with Phipps Group (landscaping) to recharge and reconnect with people and nature.",
   },
 ];
 
