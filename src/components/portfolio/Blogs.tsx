@@ -27,7 +27,7 @@ const blogs: Blog[] = [
   {
     id: "draftsman",
     date: "MMXXVI · iii",
-    title: "The product manager as draftsman",
+    title: "The product engineer as draftsman",
     dek: "On sketching as the first technical decision, not the last design polish.",
     read: "7 min",
     tags: ["craft", "process"],
@@ -106,8 +106,7 @@ export function Blogs() {
   useEffect(() => {
     if (prevOpenId.current && !openId) {
       const prevId = prevOpenId.current;
-      const trigger =
-        prevId === hero.id ? heroTriggerRef.current : restTriggers.current[prevId];
+      const trigger = prevId === hero.id ? heroTriggerRef.current : restTriggers.current[prevId];
       trigger?.focus();
     }
     prevOpenId.current = openId;
@@ -234,11 +233,7 @@ export function Blogs() {
                   <button
                     type="button"
                     disabled={isRevealing}
-                    onClick={() =>
-                      triggerReveal(() =>
-                        setArchiveCount((c) => Math.min(c + 3, rest.length)),
-                      )
-                    }
+                    onClick={() => triggerReveal(() => setArchiveCount((c) => Math.min(c + 3, rest.length)))}
                     className="font-mono-mar group inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-3 py-2 text-sepia transition-colors hover:border-sepia/60 hover:bg-sepia/[0.04] hover:text-foreground disabled:cursor-wait disabled:opacity-70"
                   >
                     {isRevealing ? (
@@ -338,8 +333,7 @@ function Essay({ post, onBack }: { post: Blog; onBack: () => void }) {
         </header>
         {post.body.map((p, i) => {
           // Only pull-quote longer essays, and never the first or last paragraph.
-          const isPull =
-            canPullQuote && i > 0 && i < post.body.length - 1 && i % 3 === 0;
+          const isPull = canPullQuote && i > 0 && i < post.body.length - 1 && i % 3 === 0;
           if (isPull) {
             return (
               <blockquote
