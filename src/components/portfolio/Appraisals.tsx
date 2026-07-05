@@ -5,8 +5,8 @@ type Testimonial = {
   quote: string;
   name: string;
   role: string;
-  org: string;
-  relation: "Colleague" | "Client" | "Built for";
+  org?: string;
+  relation?: "Colleague" | "Client" | "Built for";
 };
 
 // Placeholder drafts — swap in real quotes when ready.
@@ -63,7 +63,7 @@ export function Appraisals() {
           >
             <div className="flex items-baseline justify-between">
               <span className="font-mono-mar">{`Laus · ${String(i + 1).padStart(2, "0")}`}</span>
-              <span className="font-mono-mar">{t.relation}</span>
+              {t.relation ? <span className="font-mono-mar">{t.relation}</span> : null}
             </div>
             <blockquote className="font-display text-xl italic leading-snug text-foreground md:text-2xl">
               <span className="text-sepia">&ldquo;</span>
@@ -73,7 +73,7 @@ export function Appraisals() {
             <div className="mt-auto flex flex-col gap-0.5 border-t border-border pt-4">
               <span className="font-display text-base text-foreground md:text-lg">{t.name}</span>
               <span className="font-mono-mar">
-                {t.role} · {t.org}
+                {t.org ? `${t.role} · ${t.org}` : t.role}
               </span>
             </div>
             <div className="h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
