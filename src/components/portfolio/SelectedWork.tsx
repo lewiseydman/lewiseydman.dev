@@ -1,4 +1,4 @@
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp, ExternalLink, Loader2 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import defaultThumb from "@/assets/thumb-opera.jpg";
@@ -196,7 +196,6 @@ export function SelectedWork() {
 }
 
 function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }) {
-  const reduce = useReducedMotion();
   const [expanded, setExpanded] = useState(false);
   const [overflows, setOverflows] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
