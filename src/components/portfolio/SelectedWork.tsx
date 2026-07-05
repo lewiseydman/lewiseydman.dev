@@ -1,6 +1,6 @@
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ChevronDown, ChevronUp, ExternalLink, Loader2 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import defaultThumb from "@/assets/thumb-opera.jpg";
 import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
 import { useExpandWithLoading } from "@/hooks/use-expand-with-loading";
@@ -20,7 +20,6 @@ type Project = {
   outcome: string;
   blurb: string;
   tags: string[];
-  sketch: "gear" | "wing" | "lens" | "compass";
   notebook: string;
   liveUrl?: string;
   thumb?: string;
@@ -37,7 +36,6 @@ const projects: Project[] = [
     blurb:
       "An operator console for solar-fleet engineers. Rebuilt around a typed event stream and a single canvas of asset health.",
     tags: ["B2B", "React", "Real-time"],
-    sketch: "gear",
     notebook: [
       "Context — Helios runs a fleet of utility-scale solar sites. The legacy console had grown into a Christmas tree of dashboards — forty-seven widgets, no shared ontology, and a six-week onboarding ramp for new operators.",
       "Role — Lead PM with a hand on the design tools. Embedded with two engineers for the first quarter, then handed off as the team scaled.",
@@ -59,7 +57,6 @@ const projects: Project[] = [
     blurb:
       "Consumer mapping app rebuilt as a personal atlas. Hand-rolled vector tiles and a writing surface for cartographic notes.",
     tags: ["Consumer", "Maps", "iOS"],
-    sketch: "compass",
     notebook: [
       "Context — Atlas had been positioned as a 'better Google Maps'. It was not. We pivoted to a personal atlas — a place for the user's own places, routes, and notes, on top of a competent but unambitious map.",
       "Role — PM and prototyper. I built the first version of the note surface in SwiftUI over a weekend; the team then made it production-grade.",
@@ -80,7 +77,6 @@ const projects: Project[] = [
     blurb:
       "A scheduling primitive for asynchronous teams. The interface was a notebook; the engine was a borrowed flight-machine principle.",
     tags: ["SaaS", "Workflow"],
-    sketch: "wing",
     notebook: [
       "Context — Async teams keep reinventing scheduling, badly. We built a primitive — a small, opinionated, embeddable scheduler — that other tools could lean on instead of building their own.",
       "Role — Founder. Designed, built, and sold the first hundred customers myself before hiring.",
@@ -101,7 +97,6 @@ const projects: Project[] = [
     blurb:
       "A microscopy review tool. Built a custom annotation surface that taught itself the vocabulary of pathologists.",
     tags: ["Health", "ML", "Tooling"],
-    sketch: "lens",
     notebook: [
       "Context — Pathologists were drowning in unannotated microscopy. The off-the-shelf tools assumed a software user; pathologists are clinicians who tolerate software.",
       "Role — PM, with a strong opinion about the annotation surface.",
@@ -113,92 +108,38 @@ const projects: Project[] = [
   },
 ];
 
-function Sketch({ kind }: { kind: Project["sketch"] }) {
-  const common = "stroke-foreground/80 fill-none";
-  return (
-    <svg viewBox="0 0 80 80" className="h-16 w-16">
-      <g strokeWidth="0.8" className={common}>
-        {kind === "gear" && (
-          <>
-            <circle cx="40" cy="40" r="18" />
-            <circle cx="40" cy="40" r="6" />
-            {Array.from({ length: 10 }).map((_, i) => {
-              const a = (i / 10) * Math.PI * 2;
-              const x1 = 40 + Math.cos(a) * 18;
-              const y1 = 40 + Math.sin(a) * 18;
-              const x2 = 40 + Math.cos(a) * 26;
-              const y2 = 40 + Math.sin(a) * 26;
-              return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} />;
-            })}
-          </>
-        )}
-        {kind === "wing" && (
-          <>
-            <path d="M10 55 C 25 20, 55 20, 72 50" />
-            <path d="M14 55 C 28 30, 50 30, 64 50" />
-            <path d="M20 55 C 32 38, 48 38, 58 52" />
-            <line x1="10" y1="55" x2="72" y2="55" />
-          </>
-        )}
-        {kind === "lens" && (
-          <>
-            <circle cx="34" cy="34" r="20" />
-            <circle cx="34" cy="34" r="14" />
-            <line x1="50" y1="50" x2="68" y2="68" />
-            <line x1="46" y1="54" x2="64" y2="72" />
-          </>
-        )}
-        {kind === "compass" && (
-          <>
-            <circle cx="40" cy="40" r="24" />
-            <path d="M40 16 L46 40 L40 64 L34 40 Z" />
-            <circle cx="40" cy="40" r="2" />
-          </>
-        )}
-      </g>
-    </svg>
-  );
-}
-
 export function SelectedWork() {
-  const [openId, setOpenId] = useState<string | null>(null);
+  const { item: hashItem, openItem, closeItem } = useSectionHash();
+  const openId = hashItem && projects.some((p) => p.id === hashItem) ? hashItem : null;
   const open = projects.find((p) => p.id === openId) ?? null;
+  const triggersRef = useRef<Record<string, HTMLButtonElement | null>>({});
+  const prevOpenId = useRef<string | null>(null);
+
   const openProject = (id: string) => {
-    setOpenId(id);
+    openItem("opera", id);
     scrollDialogToTop();
   };
-  const [notebookExpanded, setNotebookExpanded] = useState(false);
-  const notebookRef = useRef<HTMLDivElement>(null);
-  const [notebookOverflows, setNotebookOverflows] = useState(false);
-  const [notebookFullHeight, setNotebookFullHeight] = useState<number>(0);
-  const { isLoading: isExpanding, trigger: triggerExpand } = useExpandWithLoading();
+  const back = () => closeItem();
 
-  // Reset the notebook collapsed state whenever we open a different project,
-  // and re-measure whether the content overflows its collapsed max-height.
-  useLayoutEffect(() => {
-    setNotebookExpanded(false);
+  // Restore focus to the triggering card when a project is closed.
+  useEffect(() => {
+    if (prevOpenId.current && !openId) {
+      const trigger = triggersRef.current[prevOpenId.current];
+      trigger?.focus();
+    }
+    prevOpenId.current = openId;
   }, [openId]);
-
-  useLayoutEffect(() => {
-    if (!open) return;
-    const el = notebookRef.current;
-    if (!el) return;
-    // Compare full content height against the collapsed cap.
-    setNotebookFullHeight(el.scrollHeight);
-    setNotebookOverflows(el.scrollHeight > 22 * 16 + 4);
-  }, [open, openId]);
-
-  const COLLAPSED_MAX_PX = 22 * 16;
 
   return (
     <div className="flex flex-col gap-8">
+      {open ? <ReadingProgressBar /> : null}
       <PopoverSummaryStrip
         label="Opera · Featured"
         items={projects.slice(0, 3).map((p) => ({
           kicker: `Opus · ${p.num}`,
           title: p.title,
           dek: p.role,
-          thumb,
+          thumb: p.thumb ?? defaultThumb,
           onClick: () => openProject(p.id),
         }))}
       />
@@ -213,195 +154,198 @@ export function SelectedWork() {
             className="flex flex-col gap-8"
           >
             <p className="font-display text-2xl leading-snug md:text-3xl">
-              Case studies &mdash; <span className="italic text-sepia">products built, shipped, and learned from.</span>
+              Case studies &mdash;{" "}
+              <span className="italic text-sepia">products built, shipped, and learned from.</span>
             </p>
             <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
               {projects.map((p, i) => (
-                <motion.button
+                <FolioCard
                   key={p.id}
-                  type="button"
+                  ref={(el) => {
+                    triggersRef.current[p.id] = el;
+                  }}
                   onClick={() => openProject(p.id)}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.45, delay: i * 0.06 }}
-                  className="group relative flex flex-col gap-5 bg-background p-6 text-left transition-colors hover:bg-card md:p-7"
-                >
-                  <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border bg-card">
-                    <img
-                      src={thumb}
-                      alt=""
-                      loading="lazy"
-                      className="h-full w-full object-cover mix-blend-multiply transition-transform duration-700 group-hover:scale-[1.03] dark:mix-blend-screen"
-                    />
-                    <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
-                    <div className="absolute left-2 top-2 font-mono-mar bg-background/80 px-2 py-0.5">
-                      Opus · {p.num}
-                    </div>
-                    <div className="absolute right-2 top-2 font-mono-mar bg-background/80 px-2 py-0.5">{p.year}</div>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <h3 className="font-display text-2xl tracking-[-0.01em] transition-colors group-hover:text-sepia md:text-3xl">
-                      {p.title}
-                    </h3>
-                    <p className="font-mono-mar">{p.role}</p>
-                  </div>
-                  <p className="text-sm leading-relaxed text-muted-foreground">{p.blurb}</p>
-                  <div className="mt-auto flex items-end justify-between gap-3 pt-1">
-                    <div className="flex flex-col gap-0.5">
-                      <span className="font-mono-mar">Outcome</span>
-                      <span className="font-display italic text-sepia">{p.outcome}</span>
-                    </div>
-                    <div className="flex flex-wrap justify-end gap-1.5">
-                      {p.tags.map((t) => (
-                        <span
-                          key={t}
-                          className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
-                </motion.button>
+                  ariaLabel={`Open case study: ${p.title}`}
+                  thumb={p.thumb ?? defaultThumb}
+                  alt=""
+                  overlayTopLeft={<>Opus · {p.num}</>}
+                  overlayTopRight={<>{p.year}</>}
+                  kicker={p.role}
+                  title={p.title}
+                  body={p.blurb}
+                  footer={
+                    <>
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-mono-mar">Outcome</span>
+                        <span className="font-display italic text-sepia">{p.outcome}</span>
+                      </div>
+                      <TagPillRow tags={p.tags} />
+                    </>
+                  }
+                  index={i}
+                />
               ))}
             </div>
           </motion.div>
         ) : (
-          <motion.article
-            key={open.id}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.35 }}
-            className="flex flex-col gap-8"
-          >
-            <button
-              type="button"
-              onClick={() => setOpenId(null)}
-              className="font-mono-mar group flex items-center gap-2 self-start hover:text-foreground"
-            >
-              <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-0.5" />
-              Back to Opera
-            </button>
-            <header className="flex flex-col gap-3 border-b border-border pb-6">
-              <div className="font-mono-mar flex items-center gap-3">
-                <span>Opus · {open.num}</span>
-                <span className="hairline h-px w-8" />
-                <span>{open.year}</span>
-                <span className="hairline h-px w-8" />
-                <span>{open.role}</span>
-              </div>
-              <h2 className="font-display text-4xl tracking-[-0.015em] md:text-5xl">{open.title}</h2>
-              <p className="font-display text-xl italic text-sepia md:text-2xl">{open.blurb}</p>
-            </header>
-            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-sm border border-border bg-card">
-              <img
-                src={thumb}
-                alt={open.title}
-                className="h-full w-full object-cover mix-blend-multiply dark:mix-blend-screen"
-              />
-              <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
-            </div>
-            {/* Caption strip: Outcome + tags + CTA, directly under the hero */}
-            <div className="flex flex-wrap items-end justify-between gap-6 border-t border-border pt-6">
-              <div className="flex flex-col">
-                <span className="font-mono-mar">Outcome</span>
-                <span className="font-display text-2xl italic text-sepia">{open.outcome}</span>
-              </div>
-              <div className="flex flex-wrap items-center justify-end gap-3">
-                {open.liveUrl ? (
-                  <a
-                    href={open.liveUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-mono-mar group inline-flex items-center gap-2 rounded-full border border-sepia/60 bg-background px-4 py-2 text-sepia transition-all hover:border-sepia hover:bg-sepia hover:text-parchment"
-                  >
-                    Visit live product
-                    <ExternalLink className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                  </a>
-                ) : null}
-                <div className="flex flex-wrap justify-end gap-2">
-                  {open.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-            {/* Notebook — free-form, collapsible */}
-            <section className="flex flex-col gap-6 border-t border-border pt-8">
-              <div className="flex items-baseline justify-between">
-                <h3 className="font-display text-2xl tracking-[-0.01em] md:text-3xl">
-                  Notebook <span className="italic text-sepia">— marginalia</span>
-                </h3>
-                <span className="font-mono-mar">Opus · {open.num}</span>
-              </div>
-              <div className="relative">
-                <motion.div
-                  animate={{
-                    height:
-                      !notebookOverflows || notebookExpanded
-                        ? notebookFullHeight || "auto"
-                        : COLLAPSED_MAX_PX,
-                  }}
-                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  style={{ overflow: "hidden" }}
-                >
-                  <div ref={notebookRef} className="flex flex-col gap-5">
-                    {open.notebook
-                      .split(/\n\s*\n/)
-                      .filter((p) => p.trim().length > 0)
-                      .map((p, i) => (
-                        <p
-                          key={i}
-                          className="max-w-prose text-[1.05rem] leading-[1.75] text-foreground"
-                        >
-                          {p}
-                        </p>
-                      ))}
-                  </div>
-                </motion.div>
-                {!notebookExpanded && notebookOverflows ? (
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent"
-                  />
-                ) : null}
-              </div>
-              {notebookOverflows ? (
-                <button
-                  type="button"
-                  disabled={isExpanding}
-                  onClick={() => triggerExpand(() => setNotebookExpanded((v) => !v))}
-                  className="font-mono-mar group inline-flex items-center gap-2 self-start rounded-full border border-border px-3 py-1.5 text-sepia transition-colors hover:border-sepia/60 hover:bg-sepia/[0.04] hover:text-foreground disabled:cursor-wait disabled:opacity-70"
-                >
-                  {isExpanding ? (
-                    <>
-                      <Loader2 className="h-3 w-3 animate-spin" />
-                      {notebookExpanded ? "Read less" : "Read more"}
-                    </>
-                  ) : notebookExpanded ? (
-                    <>
-                      <ChevronUp className="h-3 w-3" />
-                      Read less
-                    </>
-                  ) : (
-                    <>
-                      <ChevronDown className="h-3 w-3" />
-                      Read more
-                    </>
-                  )}
-                </button>
-              ) : null}
-            </section>
-          </motion.article>
+          <CaseStudy key={open.id} project={open} onBack={back} />
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }) {
+  const reduce = useReducedMotion();
+  const [expanded, setExpanded] = useState(false);
+  const [overflows, setOverflows] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const { isLoading: isExpanding, trigger: triggerExpand } = useExpandWithLoading();
+  const paragraphs = useMemo(
+    () => project.notebook.split(/\n\s*\n/).filter((p) => p.trim().length > 0),
+    [project.notebook],
+  );
+
+  // Detect overflow relative to the collapsed cap. Runs on mount + on window
+  // resize — no ResizeObserver needed since the collapsed cap is a fixed rem.
+  useEffect(() => {
+    const el = contentRef.current;
+    if (!el) return;
+    const check = () => {
+      // Collapsed cap is 22rem (see .notebook-collapsed below).
+      const cap = 22 * 16;
+      setOverflows(el.scrollHeight > cap + 8);
+    };
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, [paragraphs]);
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.35 }}
+      className="flex flex-col gap-8"
+    >
+      {/* Sticky back header with project chip on the right */}
+      <div className="sticky top-0 z-10 -mx-5 flex items-center justify-between gap-3 border-b border-border bg-background/85 px-5 py-2 backdrop-blur-md md:-mx-14 md:px-14">
+        <BackToIndexButton onClick={onBack} label="Back to Opera" />
+        <div className="font-mono-mar flex min-w-0 items-center gap-2 truncate text-right">
+          <span className="hidden sm:inline">Opus · {project.num}</span>
+          <span className="hairline hidden h-px w-6 sm:inline-block" />
+          <span className="truncate">{project.title}</span>
+        </div>
+      </div>
+
+      <header className="flex flex-col gap-3 border-b border-border pb-6">
+        {/* Meta row: stacked on mobile, inline with hairlines on sm+ */}
+        <div className="font-mono-mar flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+          <span>Opus · {project.num}</span>
+          <span className="hairline hidden h-px w-8 sm:inline-block" />
+          <span>{project.year}</span>
+          <span className="hairline hidden h-px w-8 sm:inline-block" />
+          <span>{project.role}</span>
+        </div>
+        <h3 className="font-display text-3xl tracking-[-0.015em] sm:text-4xl md:text-5xl">
+          {project.title}
+        </h3>
+        <p className="font-display text-lg italic text-sepia sm:text-xl md:text-2xl">{project.blurb}</p>
+      </header>
+      <div className="relative aspect-[16/9] w-full overflow-hidden rounded-sm border border-border bg-card">
+        <img
+          src={project.thumb ?? defaultThumb}
+          alt={`${project.title} — hero visual`}
+          loading="lazy"
+          decoding="async"
+          className="h-full w-full object-cover mix-blend-multiply dark:mix-blend-screen"
+        />
+        <div aria-hidden className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
+      </div>
+      {/* Caption strip: mobile-first three-row grid; single row on sm+ */}
+      <div className="grid gap-6 border-t border-border pt-6 sm:flex sm:flex-wrap sm:items-end sm:justify-between">
+        <div className="flex flex-col">
+          <span className="font-mono-mar">Outcome</span>
+          <span className="font-display text-2xl italic text-sepia">{project.outcome}</span>
+        </div>
+        {project.liveUrl ? (
+          <a
+            href={project.liveUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="font-mono-mar group inline-flex min-h-11 items-center justify-center gap-2 self-start rounded-full border border-sepia/60 bg-background px-4 py-2.5 text-sepia transition-all hover:border-sepia hover:bg-sepia hover:text-parchment sm:self-end"
+          >
+            Visit live product
+            <ExternalLink className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </a>
+        ) : null}
+        <div className="flex flex-wrap gap-2 sm:justify-end">
+          {project.tags.map((t) => (
+            <TagPill key={t}>{t}</TagPill>
+          ))}
+        </div>
+      </div>
+      {/* Notebook — grid-rows collapse */}
+      <section className="flex flex-col gap-6 border-t border-border pt-8">
+        <div className="flex items-baseline justify-between">
+          <h4 className="font-display text-2xl tracking-[-0.01em] md:text-3xl">
+            Notebook <span className="italic text-sepia">— marginalia</span>
+          </h4>
+          <span className="font-mono-mar">Opus · {project.num}</span>
+        </div>
+        <div className="relative">
+          <div
+            className={
+              overflows && !expanded
+                ? "notebook-collapsed relative overflow-hidden"
+                : "grid grid-rows-[1fr] transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+            }
+            style={overflows && !expanded ? { maxHeight: "22rem" } : undefined}
+          >
+            <div ref={contentRef} className="min-h-0 overflow-hidden">
+              <div className="flex flex-col gap-5">
+                {paragraphs.map((p, i) => (
+                  <p key={i} className="max-w-prose text-[1.05rem] leading-[1.75] text-foreground">
+                    {p}
+                  </p>
+                ))}
+              </div>
+            </div>
+          </div>
+          {overflows && !expanded ? (
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent"
+            />
+          ) : null}
+        </div>
+        {overflows ? (
+          <button
+            type="button"
+            disabled={isExpanding}
+            onClick={() => triggerExpand(() => setExpanded((v) => !v))}
+            aria-expanded={expanded}
+            className="font-mono-mar group inline-flex min-h-11 items-center gap-2 self-start rounded-full border border-border px-3 py-2.5 text-sepia transition-colors hover:border-sepia/60 hover:bg-sepia/[0.04] hover:text-foreground disabled:cursor-wait disabled:opacity-70"
+          >
+            {isExpanding ? (
+              <>
+                <Loader2 className="h-3 w-3 animate-spin" />
+                {expanded ? "Read less" : "Read more"}
+              </>
+            ) : expanded ? (
+              <>
+                <ChevronUp className="h-3 w-3" /> Read less
+              </>
+            ) : (
+              <>
+                <ChevronDown className="h-3 w-3" /> Read more
+              </>
+            )}
+          </button>
+        ) : null}
+        {reduce ? null : null}
+      </section>
+    </motion.article>
   );
 }
