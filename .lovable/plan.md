@@ -1,56 +1,32 @@
-## Goal
+Four small, contained changes across the popover sections.
 
-Make the three.js sphere read as design + code by placing ~12 semantic tokens (words, symbols, glyphs) on the outer shell vertices — the "Constellation" concept — while keeping the current wireframe as the backdrop.
+## 1. Tests — add thumbnails to the featured strip
+`src/components/portfolio/Tests.tsx`
 
-## Changes
+- Import `thumb from "@/assets/thumb-disputatio.jpg"` is already there.
+- In the `PopoverSummaryStrip` items mapping, pass `thumb` on each item so the featured pills show the same imagery as the grid cards below.
 
-Only `src/components/portfolio/VitruvianScene.tsx` is touched. No other files, no new deps (`@react-three/drei` is already installed).
+## 2. Blogs — archive as Work/Tests-style grid, keep "reveal more"
+`src/components/portfolio/Blogs.tsx`
 
-### 1. Token set
+- Replace the current `<motion.ul>` list-row layout in the "Archivum · earlier folios" section with a 2-column grid matching Tests/SelectedWork:
+  - Outer wrapper: `grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2`
+  - Each entry is a `<button>` card with an aspect-16/10 thumbnail (`thumb-codex`), blueprint-grid overlay, meta row (`No.` + date), title (`font-display text-2xl md:text-3xl`), dek, tags row, and the hover sepia underline.
+- Keep the `visibleRest` / `archiveCount` / `triggerReveal` state and the "Reveal N earlier folios" button underneath the grid unchanged.
+- Also add `thumb` to each item in the featured `PopoverSummaryStrip` (already the case) — no change needed there.
 
-Curated 12-token list mixing design vocabulary, code vocabulary, and symbols so the metaphor reads both ways:
+## 3. Consistent scroll-to-top on card click across sections
+The dialog body scrolls inside `SectionDialog`'s `overflow-y-auto` container, not the window, so the existing Blogs scroll logic (which used `window.scrollY` / `scrollIntoView`) sometimes lands slightly off. Fix by scrolling the dialog's scroll container to `0` right after opening.
 
-```
-grid   flex   token   hue
-type   axiom  scale   ratio
-{ }    </>    λ       ∅
-```
+- `src/components/portfolio/SectionDialog.tsx`: add a `ref` to the inner `overflow-y-auto` div and expose a scroll-reset via context, OR simpler: give that scroll container a stable attribute `data-dialog-scroll` so children can find it.
+- Add a small helper `src/lib/scroll-dialog-top.ts` exporting `scrollDialogToTop()` that finds the nearest `[data-dialog-scroll]` ancestor of `document.activeElement` (or queries `document.querySelector('[data-dialog-scroll]')`) and sets `scrollTop = 0`.
+- Call `scrollDialogToTop()` inside the `setOpenId(...)` handlers (wrapped in `requestAnimationFrame` so it runs after the detail view mounts) in:
+  - `Blogs.tsx` (hero button, archive grid buttons, featured strip items — replace the current `useEffect`-based scroll)
+  - `SelectedWork.tsx` (grid cards + featured strip items)
+  - `Tests.tsx` (grid cards + featured strip items)
 
-Kept short (≤6 chars) so labels stay legible at small sizes.
+Behavior after fix: clicking any featured pill or grid card opens the detail view with the dialog body pinned to the top, regardless of prior scroll position.
 
-### 2. Placement
-
-Distribute the 12 tokens roughly evenly on a sphere of radius ~1.9 using a Fibonacci lattice (deterministic, visually even, no clumping). Each token is a `<Html>` element from `@react-three/drei` positioned at its 3D point, with:
-
-- `center` prop so the label anchors on the vertex
-- `distanceFactor` for gentle perspective scaling
-- `occlude` set against the inner sphere so tokens on the back face fade behind the wireframe
-
-### 3. Styling
-
-Tokens rendered as small DOM spans styled to match the manuscript palette:
-
-- `font-mono` (already in the theme), `text-[0.55rem]` / `text-[0.6rem]`
-- `text-sepia/70` with `mix-blend-multiply` in light and inverted blend in dark, mirroring the Vitruvian image treatment
-- `pointer-events-none` so they don't interfere with the labels/dialog triggers
-- `whitespace-nowrap` and `tracking-wide`
-
-### 4. Motion
-
-Tokens live inside the existing `inner` group, so they rotate with the sphere at the current speed. No new animation loops. Reduced-motion path unchanged (scene not mounted at all).
-
-### 5. Preserving the existing look
-
-- Outer icosahedron, inner detailed sphere, and both equatorial rings all stay.
-- Only addition is the `<Html>` token cluster inside the `inner` group.
-- Opacity of tokens tuned so the wireframe still reads as the primary form.
-
-## Out of scope
-
-- No changes to `VitruvianStage.tsx`, labels, dialogs, or mobile nav.
-- No new geometry, shaders, or post-processing.
-- No responsive rework beyond what the existing scene already does.
-
-## Verification
-
-After the edit: load `/`, confirm tokens appear orbiting the Vitruvian, are legible in both light and dark, don't block clicks on the orbit labels, and disappear entirely under `prefers-reduced-motion` (scene is already gated).
+## 4. Out of scope
+- No content, copy, palette, or dialog chrome changes.
+- No changes to the "Back to …" flow or to Blogs' scroll-to-top floating button (it keeps working against the dialog scroll container once selectors point at it — trivial follow-up if needed).
