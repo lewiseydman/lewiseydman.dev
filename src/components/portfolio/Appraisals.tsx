@@ -37,11 +37,9 @@ const testimonials: Testimonial[] = [
   },
   {
     quote:
-      "Lewis built our entire web presence from research to deployment. Two years on, it still feels considered — nothing has had to be rebuilt.",
-    name: "Placeholder Name",
+      "Lewis is a outstanding digital creative - designed me a site that looked years ahead of its time and was with me through every step of the way. Would recommend for anyone trying to stand out in a otherwise boring market",
+    name: "Anonymous",
     role: "Director",
-    org: "Freelance engagement",
-    relation: "Built for",
   },
 ];
 
