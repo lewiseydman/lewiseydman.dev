@@ -40,6 +40,7 @@ const testimonials: Testimonial[] = [
       "Lewis is an outstanding digital creative. He developed a site for me that looked years ahead of its time, and he was with me every step of the way. Would recommend him for anyone trying to stand out in an otherwise oversaturated market.",
     name: "Anonymous",
     role: "Founder",
+    relation: "Client",
   },
 ];
 
