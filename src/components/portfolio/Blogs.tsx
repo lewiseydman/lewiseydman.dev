@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import thumb from "@/assets/thumb-codex.jpg";
 import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
 import { useExpandWithLoading } from "@/hooks/use-expand-with-loading";
+import { scrollDialogToTop } from "@/lib/scroll-dialog-top";
 
 type Blog = {
   id: string;
@@ -77,6 +78,10 @@ const blogs: Blog[] = [
 export function Blogs() {
   const [openId, setOpenId] = useState<string | null>(null);
   const open = blogs.find((b) => b.id === openId) ?? null;
+  const openBlog = (id: string) => {
+    setOpenId(id);
+    scrollDialogToTop();
+  };
 
   const [hero, ...rest] = blogs;
   const INITIAL_ARCHIVE = 2;
@@ -88,32 +93,22 @@ export function Blogs() {
   const articleRef = useRef<HTMLElement>(null);
   const [showTopBtn, setShowTopBtn] = useState(false);
 
-  // Reset scroll to the top of the article whenever a new post opens.
   useEffect(() => {
     if (!open) {
       setShowTopBtn(false);
       return;
     }
-    // Defer to next frame so the article has mounted.
-    const id = requestAnimationFrame(() => {
-      articleRef.current?.scrollIntoView({ block: "start", behavior: "auto" });
-    });
-    return () => cancelAnimationFrame(id);
-  }, [openId, open]);
-
-  useEffect(() => {
-    if (!open) return;
-    const onScroll = () => setShowTopBtn(window.scrollY > 600);
+    const scroller = document.querySelector<HTMLElement>("[data-dialog-scroll]");
+    if (!scroller) return;
+    const onScroll = () => setShowTopBtn(scroller.scrollTop > 600);
     onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    return () => scroller.removeEventListener("scroll", onScroll);
   }, [open]);
 
   const scrollToArticleTop = () => {
-    const el = articleRef.current;
-    if (!el) return;
-    const top = el.getBoundingClientRect().top + window.scrollY - 16;
-    window.scrollTo({ top, behavior: "smooth" });
+    const scroller = document.querySelector<HTMLElement>("[data-dialog-scroll]");
+    scroller?.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -125,7 +120,7 @@ export function Blogs() {
           title: b.title,
           dek: `${b.read} · ${b.tags.join(" · ")}`,
           thumb,
-          onClick: () => setOpenId(b.id),
+          onClick: () => openBlog(b.id),
         }))}
       />
 
@@ -142,7 +137,7 @@ export function Blogs() {
             {/* Hero feature */}
             <motion.button
               type="button"
-              onClick={() => setOpenId(hero.id)}
+              onClick={() => openBlog(hero.id)}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -189,31 +184,36 @@ export function Blogs() {
                 <span className="font-mono-mar">Archivum · earlier folios</span>
                 <span className="hairline h-px flex-1" />
               </div>
-              <motion.ul layout className="flex flex-col">
+              <motion.div layout className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
                 {visibleRest.map((b, i) => (
-                  <motion.li
+                  <motion.button
                     key={b.id}
                     layout
-                    initial={{ opacity: 0, y: 6 }}
+                    type="button"
+                    onClick={() => openBlog(b.id)}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: i * 0.05 }}
-                    className="border-t border-border last:border-b"
+                    transition={{ duration: 0.4, delay: i * 0.06 }}
+                    className="group flex h-full w-full flex-col gap-4 bg-background p-5 text-left transition-colors hover:bg-card md:p-6"
                   >
-                    <button
-                      type="button"
-                      onClick={() => setOpenId(b.id)}
-                      className="group grid w-full grid-cols-[2.5rem_5.5rem_1fr_auto] items-baseline gap-4 py-5 text-left transition-colors hover:bg-sepia/[0.04] md:grid-cols-[3rem_7rem_1fr_5rem_8rem]"
-                    >
-                      <span className="font-mono-mar text-sepia">№ {String(i + 2).padStart(2, "0")}</span>
+                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border bg-card">
+                      <img
+                        src={thumb}
+                        alt=""
+                        loading="lazy"
+                        className="h-full w-full object-cover mix-blend-multiply transition-transform duration-700 group-hover:scale-[1.03] dark:mix-blend-screen"
+                      />
+                      <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
+                      <div className="absolute left-2 top-2 font-mono-mar bg-background/80 px-2 py-0.5">
+                        № {String(i + 2).padStart(2, "0")}
+                      </div>
+                      <div className="absolute right-2 top-2 font-mono-mar bg-background/80 px-2 py-0.5">
+                        {b.read}
+                      </div>
+                    </div>
+                    <div className="flex items-baseline justify-between">
                       <span className="font-mono-mar">{b.date}</span>
-                      <span className="flex min-w-0 flex-col gap-1">
-                        <span className="font-display text-2xl leading-tight tracking-[-0.005em] transition-colors group-hover:text-sepia md:text-3xl">
-                          {b.title}
-                        </span>
-                        <span className="truncate text-sm leading-snug text-muted-foreground">{b.dek}</span>
-                      </span>
-                      <span className="font-mono-mar hidden md:inline">{b.read}</span>
-                      <span className="hidden justify-end gap-1.5 md:flex">
+                      <div className="flex flex-wrap justify-end gap-1.5">
                         {b.tags.map((t) => (
                           <span
                             key={t}
@@ -222,11 +222,16 @@ export function Blogs() {
                             {t}
                           </span>
                         ))}
-                      </span>
-                    </button>
-                  </motion.li>
+                      </div>
+                    </div>
+                    <h3 className="font-display text-2xl leading-tight tracking-[-0.005em] transition-colors group-hover:text-sepia md:text-3xl">
+                      {b.title}
+                    </h3>
+                    <p className="text-sm leading-relaxed text-muted-foreground">{b.dek}</p>
+                    <div className="mt-auto h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
+                  </motion.button>
                 ))}
-              </motion.ul>
+              </motion.div>
               {remaining > 0 && (
                 <div className="flex items-center gap-3 pt-2">
                   <span className="hairline h-px flex-1" />
