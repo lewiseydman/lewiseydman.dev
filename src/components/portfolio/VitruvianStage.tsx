@@ -21,11 +21,11 @@ const VitruvianScene = lazy(() => import("./VitruvianScene"));
 
 const items: OrbitItem[] = [
   { id: "vita", numeral: "I", latin: "Vita", english: "About", angle: 210, side: "left" },
-  { id: "codex", numeral: "II", latin: "Codex", english: "Blogs", angle: 180, side: "left" },
-  { id: "laudes", numeral: "III", latin: "Laudes", english: "Appraisals", angle: 150, side: "left" },
+  { id: "opera", numeral: "II", latin: "Opera", english: "Work", angle: 0, side: "right" },
+  { id: "cursus", numeral: "III", latin: "Cursus", english: "Experience", angle: 330, side: "right" },
   { id: "disputatio", numeral: "IV", latin: "Disputatio", english: "Tests", angle: 30, side: "right" },
-  { id: "opera", numeral: "V", latin: "Opera", english: "Work", angle: 0, side: "right" },
-  { id: "cursus", numeral: "VI", latin: "Cursus", english: "Experience", angle: 330, side: "right" },
+  { id: "laudes", numeral: "V", latin: "Laudes", english: "Appraisals", angle: 150, side: "left" },
+  { id: "codex", numeral: "VI", latin: "Codex", english: "Blogs", angle: 180, side: "left" },
 ];
 
 const sections: Record<
