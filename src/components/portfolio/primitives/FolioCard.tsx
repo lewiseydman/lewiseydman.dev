@@ -15,6 +15,7 @@ type Props = {
   footer?: ReactNode;
   index?: number;
   padded?: boolean;
+  className?: string;
 };
 
 /**
