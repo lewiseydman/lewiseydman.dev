@@ -201,31 +201,36 @@ export function Blogs() {
                 <span className="hairline h-px flex-1" />
               </div>
               <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
-                {visibleRest.map((b, i) => (
-                  <FolioCard
-                    key={b.id}
-                    ref={(el) => {
-                      restTriggers.current[b.id] = el;
-                    }}
-                    onClick={() => openBlog(b.id)}
-                    ariaLabel={`Read essay: ${b.title}`}
-                    thumb={b.thumb ?? defaultThumb}
-                    alt=""
-                    overlayTopLeft={<>№ {String(i + 2).padStart(2, "0")}</>}
-                    overlayTopRight={<>{b.read}</>}
-                    kicker={b.date}
-                    title={b.title}
-                    body={b.dek}
-                    footer={
-                      <div className="flex flex-wrap gap-1.5">
-                        {b.tags.map((t) => (
-                          <TagPill key={t}>{t}</TagPill>
-                        ))}
-                      </div>
-                    }
-                    index={i}
-                  />
-                ))}
+                {visibleRest.map((b, i) => {
+                  const isLast = i === visibleRest.length - 1;
+                  const isOddLast = isLast && visibleRest.length % 2 === 1;
+                  return (
+                    <FolioCard
+                      key={b.id}
+                      ref={(el) => {
+                        restTriggers.current[b.id] = el;
+                      }}
+                      onClick={() => openBlog(b.id)}
+                      ariaLabel={`Read essay: ${b.title}`}
+                      thumb={b.thumb ?? defaultThumb}
+                      alt=""
+                      overlayTopLeft={<>№ {String(i + 2).padStart(2, "0")}</>}
+                      overlayTopRight={<>{b.read}</>}
+                      kicker={b.date}
+                      title={b.title}
+                      body={b.dek}
+                      footer={
+                        <div className="flex flex-wrap gap-1.5">
+                          {b.tags.map((t) => (
+                            <TagPill key={t}>{t}</TagPill>
+                          ))}
+                        </div>
+                      }
+                      index={i}
+                      className={isOddLast ? "md:col-span-2" : ""}
+                    />
+                  );
+                })}
               </div>
               {remaining > 0 && (
                 <div className="flex items-center gap-3 pt-2">
@@ -367,10 +372,10 @@ function Essay({ post, onBack }: { post: Blog; onBack: () => void }) {
           type="button"
           onClick={scrollToTop}
           aria-label="Back to top of post"
-          className="font-mono-mar group fixed bottom-4 right-4 z-40 inline-flex min-h-11 items-center gap-2 rounded-full border border-sepia/60 bg-background/90 px-3.5 py-2 text-sepia shadow-md backdrop-blur transition-all hover:border-sepia hover:bg-sepia hover:text-parchment sm:bottom-6 sm:right-6"
+          title="Back to top"
+          className="group fixed bottom-4 right-4 z-40 inline-flex h-11 w-11 items-center justify-center rounded-full border border-sepia/60 bg-background/90 text-sepia shadow-md backdrop-blur transition-all hover:border-sepia hover:bg-sepia hover:text-parchment sm:bottom-6 sm:right-6"
         >
-          <ArrowUp className="h-3 w-3 transition-transform group-hover:-translate-y-0.5" />
-          Back to top
+          <ArrowUp className="h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
         </button>
       ) : null}
     </motion.article>

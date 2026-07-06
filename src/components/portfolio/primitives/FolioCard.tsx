@@ -15,6 +15,7 @@ type Props = {
   footer?: ReactNode;
   index?: number;
   padded?: boolean;
+  className?: string;
 };
 
 /**
@@ -33,10 +34,11 @@ export const FolioCard = forwardRef<HTMLButtonElement, Props>(function FolioCard
     kicker,
     title,
     body,
-    footer,
-    index = 0,
-    padded = true,
-  },
+  footer,
+  index = 0,
+  padded = true,
+  className = "",
+},
   ref,
 ) {
   return (
@@ -51,7 +53,7 @@ export const FolioCard = forwardRef<HTMLButtonElement, Props>(function FolioCard
       transition={{ duration: 0.4, delay: Math.min(index, 6) * 0.05 }}
       className={`group relative flex h-full w-full flex-col gap-5 bg-background text-left transition-colors hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 ${
         padded ? "p-5 md:p-7" : ""
-      }`}
+      } ${className}`}
     >
       <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border bg-card">
         <img
