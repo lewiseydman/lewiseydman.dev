@@ -182,24 +182,6 @@ export function OrbitLines({
               }}
               style={{ vectorEffect: "non-scaling-stroke" }}
             />
-            <motion.circle
-              cx={x2}
-              cy={y2}
-              r={0.004}
-              fill="var(--sepia)"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: 1.0 + i * 0.12 }}
-            />
-            <motion.circle
-              cx={x1}
-              cy={y1}
-              r={0.0025}
-              fill="var(--sepia)"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.6 }}
-              transition={{ duration: 0.4, delay: 0.6 + i * 0.12 }}
-            />
           </g>
         );
       })}
