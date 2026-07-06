@@ -33,10 +33,11 @@ export const FolioCard = forwardRef<HTMLButtonElement, Props>(function FolioCard
     kicker,
     title,
     body,
-    footer,
-    index = 0,
-    padded = true,
-  },
+  footer,
+  index = 0,
+  padded = true,
+  className = "",
+},
   ref,
 ) {
   return (
