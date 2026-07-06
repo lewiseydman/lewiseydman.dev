@@ -201,31 +201,36 @@ export function Blogs() {
                 <span className="hairline h-px flex-1" />
               </div>
               <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
-                {visibleRest.map((b, i) => (
-                  <FolioCard
-                    key={b.id}
-                    ref={(el) => {
-                      restTriggers.current[b.id] = el;
-                    }}
-                    onClick={() => openBlog(b.id)}
-                    ariaLabel={`Read essay: ${b.title}`}
-                    thumb={b.thumb ?? defaultThumb}
-                    alt=""
-                    overlayTopLeft={<>№ {String(i + 2).padStart(2, "0")}</>}
-                    overlayTopRight={<>{b.read}</>}
-                    kicker={b.date}
-                    title={b.title}
-                    body={b.dek}
-                    footer={
-                      <div className="flex flex-wrap gap-1.5">
-                        {b.tags.map((t) => (
-                          <TagPill key={t}>{t}</TagPill>
-                        ))}
-                      </div>
-                    }
-                    index={i}
-                  />
-                ))}
+                {visibleRest.map((b, i) => {
+                  const isLast = i === visibleRest.length - 1;
+                  const isOddLast = isLast && visibleRest.length % 2 === 1;
+                  return (
+                    <FolioCard
+                      key={b.id}
+                      ref={(el) => {
+                        restTriggers.current[b.id] = el;
+                      }}
+                      onClick={() => openBlog(b.id)}
+                      ariaLabel={`Read essay: ${b.title}`}
+                      thumb={b.thumb ?? defaultThumb}
+                      alt=""
+                      overlayTopLeft={<>№ {String(i + 2).padStart(2, "0")}</>}
+                      overlayTopRight={<>{b.read}</>}
+                      kicker={b.date}
+                      title={b.title}
+                      body={b.dek}
+                      footer={
+                        <div className="flex flex-wrap gap-1.5">
+                          {b.tags.map((t) => (
+                            <TagPill key={t}>{t}</TagPill>
+                          ))}
+                        </div>
+                      }
+                      index={i}
+                      className={isOddLast ? "md:col-span-2" : ""}
+                    />
+                  );
+                })}
               </div>
               {remaining > 0 && (
                 <div className="flex items-center gap-3 pt-2">
