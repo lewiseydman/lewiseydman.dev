@@ -34,28 +34,28 @@ const sections: Record<
 > = {
   vita: { numeral: "I", latin: "Vita", english: "About", kicker: "De Ipso", node: <About /> },
   opera: {
-    numeral: "V",
+    numeral: "II",
     latin: "Opera",
     english: "Selected Work",
     kicker: "Opera",
     node: <SelectedWork />,
   },
   cursus: {
-    numeral: "VI",
+    numeral: "III",
     latin: "Cursus",
     english: "Experience",
     kicker: "Cursus",
     node: <ExperienceTimeline />,
   },
   codex: {
-    numeral: "II",
+    numeral: "VI",
     latin: "Codex",
     english: "Blogs",
     kicker: "Codex",
     node: <Blogs />,
   },
   laudes: {
-    numeral: "III",
+    numeral: "V",
     latin: "Laudes",
     english: "Appraisals",
     kicker: "Laudes",
