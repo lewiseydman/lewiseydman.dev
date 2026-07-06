@@ -34,10 +34,10 @@ export function SectionDialog({
             <div className="absolute inset-0 paper-grain opacity-60" />
             <div className="relative flex items-end justify-between gap-6">
               <div className="flex flex-col gap-2">
-                <div className="font-mono-mar flex items-center gap-3">
-                  <span>Folio · {numeral}</span>
-                  <span className="hairline h-px w-10" />
-                  {kicker ? <span>{kicker}</span> : null}
+                <div className="font-mono-mar flex items-center gap-2 whitespace-nowrap sm:gap-3">
+                  <span className="shrink-0">Folio · {numeral}</span>
+                  <span className="hairline h-px w-6 shrink-0 sm:w-10" />
+                  {kicker ? <span className="shrink-0 truncate">{kicker}</span> : null}
                 </div>
                 <DialogPrimitive.Title asChild>
                   <h2 className="font-display text-3xl tracking-[-0.01em] md:text-5xl">
