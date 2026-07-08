@@ -9,6 +9,7 @@ import { FolioCard } from "./primitives/FolioCard";
 import { TagPill } from "./primitives/TagPill";
 import { BackToIndexButton } from "./primitives/BackToIndexButton";
 import { ReadingProgressBar } from "./primitives/ReadingProgressBar";
+import { pillButtonClasses } from "./primitives/pillButton";
 import { useSectionHash } from "@/hooks/use-section-hash";
 import { useThrottledScroll } from "@/hooks/use-throttled-scroll";
 
