@@ -1,5 +1,6 @@
 import { Download, ExternalLink } from "lucide-react";
 import { SectionDialog } from "./SectionDialog";
+import { pillButtonClasses } from "./primitives/pillButton";
 
 const PDF_URL = "/Lewis_Eydman_Resume.pdf";
 // Open with the thumbnail sidebar visible and 100% zoom by default
@@ -32,14 +33,14 @@ export function ResumeDialog({ open, onOpenChange }: Props) {
               href={PDF_URL}
               target="_blank"
               rel="noreferrer"
-              className="font-mono-mar inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-sepia transition-colors hover:text-foreground"
+              className={pillButtonClasses("ghost")}
             >
               <ExternalLink className="h-3.5 w-3.5" /> Open in new tab
             </a>
             <a
               href={PDF_URL}
               download="Lewis_Eydman_Resume.pdf"
-              className="font-mono-mar inline-flex items-center gap-2 rounded-full border border-sepia/60 bg-background px-3 py-1.5 text-sepia transition-all hover:border-sepia hover:bg-sepia hover:text-parchment"
+              className={pillButtonClasses("primary")}
             >
               <Download className="h-3.5 w-3.5" /> Download
             </a>
@@ -65,7 +66,7 @@ export function ResumeDialog({ open, onOpenChange }: Props) {
               <a
                 href={PDF_URL}
                 download="Lewis_Eydman_Resume.pdf"
-                className="font-mono-mar inline-flex items-center gap-2 rounded-full border border-sepia/60 px-3 py-1.5 text-sepia hover:bg-sepia hover:text-parchment"
+                className={pillButtonClasses("primary")}
               >
                 <Download className="h-3.5 w-3.5" /> Download résumé
               </a>

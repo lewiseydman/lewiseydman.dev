@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Download } from "lucide-react";
 import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
+import { pillButtonClasses } from "./primitives/pillButton";
 
 const experience = [
   {
@@ -78,7 +79,7 @@ export function ExperienceTimeline() {
         <a
           href="/Lewis_Eydman_Resume.pdf"
           download="Lewis_Eydman_Resume.pdf"
-          className="font-mono-mar group inline-flex items-center gap-2 rounded-full border border-sepia/60 bg-background px-4 py-2 text-sepia transition-all hover:border-sepia hover:bg-sepia hover:text-parchment"
+          className={pillButtonClasses("primary")}
         >
           <Download className="h-3.5 w-3.5 transition-transform group-hover:translate-y-0.5" />
           Download Résumé
