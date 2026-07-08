@@ -76,7 +76,7 @@ function PortraitBlock() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.9 }}
-      className="relative"
+      className="relative md:max-w-[280px] md:mx-auto lg:max-w-none lg:mx-0"
     >
       <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm border border-border bg-card paper-grain">
         <motion.img
