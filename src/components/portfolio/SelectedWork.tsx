@@ -9,6 +9,7 @@ import { FolioCard } from "./primitives/FolioCard";
 import { TagPill, TagPillRow } from "./primitives/TagPill";
 import { BackToIndexButton } from "./primitives/BackToIndexButton";
 import { ReadingProgressBar } from "./primitives/ReadingProgressBar";
+import { pillButtonClasses } from "./primitives/pillButton";
 import { useSectionHash } from "@/hooks/use-section-hash";
 
 type Project = {
@@ -273,7 +274,7 @@ function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }
             href={project.liveUrl}
             target="_blank"
             rel="noreferrer"
-            className="font-mono-mar group inline-flex min-h-11 items-center justify-center gap-2 self-start rounded-full border border-sepia/60 bg-background px-4 py-2.5 text-sepia transition-all hover:border-sepia hover:bg-sepia hover:text-parchment sm:self-end"
+            className={pillButtonClasses("primary", "self-start sm:self-end")}
           >
             Visit live product
             <ExternalLink className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -319,7 +320,7 @@ function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }
             disabled={isExpanding}
             onClick={() => triggerExpand(() => setExpanded((v) => !v))}
             aria-expanded={expanded}
-            className="font-mono-mar group inline-flex min-h-11 items-center gap-2 self-start rounded-full border border-border px-3 py-2.5 text-sepia transition-colors hover:border-sepia/60 hover:bg-sepia/[0.04] hover:text-foreground disabled:cursor-wait disabled:opacity-70"
+            className={pillButtonClasses("ghost", "self-start")}
           >
             {isExpanding ? (
               <>
