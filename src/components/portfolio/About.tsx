@@ -177,7 +177,7 @@ export function About() {
       </section>
 
       {/* Portrait + Disciplines (manuscript block — kept) */}
-      <section className="grid gap-10 border-t border-border pt-10 md:grid-cols-[0.85fr_1.15fr] md:gap-14">
+      <section className="grid gap-10 border-t border-border pt-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
         <PortraitBlock />
 
         <div className="relative flex flex-col">
