@@ -58,22 +58,22 @@ export function Appraisals() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: i * 0.05 }}
-            className="group flex flex-col gap-5 bg-background p-6 md:p-7"
+            className="group relative flex flex-col gap-5 bg-background p-6 transition-all duration-300 ease-out hover:bg-card hover:shadow-[0_12px_40px_-16px_color-mix(in_oklab,var(--ink)_12%,transparent)] focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 md:p-7"
           >
             <div className="flex items-baseline justify-between">
-              <span className="font-mono-mar">{`Laus · ${String(i + 1).padStart(2, "0")}`}</span>
-              {t.relation ? <span className="font-mono-mar">{t.relation}</span> : null}
+              <span className="font-mono-mar transition-colors duration-300 group-hover:text-brass">{`Laus · ${String(i + 1).padStart(2, "0")}`}</span>
+              {t.relation ? <span className="font-mono-mar transition-colors duration-300 group-hover:text-brass">{t.relation}</span> : null}
             </div>
-            <blockquote className="font-display text-xl italic leading-snug text-foreground md:text-2xl">
-              <span className="text-sepia">&ldquo;</span>
+            <blockquote className="font-display text-xl italic leading-snug text-foreground transition-colors duration-300 md:text-2xl">
+              <span className="text-sepia transition-colors duration-300 group-hover:text-brass">&ldquo;</span>
               {t.quote}
-              <span className="text-sepia">&rdquo;</span>
+              <span className="text-sepia transition-colors duration-300 group-hover:text-brass">&rdquo;</span>
             </blockquote>
-            <div className="mt-auto flex flex-col gap-0.5 border-t border-border pt-4">
-              <span className="font-display text-base text-foreground md:text-lg">{t.name}</span>
+            <div className="mt-auto flex flex-col gap-0.5 border-t border-border pt-4 transition-colors duration-300 group-hover:border-sepia/40">
+              <span className="font-display text-base text-foreground transition-colors duration-300 group-hover:text-brass md:text-lg">{t.name}</span>
               <span className="font-mono-mar">{t.org ? `${t.role} · ${t.org}` : t.role}</span>
             </div>
-            <div className="h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
+            <div className="h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full group-hover:bg-brass" />
           </motion.li>
         ))}
       </ul>
