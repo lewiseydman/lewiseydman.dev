@@ -1,5 +1,6 @@
-import { motion } from "framer-motion";
-import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
+import { useMemo, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { pillButtonClasses } from "./primitives/pillButton";
 
 type Testimonial = {
   quote: string;
@@ -42,40 +43,81 @@ const testimonials: Testimonial[] = [
   },
 ];
 
+const relations = ["All", ...Array.from(new Set(testimonials.map((t) => t.relation).filter(Boolean)))] as const;
+
 export function Appraisals() {
+  const [activeRelation, setActiveRelation] = useState<string>("All");
+
+  const filtered = useMemo(() => {
+    if (activeRelation === "All") return testimonials;
+    return testimonials.filter((t) => t.relation === activeRelation);
+  }, [activeRelation]);
+
   return (
     <div className="flex flex-col gap-8">
-      <p className="font-display text-2xl leading-snug md:text-3xl">
-        Laudes &mdash;{" "}
-        <span className="italic text-sepia">
-          a few words from former colleagues, clients, and the people I&rsquo;ve built for.
-        </span>
-      </p>
+      <div className="flex flex-col gap-6">
+        <p className="font-display text-2xl leading-snug md:text-3xl">
+          Laudes &mdash;{" "}
+          <span className="italic text-sepia">
+            a few words from former colleagues, clients, and the people I&rsquo;ve built for.
+          </span>
+        </p>
+        <div className="flex flex-wrap gap-2" role="group" aria-label="Filter testimonials by relation">
+          {relations.map((relation) => {
+            const isActive = relation === activeRelation;
+            return (
+              <button
+                key={relation}
+                onClick={() => setActiveRelation(relation)}
+                aria-pressed={isActive}
+                className={pillButtonClasses(isActive ? "primary" : "ghost")}
+              >
+                {relation}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <ul className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
-        {testimonials.map((t, i) => (
-          <motion.li
-            key={i}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: i * 0.05 }}
-            className="group relative flex flex-col gap-5 bg-background p-6 transition-all duration-300 ease-out hover:bg-card hover:shadow-[0_12px_40px_-16px_color-mix(in_oklab,var(--ink)_12%,transparent)] focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 md:p-7"
-          >
-            <div className="flex items-baseline justify-between">
-              <span className="font-mono-mar transition-colors duration-300 group-hover:text-brass">{`Laus · ${String(i + 1).padStart(2, "0")}`}</span>
-              {t.relation ? <span className="font-mono-mar transition-colors duration-300 group-hover:text-brass">{t.relation}</span> : null}
-            </div>
-            <blockquote className="font-display text-xl italic leading-snug text-foreground transition-colors duration-300 md:text-2xl">
-              <span className="text-sepia transition-colors duration-300 group-hover:text-brass">&ldquo;</span>
-              {t.quote}
-              <span className="text-sepia transition-colors duration-300 group-hover:text-brass">&rdquo;</span>
-            </blockquote>
-            <div className="mt-auto flex flex-col gap-0.5 border-t border-border pt-4 transition-colors duration-300 group-hover:border-sepia/40">
-              <span className="font-display text-base text-foreground transition-colors duration-300 group-hover:text-brass md:text-lg">{t.name}</span>
-              <span className="font-mono-mar">{t.org ? `${t.role} · ${t.org}` : t.role}</span>
-            </div>
-            <div className="h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full group-hover:bg-brass" />
-          </motion.li>
-        ))}
+        <AnimatePresence mode="popLayout">
+          {filtered.map((t, i) => (
+            <motion.li
+              key={`${t.name}-${t.role}`}
+              layout
+              initial={{ opacity: 0, scale: 0.98, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.98, y: -8 }}
+              transition={{ duration: 0.35, delay: i * 0.05, layout: { duration: 0.35 } }}
+              className="group relative flex flex-col gap-5 bg-background p-6 transition-all duration-300 ease-out hover:bg-card hover:shadow-[0_12px_40px_-16px_color-mix(in_oklab,var(--ink)_18%,transparent)] focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 md:p-7"
+            >
+              <div className="flex items-baseline justify-between">
+                <span className="font-mono-mar text-foreground transition-colors duration-300 group-hover:text-brass">{`Laus · ${String(i + 1).padStart(2, "0")}`}</span>
+                {t.relation ? (
+                  <span className="font-mono-mar text-foreground transition-colors duration-300 group-hover:text-brass">
+                    {t.relation}
+                  </span>
+                ) : null}
+              </div>
+              <blockquote className="font-sans text-base leading-relaxed text-foreground transition-colors duration-300 md:text-lg">
+                <span className="text-ink transition-colors duration-300 group-hover:text-brass" aria-hidden="true">
+                  &ldquo;
+                </span>
+                {t.quote}
+                <span className="text-ink transition-colors duration-300 group-hover:text-brass" aria-hidden="true">
+                  &rdquo;
+                </span>
+              </blockquote>
+              <div className="mt-auto flex flex-col gap-0.5 border-t border-border pt-4 transition-colors duration-300 group-hover:border-sepia/40">
+                <span className="font-display text-base text-foreground transition-colors duration-300 group-hover:text-brass md:text-lg">
+                  {t.name}
+                </span>
+                <span className="font-mono-mar text-foreground">{t.org ? `${t.role} · ${t.org}` : t.role}</span>
+              </div>
+              <div className="h-px w-0 bg-ink transition-all duration-500 group-hover:w-full group-hover:bg-brass" />
+            </motion.li>
+          ))}
+        </AnimatePresence>
       </ul>
     </div>
   );
