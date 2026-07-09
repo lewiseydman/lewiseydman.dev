@@ -9,14 +9,13 @@ type Testimonial = {
   relation?: "Colleague" | "Client" | "Built for";
 };
 
-// Placeholder drafts — swap in real quotes when ready.
 const testimonials: Testimonial[] = [
   {
     quote:
-      "Lewis is the rare PM who can sketch the interface in the morning, write the React in the afternoon, and still argue the roadmap with the board.",
-    name: "Placeholder Name",
-    role: "Head of Engineering",
-    org: "100Green",
+      "I worked with Lewis for a couple of years while he was a Front End Developer, and what consistently stood out was the quality and reliability of his work — he was someone I could always count on to deliver front-end work that was on point and met our quality standards.",
+    name: "Dave Craven",
+    role: "Technology Lead",
+    org: "Apply Digital",
     relation: "Colleague",
   },
   {
