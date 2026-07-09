@@ -228,3 +228,26 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+@utility dialog-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sepia) color-mix(in oklab, var(--border) 40%, transparent);
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: color-mix(in oklab, var(--border) 40%, transparent);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--sepia);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--brass);
+  }
+}
