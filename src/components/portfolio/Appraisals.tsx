@@ -24,7 +24,6 @@ const testimonials: Testimonial[] = [
     name: "Dave Craven",
     role: "Technology Lead",
     org: "Apply Digital",
-    relation: "Colleague",
   },
   {
     quote:
