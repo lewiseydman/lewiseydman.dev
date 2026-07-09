@@ -12,18 +12,18 @@ type Testimonial = {
 const testimonials: Testimonial[] = [
   {
     quote:
-      "I worked with Lewis for a couple of years while he was a Front End Developer, and what consistently stood out was the quality and reliability of his work — he was someone I could always count on to deliver front-end work that was on point and met our quality standards.",
-    name: "Dave Craven",
-    role: "Technology Lead",
-    org: "Apply Digital",
-    relation: "Colleague",
-  },
-  {
-    quote:
       "Lewis is a caring, hardworking, and talented individual. He always considers all aspects of the project when generating ideas, making sure every stage is carefully thought through. His experience in design and development made him an invaluable asset to our team.",
     name: "Monika Marcinkeviciene",
     role: "Creative Lead",
     org: "ITS",
+    relation: "Colleague",
+  },
+  {
+    quote:
+      "What consistently stood out was the quality and reliability of his work. He was someone I could always count on to deliver front-end work that was on point and met our quality standards.",
+    name: "Dave Craven",
+    role: "Technology Lead",
+    org: "Apply Digital",
     relation: "Colleague",
   },
   {
