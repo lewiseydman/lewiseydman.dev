@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
+import { useMemo, useState } from "react";
 import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
+import { pillButtonClasses } from "./primitives/pillButton";
 
 type Testimonial = {
   quote: string;
@@ -43,6 +45,14 @@ const testimonials: Testimonial[] = [
 ];
 
 export function Appraisals() {
+  const relations = useMemo(() => {
+    const set = new Set<string>();
+    testimonials.forEach((t) => t.relation && set.add(t.relation));
+    return ["All", ...Array.from(set)];
+  }, []);
+  const [filter, setFilter] = useState<string>("All");
+  const filtered = filter === "All" ? testimonials : testimonials.filter((t) => t.relation === filter);
+
   return (
     <div className="flex flex-col gap-8">
       <p className="font-display text-2xl leading-snug md:text-3xl">
@@ -51,20 +61,35 @@ export function Appraisals() {
           a few words from former colleagues, clients, and the people I&rsquo;ve built for.
         </span>
       </p>
-      <ul className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
-        {testimonials.map((t, i) => (
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="font-mono-mar mr-1">Filter ·</span>
+        {relations.map((r) => (
+          <button
+            key={r}
+            type="button"
+            onClick={() => setFilter(r)}
+            aria-pressed={filter === r}
+            className={pillButtonClasses(filter === r ? "primary" : "ghost", "min-h-9 px-3 py-1.5 text-xs")}
+          >
+            {r}
+          </button>
+        ))}
+      </div>
+      <ul className="grid gap-px overflow-hidden rounded-sm border border-border bg-border lg:grid-cols-2">
+        {filtered.map((t, i) => (
           <motion.li
-            key={i}
+            key={t.name}
+            layout
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: i * 0.05 }}
-            className="group relative flex flex-col gap-5 bg-background p-6 transition-all duration-300 ease-out hover:bg-card hover:shadow-[0_12px_40px_-16px_color-mix(in_oklab,var(--ink)_12%,transparent)] focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 md:p-7"
+            className="group relative flex flex-col gap-5 bg-background p-6 transition-all duration-300 ease-out hover:bg-card hover:shadow-[0_12px_40px_-16px_color-mix(in_oklab,var(--ink)_12%,transparent)] focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 md:p-6"
           >
             <div className="flex items-baseline justify-between">
               <span className="font-mono-mar transition-colors duration-300 group-hover:text-brass">{`Laus · ${String(i + 1).padStart(2, "0")}`}</span>
               {t.relation ? <span className="font-mono-mar transition-colors duration-300 group-hover:text-brass">{t.relation}</span> : null}
             </div>
-            <blockquote className="font-display text-xl italic leading-snug text-foreground transition-colors duration-300 md:text-2xl">
+            <blockquote className="font-display text-lg italic leading-snug text-foreground transition-colors duration-300 md:text-xl">
               <span className="text-sepia transition-colors duration-300 group-hover:text-brass">&ldquo;</span>
               {t.quote}
               <span className="text-sepia transition-colors duration-300 group-hover:text-brass">&rdquo;</span>

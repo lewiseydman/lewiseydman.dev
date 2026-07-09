@@ -87,12 +87,14 @@ export function ExperienceTimeline() {
       </div>
 
       <div className="relative">
-        {/* central spine */}
-        <div className="absolute left-[1.25rem] top-0 bottom-0 w-px hairline md:left-1/2" />
+        {/* Desktop-only continuous central spine */}
+        <div className="hairline absolute left-1/2 top-0 bottom-0 hidden w-px lg:block" />
 
-        <ol className="space-y-16 md:space-y-24">
+        <ol className="space-y-12 lg:space-y-24">
           {experience.map((e, i) => {
             const left = i % 2 === 0;
+            const isFirst = i === 0;
+            const isLast = i === experience.length - 1;
             return (
               <motion.li
                 key={e.year}
@@ -100,10 +102,13 @@ export function ExperienceTimeline() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.7 }}
-                className="relative grid grid-cols-[3rem_1fr] gap-6 md:grid-cols-2 md:gap-12"
+                className="relative flex flex-col items-center gap-4 text-center lg:grid lg:grid-cols-2 lg:gap-12 lg:text-left"
               >
+                {/* top spine segment (mobile/tablet) */}
+                {!isFirst && <div className="hairline h-8 w-px lg:hidden" aria-hidden />}
+
                 {/* gear node */}
-                <div className="absolute left-[1.25rem] -translate-x-1/2 md:left-1/2">
+                <div className="relative lg:absolute lg:left-1/2 lg:top-0 lg:-translate-x-1/2">
                   <div className="rounded-full bg-background p-1">
                     <Gear teeth={6 + (i % 3) * 2} />
                   </div>
@@ -111,22 +116,26 @@ export function ExperienceTimeline() {
 
                 {/* card */}
                 <div
-                  className={`col-start-2 md:row-start-1 ${
-                    left ? "md:col-start-1 md:pr-16 md:text-right" : "md:col-start-2 md:pl-16"
+                  className={`w-full lg:row-start-1 ${
+                    left ? "lg:col-start-1 lg:pr-16 lg:text-right" : "lg:col-start-2 lg:pl-16"
                   }`}
                 >
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col items-center gap-3 lg:items-stretch">
                     <span className="font-mono-mar">{e.year}</span>
                     <h3 className="font-display text-2xl md:text-3xl">{e.role}</h3>
                     <p className="font-display italic text-sepia md:text-lg">{e.org}</p>
-                    <p className={`max-w-md text-sm leading-relaxed text-muted-foreground ${left ? "md:ml-auto" : ""}`}>
+                    <p className={`max-w-md text-sm leading-relaxed text-muted-foreground ${left ? "lg:ml-auto" : ""}`}>
                       {e.notes}
                     </p>
                   </div>
                 </div>
+
+                {/* bottom spine segment (mobile/tablet) */}
+                {!isLast && <div className="hairline h-8 w-px lg:hidden" aria-hidden />}
+
                 {/* hairline leader */}
                 <div
-                  className={`hidden md:block absolute top-5 ${
+                  className={`absolute top-5 hidden lg:block ${
                     left ? "right-1/2 mr-12" : "left-1/2 ml-12"
                   } h-px w-12 hairline`}
                 />

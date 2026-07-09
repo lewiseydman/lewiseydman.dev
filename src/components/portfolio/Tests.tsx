@@ -92,7 +92,7 @@ export function Tests() {
               Small <span className="italic text-sepia">disputationes</span> &mdash; experiments, studies, and things I
               have found beautiful lately.
             </p>
-            <ol className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
+            <ol className="grid gap-px overflow-hidden rounded-sm border border-border bg-border lg:grid-cols-2">
               {tests.map((t, i) => (
                 <motion.li
                   key={t.id}
