@@ -43,7 +43,10 @@ const testimonials: Testimonial[] = [
   },
 ];
 
-const relations = ["All", ...Array.from(new Set(testimonials.map((t) => t.relation).filter(Boolean)))] as const;
+const uniqueRelations = Array.from(
+  new Set(testimonials.map((t) => t.relation).filter((r): r is NonNullable<typeof r> => Boolean(r))),
+);
+const relations = ["All", ...uniqueRelations];
 
 export function Appraisals() {
   const [activeRelation, setActiveRelation] = useState<string>("All");
