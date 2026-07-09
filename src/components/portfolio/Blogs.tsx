@@ -201,7 +201,7 @@ export function Blogs() {
                 <span className="font-mono-mar">Archivum · earlier folios</span>
                 <span className="hairline h-px flex-1" />
               </div>
-              <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
+              <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border lg:grid-cols-2">
                 {visibleRest.map((b, i) => {
                   const isLast = i === visibleRest.length - 1;
                   const isOddLast = isLast && visibleRest.length % 2 === 1;
@@ -228,7 +228,7 @@ export function Blogs() {
                         </div>
                       }
                       index={i}
-                      className={isOddLast ? "md:col-span-2" : ""}
+                      className={isOddLast ? "lg:col-span-2" : ""}
                     />
                   );
                 })}
