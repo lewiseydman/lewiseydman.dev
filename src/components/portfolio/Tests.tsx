@@ -105,7 +105,6 @@ export function Tests() {
                   alt=""
                   overlayTopLeft={<>Disputatio · {t.num}</>}
                   overlayTopRight={<>{t.domain}</>}
-                  kicker={`Disputatio · ${t.num}`}
                   title={t.title}
                   body={t.summary}
                   index={i}
