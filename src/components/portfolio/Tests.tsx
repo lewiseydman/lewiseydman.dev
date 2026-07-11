@@ -148,8 +148,6 @@ function TestDetail({ open, onBack }: { open: Test; onBack: () => void }) {
       </div>
       <div className="flex flex-col gap-3">
         <div className="font-mono-mar flex items-center gap-3">
-          <span>Disputatio · {open.num}</span>
-          <span className="hairline h-px w-8" />
           <span>{open.domain}</span>
         </div>
         <h2 className="font-display text-3xl tracking-[-0.01em] md:text-5xl">{open.title}</h2>
