@@ -103,7 +103,6 @@ export function Tests() {
                   ariaLabel={`Open disputatio: ${t.title}`}
                   thumb={thumb}
                   alt=""
-                  overlayTopLeft={<>Disputatio · {t.num}</>}
                   overlayTopRight={<>{t.domain}</>}
                   title={t.title}
                   body={t.summary}
