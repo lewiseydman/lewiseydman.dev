@@ -116,16 +116,18 @@ export function Blogs() {
   return (
     <div className="flex flex-col gap-10">
       {open ? <ReadingProgressBar /> : null}
-      <PopoverSummaryStrip
-        label="Codex · featured"
-        items={blogs.slice(0, 3).map((b) => ({
-          kicker: b.date,
-          title: b.title,
-          dek: `${b.read} · ${b.tags.join(" · ")}`,
-          thumb: b.thumb ?? defaultThumb,
-          onClick: () => openBlog(b.id),
-        }))}
-      />
+      {!open ? (
+        <PopoverSummaryStrip
+          label="Codex · featured"
+          items={blogs.slice(0, 3).map((b) => ({
+            kicker: b.date,
+            title: b.title,
+            dek: `${b.read} · ${b.tags.join(" · ")}`,
+            thumb: b.thumb ?? defaultThumb,
+            onClick: () => openBlog(b.id),
+          }))}
+        />
+      ) : null}
 
       <AnimatePresence mode="wait">
         {!open ? (
@@ -298,37 +300,28 @@ function Essay({ post, onBack }: { post: Blog; onBack: () => void }) {
         <span className="font-mono-mar truncate">{post.date}</span>
       </div>
 
-      {/* Meta bar — 2-col grid on mobile, flex row on sm+ */}
-      <div className="grid grid-cols-2 gap-x-5 gap-y-3 border-y border-border py-4 sm:flex sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-3">
-        <div className="flex flex-col">
-          <span className="font-mono-mar">Author</span>
-          <span className="font-display text-base leading-tight">Lewis Eydman</span>
-        </div>
-        <span aria-hidden className="hairline hidden h-8 w-px sm:block" />
-        <div className="flex flex-col">
-          <span className="font-mono-mar">Published</span>
-          <span className="font-display text-base leading-tight">{post.date}</span>
-        </div>
-        <span aria-hidden className="hairline hidden h-8 w-px sm:block" />
-        <div className="flex flex-col">
-          <span className="font-mono-mar">Length</span>
-          <span className="font-display text-base leading-tight">{post.read}</span>
-        </div>
-        <span aria-hidden className="hairline hidden h-8 w-px sm:block" />
-        <div className="col-span-2 flex min-w-0 flex-col gap-1 sm:col-span-1">
-          <span className="font-mono-mar">Tags</span>
-          <div className="flex flex-wrap gap-1.5">
-            {post.tags.map((t) => (
-              <TagPill key={t}>{t}</TagPill>
-            ))}
-          </div>
-        </div>
+      {/* Meta strip — single horizontal line above the body */}
+      <div className="font-mono-mar flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-border pb-3">
+        <span>Lewis Eydman</span>
+        <span className="text-muted-foreground/60">·</span>
+        <span>{post.date}</span>
+        <span className="text-muted-foreground/60">·</span>
+        <span>{post.read}</span>
+        {post.tags.length ? (
+          <>
+            <span className="text-muted-foreground/60">·</span>
+            <div className="flex flex-wrap gap-1.5">
+              {post.tags.map((t) => (
+                <TagPill key={t}>{t}</TagPill>
+              ))}
+            </div>
+          </>
+        ) : null}
       </div>
 
       {/* Body */}
       <div className="mx-auto flex w-full max-w-[68ch] flex-col gap-7">
         <header className="flex flex-col gap-3 border-b border-border pb-6">
-          <span className="font-mono-mar">Essay · {post.date}</span>
           <h3
             ref={titleRef}
             tabIndex={-1}
