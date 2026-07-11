@@ -19,8 +19,8 @@ const base =
   "font-mono-mar group inline-flex items-center justify-center gap-2 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 disabled:cursor-wait disabled:opacity-70";
 
 const sizes: Record<PillSize, string> = {
-  md: "min-h-11 px-4 py-2.5",
-  sm: "min-h-9 px-3 py-1.5 text-xs",
+  md: "min-h-11 px-5 py-2.5 text-sm leading-none",
+  sm: "min-h-9 px-3.5 py-2 text-xs leading-none",
 };
 
 const variants: Record<PillVariant, string> = {

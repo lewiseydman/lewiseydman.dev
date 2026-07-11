@@ -116,7 +116,7 @@ export function Blogs() {
   }, [openId, hero.id]);
 
   return (
-    <div className="flex flex-col gap-12 md:gap-16">
+    <div className="flex flex-col gap-8 md:gap-12">
       {open ? <ReadingProgressBar /> : null}
       {!open ? (
         <PopoverSummaryStrip
@@ -139,7 +139,7 @@ export function Blogs() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3 }}
-            className="flex flex-col gap-12 md:gap-16"
+            className="flex flex-col gap-10 md:gap-12"
           >
             {/* Hero feature — article semantics with a proper CTA */}
             <motion.article
@@ -147,14 +147,14 @@ export function Blogs() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="group grid w-full gap-6 text-left md:grid-cols-[1.1fr_1fr] md:items-center md:gap-8"
+              className="group grid w-full gap-5 text-left sm:gap-6 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-8"
             >
               <button
                 type="button"
                 ref={heroTriggerRef}
                 onClick={() => openBlog(hero.id)}
                 aria-label={`Read essay: ${hero.title}`}
-                className="relative aspect-[16/10] overflow-hidden rounded-sm border border-border bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 md:aspect-[5/4]"
+                className="relative aspect-[16/10] overflow-hidden rounded-sm border border-border bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 lg:aspect-[5/4]"
               >
                 <img
                   src={hero.thumb ?? defaultThumb}
@@ -168,11 +168,11 @@ export function Blogs() {
                   Feature · {hero.date}
                 </div>
               </button>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-3 sm:gap-4">
                 <span className="font-mono-mar">Lewis Eydman · {hero.read}</span>
                 <h3
                   id={`codex-hero-${hero.id}`}
-                  className="font-display text-3xl leading-[1.05] tracking-[-0.015em] sm:text-4xl md:text-5xl"
+                  className="font-display text-2xl leading-[1.05] tracking-[-0.015em] sm:text-3xl md:text-4xl lg:text-5xl"
                 >
                   <button
                     type="button"
@@ -182,7 +182,7 @@ export function Blogs() {
                     {hero.title}
                   </button>
                 </h3>
-                <p className="font-display text-lg italic text-sepia sm:text-xl md:text-2xl">{hero.dek}</p>
+                <p className="font-display text-base italic text-sepia sm:text-lg md:text-xl lg:text-2xl">{hero.dek}</p>
                 <div className="flex flex-wrap gap-2">
                   {hero.tags.map((t) => (
                     <TagPill key={t}>{t}</TagPill>
