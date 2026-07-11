@@ -1,6 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Download } from "lucide-react";
-import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
 import { pillButtonClasses } from "./primitives/pillButton";
 
 const experience = [
@@ -40,14 +39,14 @@ const education = [
   { year: "2024", title: "Google UX Design", org: "Google" },
 ];
 
-function Gear({ teeth = 8 }: { teeth?: number }) {
+function Gear({ teeth = 8, className = "h-8 w-8" }: { teeth?: number; className?: string }) {
   const reduce = useReducedMotion();
   return (
     <motion.svg
       animate={reduce ? {} : { rotate: 360 }}
       transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
       viewBox="0 0 40 40"
-      className="h-10 w-10 text-sepia"
+      className={`${className} text-sepia`}
     >
       <g stroke="currentColor" strokeWidth="0.8" fill="none">
         <circle cx="20" cy="20" r="9" />
@@ -71,77 +70,61 @@ function Gear({ teeth = 8 }: { teeth?: number }) {
 
 export function ExperienceTimeline() {
   return (
-    <div className="flex flex-col gap-10">
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-5">
-        <p className="font-display text-xl italic text-sepia md:text-2xl">
-          A mechanical chronology &mdash; in eight working years.
-        </p>
+    <div className="flex flex-col gap-8">
+      {/* Header — mirrors Laudes / Appraisals */}
+      <p className="font-display text-2xl leading-snug md:text-3xl">
+        Cursus &mdash;{" "}
+        <span className="italic text-sepia">
+          a mechanical chronology, in eight working years.
+        </span>
+      </p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+        <span className="font-mono-mar">Actions ·</span>
         <a
           href="/Lewis_Eydman_Resume.pdf"
           download="Lewis_Eydman_Resume.pdf"
-          className={pillButtonClasses("primary")}
+          className={pillButtonClasses("primary", "min-h-9 px-3 py-1.5 text-xs")}
         >
           <Download className="h-3.5 w-3.5 transition-transform group-hover:translate-y-0.5" />
           Download Résumé
         </a>
       </div>
 
-      <div className="relative">
-        {/* Desktop-only continuous central spine */}
-        <div className="hairline absolute left-1/2 top-0 bottom-0 hidden w-px lg:block" />
+      {/* Manuscript rail — mirrors About > Disciplines */}
+      <div className="relative flex flex-col">
+        <div className="pointer-events-none absolute bottom-2 left-[0.45rem] top-2 w-px bg-sepia/30" />
 
-        <ol className="space-y-12 lg:space-y-24">
-          {experience.map((e, i) => {
-            const left = i % 2 === 0;
-            const isFirst = i === 0;
-            const isLast = i === experience.length - 1;
-            return (
-              <motion.li
-                key={e.year}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.7 }}
-                className="relative flex flex-col items-center gap-4 text-center lg:grid lg:grid-cols-2 lg:gap-12 lg:text-left"
-              >
-                {/* top spine segment (mobile/tablet) */}
-                {!isFirst && <div className="hairline h-8 w-px lg:hidden" aria-hidden />}
+        {/* Section marker at the top of the rail keeps the mechanical motif */}
+        <div className="absolute -left-[0.35rem] -top-3 rounded-full bg-background p-0.5">
+          <Gear teeth={8} className="h-5 w-5" />
+        </div>
 
-                {/* gear node */}
-                <div className="relative lg:absolute lg:left-1/2 lg:top-0 lg:-translate-x-1/2">
-                  <div className="rounded-full bg-background p-1">
-                    <Gear teeth={6 + (i % 3) * 2} />
-                  </div>
+        <ol className="flex flex-col">
+          {experience.map((e, i) => (
+            <motion.li
+              key={e.year}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.55, delay: 0.06 * i }}
+              className="relative flex gap-5 border-b border-border py-6 last:border-b-0"
+            >
+              <span className="absolute left-0 top-[1.9rem] flex h-[0.9rem] w-[0.9rem] items-center justify-center">
+                <span className="h-2 w-2 rounded-full border border-sepia bg-background" />
+              </span>
+              <div className="w-4 shrink-0 pl-7" aria-hidden />
+              <div className="grid flex-1 gap-x-6 gap-y-1 md:grid-cols-[9rem_1fr]">
+                <div className="flex flex-col gap-1 md:pt-1">
+                  <span className="font-mono-mar">{e.year}</span>
+                  <span className="font-display italic text-sepia md:text-base">{e.org}</span>
                 </div>
-
-                {/* card */}
-                <div
-                  className={`w-full lg:row-start-1 ${
-                    left ? "lg:col-start-1 lg:pr-16 lg:text-right" : "lg:col-start-2 lg:pl-16"
-                  }`}
-                >
-                  <div className="flex flex-col items-center gap-3 lg:items-stretch">
-                    <span className="font-mono-mar">{e.year}</span>
-                    <h3 className="font-display text-2xl md:text-3xl">{e.role}</h3>
-                    <p className="font-display italic text-sepia md:text-lg">{e.org}</p>
-                    <p className={`max-w-md text-sm leading-relaxed text-muted-foreground ${left ? "lg:ml-auto" : ""}`}>
-                      {e.notes}
-                    </p>
-                  </div>
+                <div className="flex flex-col gap-2">
+                  <h3 className="font-display text-2xl tracking-[-0.01em] md:text-3xl">{e.role}</h3>
+                  <p className="max-w-prose text-sm leading-relaxed text-muted-foreground">{e.notes}</p>
                 </div>
-
-                {/* bottom spine segment (mobile/tablet) */}
-                {!isLast && <div className="hairline h-8 w-px lg:hidden" aria-hidden />}
-
-                {/* hairline leader */}
-                <div
-                  className={`absolute top-5 hidden lg:block ${
-                    left ? "right-1/2 mr-12" : "left-1/2 ml-12"
-                  } h-px w-12 hairline`}
-                />
-              </motion.li>
-            );
-          })}
+              </div>
+            </motion.li>
+          ))}
         </ol>
       </div>
 
@@ -151,7 +134,7 @@ export function ExperienceTimeline() {
           <span className="font-mono-mar">Studia · Education</span>
           <span className="hairline h-px flex-1" />
         </div>
-        <ul className="grid gap-4 md:grid-cols-3">
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {education.map((e) => (
             <li key={e.title} className="flex flex-col gap-1 rounded-sm border border-border bg-card/40 p-4">
               <span className="font-mono-mar">{e.year}</span>
