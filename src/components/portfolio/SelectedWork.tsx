@@ -132,7 +132,7 @@ export function SelectedWork() {
   }, [openId]);
 
   return (
-    <div className="flex flex-col gap-12 md:gap-16">
+    <div className="flex flex-col gap-8 md:gap-12">
       {open ? <ReadingProgressBar /> : null}
       {!open ? (
         <PopoverSummaryStrip
