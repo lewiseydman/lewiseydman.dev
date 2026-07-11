@@ -299,8 +299,6 @@ function Essay({ post, onBack }: { post: Blog; onBack: () => void }) {
       <div className="font-mono-mar flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-border pb-3">
         <span>Lewis Eydman</span>
         <span className="text-muted-foreground/60">·</span>
-        <span>{post.date}</span>
-        <span className="text-muted-foreground/60">·</span>
         <span>{post.read}</span>
         {post.tags.length ? (
           <>
