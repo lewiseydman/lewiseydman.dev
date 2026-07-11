@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
 import { pillButtonClasses } from "./primitives/pillButton";
@@ -61,29 +61,33 @@ export function Appraisals() {
           a few words from former colleagues, clients, and the people I&rsquo;ve built for.
         </span>
       </p>
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="font-mono-mar mr-1">Filter ·</span>
-        {relations.map((r) => (
-          <button
-            key={r}
-            type="button"
-            onClick={() => setFilter(r)}
-            aria-pressed={filter === r}
-            className={pillButtonClasses(filter === r ? "primary" : "ghost", "min-h-9 px-3 py-1.5 text-xs")}
-          >
-            {r}
-          </button>
-        ))}
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2">
+        <span className="font-mono-mar">Filter ·</span>
+        <div className="flex flex-wrap gap-2">
+          {relations.map((r) => (
+            <button
+              key={r}
+              type="button"
+              onClick={() => setFilter(r)}
+              aria-pressed={filter === r}
+              className={pillButtonClasses(filter === r ? "primary" : "ghost", "min-h-9 px-3 py-1.5 text-xs")}
+            >
+              {r}
+            </button>
+          ))}
+        </div>
       </div>
-      <ul className="grid gap-px overflow-hidden rounded-sm border border-border bg-border lg:grid-cols-2">
+      <ul className="grid gap-4 lg:grid-cols-2">
+        <AnimatePresence mode="popLayout" initial={false}>
         {filtered.map((t, i) => (
           <motion.li
             key={t.name}
             layout
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: i * 0.05 }}
-            className="group relative flex flex-col gap-5 bg-background p-6 transition-all duration-300 ease-out hover:bg-card hover:shadow-[0_12px_40px_-16px_color-mix(in_oklab,var(--ink)_12%,transparent)] focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 md:p-6"
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.35, delay: Math.min(i, 3) * 0.05 }}
+            className="group relative flex flex-col gap-5 rounded-sm border border-border bg-background p-6 transition-[background-color,box-shadow,border-color] duration-300 ease-out hover:bg-card hover:shadow-[0_12px_40px_-16px_color-mix(in_oklab,var(--ink)_12%,transparent)] focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 md:p-6"
           >
             <div className="flex items-baseline justify-between">
               <span className="font-mono-mar transition-colors duration-300 group-hover:text-brass">{`Laus · ${String(i + 1).padStart(2, "0")}`}</span>
@@ -101,6 +105,7 @@ export function Appraisals() {
             <div className="h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full group-hover:bg-brass" />
           </motion.li>
         ))}
+        </AnimatePresence>
       </ul>
     </div>
   );
