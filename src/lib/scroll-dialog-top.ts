@@ -5,11 +5,14 @@
  */
 export function scrollDialogToTop() {
   if (typeof document === "undefined") return;
-  requestAnimationFrame(() => {
+  const reset = () => {
     document
       .querySelectorAll<HTMLElement>("[data-dialog-scroll]")
       .forEach((el) => {
-        el.scrollTop = 0;
+        el.scrollTo({ top: 0, behavior: "auto" });
       });
-  });
+  };
+  // Two nested RAFs so the reset lands after AnimatePresence paints the
+  // incoming view; behavior "auto" avoids the smooth-scroll flicker.
+  requestAnimationFrame(() => requestAnimationFrame(reset));
 }
