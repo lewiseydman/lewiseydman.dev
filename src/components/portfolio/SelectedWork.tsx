@@ -134,16 +134,18 @@ export function SelectedWork() {
   return (
     <div className="flex flex-col gap-8">
       {open ? <ReadingProgressBar /> : null}
-      <PopoverSummaryStrip
-        label="Opera · Featured"
-        items={projects.slice(0, 3).map((p) => ({
-          kicker: `Opus · ${p.num}`,
-          title: p.title,
-          dek: p.role,
-          thumb: p.thumb ?? defaultThumb,
-          onClick: () => openProject(p.id),
-        }))}
-      />
+      {!open ? (
+        <PopoverSummaryStrip
+          label="Opera · Featured"
+          items={projects.slice(0, 3).map((p) => ({
+            kicker: `Opus · ${p.num}`,
+            title: p.title,
+            dek: p.role,
+            thumb: p.thumb ?? defaultThumb,
+            onClick: () => openProject(p.id),
+          }))}
+        />
+      ) : null}
       <AnimatePresence mode="wait">
         {!open ? (
           <motion.div
@@ -231,7 +233,7 @@ function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ duration: 0.35 }}
-      className="flex flex-col gap-8"
+      className="flex flex-col gap-6 md:gap-8"
     >
       {/* Sticky back header with project chip on the right */}
       <div className="sticky top-0 z-10 -mx-5 flex items-center justify-between gap-3 border-b border-border bg-background/85 px-5 py-1.5 backdrop-blur-md md:-mx-14 md:px-14">
@@ -243,19 +245,19 @@ function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }
         </div>
       </div>
 
-      <header className="flex flex-col gap-3 border-b border-border pb-6">
-        {/* Meta row: stacked on mobile, inline with hairlines on sm+ */}
-        <div className="font-mono-mar flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+      <header className="flex flex-col gap-2 border-b border-border pb-4 md:gap-3 md:pb-6">
+        {/* Meta row: single horizontal line at every breakpoint */}
+        <div className="font-mono-mar flex flex-wrap items-center gap-x-2 gap-y-1">
           <span>Opus · {project.num}</span>
-          <span className="hairline hidden h-px w-8 sm:inline-block" />
+          <span className="text-muted-foreground/60">·</span>
           <span>{project.year}</span>
-          <span className="hairline hidden h-px w-8 sm:inline-block" />
+          <span className="text-muted-foreground/60">·</span>
           <span>{project.role}</span>
         </div>
-        <h3 className="font-display text-3xl tracking-[-0.015em] sm:text-4xl md:text-5xl">
+        <h3 className="font-display text-[1.75rem] leading-[1.05] tracking-[-0.015em] sm:text-4xl md:text-5xl">
           {project.title}
         </h3>
-        <p className="font-display text-lg italic text-sepia sm:text-xl md:text-2xl">{project.blurb}</p>
+        <p className="font-display text-base italic text-sepia sm:text-lg md:text-xl">{project.blurb}</p>
       </header>
       <div className="relative aspect-[16/9] w-full overflow-hidden rounded-sm border border-border bg-card">
         <img

@@ -1,59 +1,66 @@
+
 ## Goal
 
-Align Cursus (Experience) with Laudes (Appraisals) styling, restructure the timeline to match the About "manuscript rail" pattern (consistent left-rail spine at every breakpoint), standardise a compact sticky "back" control at the top of every detail view, and make popover scroll-to-top reliable.
+Three related polish fixes across popovers:
 
-## 1. Cursus header styled like Laudes
+1. Make the sticky "back" bar sit at the **actual top** of every detail view (currently the featured `PopoverSummaryStrip` is rendered above it, so back visually appears mid-page).
+2. Rework the Opera (SelectedWork) detail **header block** so the meta row + title + dek stop stacking so aggressively on mobile — the hero title should land above the fold.
+3. Slim the Blog (Codex) essay **meta bar** — author is always Lewis Eydman, so drop it from the primary row and consolidate published / length / tags into one compact line above the body.
 
-Rework the top of `src/components/portfolio/ExperienceTimeline.tsx` to mirror `Appraisals.tsx`:
+Also verify #4: every card click across popovers resets scroll to the top of the dialog reliably.
 
-- Replace the `flex … border-b pb-5` intro bar with the Laudes two-block pattern:
-  - `font-display text-2xl md:text-3xl` intro line — plain foreground clause + italic sepia rider.
-  - A quieter action row underneath (`font-mono-mar Actions ·` label + the existing "Download Résumé" pill), same wrap/gap rhythm as the Laudes filter row.
-- Remove the header divider (Laudes has none); keep section `gap-10`.
+## 1. Sticky back = true top of popover
 
-## 2. Timeline restructured to match About's manuscript rail
+The featured `PopoverSummaryStrip` is currently rendered above the `AnimatePresence` in `SelectedWork.tsx`, `Blogs.tsx`, and `Tests.tsx`, so when a detail view opens the strip sits above the sticky back header. This means the back control is not at the top of the popover on any of the three sections.
 
-Adopt the exact "left rail + dot node + item" pattern used in About's Portrait/Disciplines section (`src/components/portfolio/About.tsx` §180–223), so both sections read as one design language. This also fixes mobile: today the timeline centers on mobile with gears above/below, burning vertical space.
+Fix: only render `PopoverSummaryStrip` on the **index** view — hide it whenever a detail is open. That makes the sticky back bar the first child of the scroll container and it truly pins to the top.
 
-Rework the body of `ExperienceTimeline.tsx`:
+Apply in all three files:
+- `src/components/portfolio/SelectedWork.tsx` — wrap `<PopoverSummaryStrip … />` in `{!open ? … : null}`.
+- `src/components/portfolio/Blogs.tsx` — same treatment for the Codex strip.
+- `src/components/portfolio/Tests.tsx` — same treatment for the Disputationes strip.
 
-- One layout at every breakpoint (mobile → desktop): a single vertical column with a left rail.
-  - Wrapper: `relative flex flex-col`.
-  - Rail: `pointer-events-none absolute top-2 bottom-2 left-[0.45rem] w-px bg-sepia/30` (identical to About).
-  - Each item: `relative flex gap-5 border-b border-border py-6 last:border-b-0`, with an absolutely-positioned dot node (`h-2 w-2 rounded-full border border-sepia bg-background`) sitting on the rail.
-- Replace the animated Gear SVG with the dot node on mobile/tablet (keeps rhythm and cuts ~40px per item). Preserve one small rotating Gear as the section's marker at the top of the rail only, so the mechanical motif survives without dominating each row.
-- Item content grid: `md:grid-cols-[9rem_1fr] gap-x-6`, meta column (year + org) on the left from `md:` up, role/notes on the right. On mobile, stacks — year and org sit above role/notes, all left-aligned against the rail.
-- Remove the desktop-only alternating two-column layout, the mobile top/bottom spine `<div>` fillers, and the `Gear` node wrapper.
-- Tighten rhythm: `space-y-0` (borders provide separation), remove `lg:space-y-24`.
-- Education footer: switch to `sm:grid-cols-2 lg:grid-cols-3` so tablets get two-up.
+No changes needed to the sticky bar markup itself; it already uses the standardised pattern (`sticky top-0 z-10 -mx-5 md:-mx-14 border-b bg-background/85 backdrop-blur-md py-1.5`).
 
-Result: timeline visually mirrors About, wider copy column at every size, ~40% less vertical space on phones, important content (first role) stays above the fold on mobile.
+## 2. Opera detail header — mobile compaction
 
-## 3. Mobile-stacking audit across all sections
+In `src/components/portfolio/SelectedWork.tsx` `CaseStudy`, the meta row currently stacks vertically on mobile (`flex flex-col … sm:flex-row`), then the H3 (`text-3xl`) and dek (`text-lg italic`) each take a line. On a 390px viewport this pushes the hero image well below the fold.
 
-Sweep the popover sections to confirm important content stays above the fold on mobile and stacks consistently:
+Rework `<header>` (around line 246):
 
-- `About.tsx`: intro headline + first paragraph already above the fold. Confirm no changes needed — the manuscript rail is the reference.
-- `SelectedWork.tsx` / `Blogs.tsx`: hero card + title already stack correctly; verify `PopoverSummaryStrip` is not pushing hero content below the fold on mobile. If the strip is > ~40% of viewport height on mobile, cap its `min-h`/thumb aspect so hero content stays visible.
-- `Tests.tsx`: intro line + first card should sit above the fold — currently fine.
-- `Appraisals.tsx`: intro line + filter row already stack (from the earlier fix); no changes.
-- `ExperienceTimeline.tsx`: covered by §2.
+- Meta row: collapse to a single horizontal line at every breakpoint using middle-dot separators instead of hairlines and stacking. Shape: `Opus · I · 2025 · Lead Product · Design Systems` on one line, `truncate` friendly, `font-mono-mar text-xs`.
+- Title: keep `font-display` but tighten mobile sizing to `text-[1.75rem] leading-[1.05]` (was `text-3xl` = 1.875rem with default leading), and drop the top margin.
+- Dek: mobile `text-base`, `sm:text-lg`, `md:text-xl` (was `text-lg → text-2xl`). Trim `pb-6 → pb-4`, section `gap-8 → gap-6` on mobile.
 
-Deliverable: no structural changes to sections that already stack well; only the strip cap if measured overflow warrants it.
+Net effect: the meta+title+dek fit within ~140–160px on mobile so the hero image + Outcome pill land above the fold on a 390×844 viewport.
 
-## 4. Compact sticky "back" at the top of every detail view
+## 3. Blog (Codex) essay meta bar — slim & horizontal
 
-- `Blogs.tsx` `Essay` and `SelectedWork.tsx` `CaseStudy`: already have a sticky back bar — tighten to `py-1.5`, ensure it's the very first child.
-- `Tests.tsx` detail view: wrap in the same sticky pattern (`sticky top-0 z-10 -mx-5 md:-mx-14 border-b bg-background/85 backdrop-blur-md px-5 md:px-14 py-1.5`) using `BackToIndexButton` with "Back to Disputationes" and a right-side `Disputatio · {num}` chip.
+In `src/components/portfolio/Blogs.tsx` `Essay` (around line 302), the meta bar is a 2-col grid on mobile that shows Author / Published / Length / Tags in four separate labelled blocks. Since Author is always "Lewis Eydman" it doesn't earn its own block.
 
-## 5. Reliable "scroll to top" on every card click
+Replace the block-grid meta bar with a single-line meta strip above the body:
 
-- Update `src/lib/scroll-dialog-top.ts` to run two nested RAFs with `behavior: "auto"`, so the reset happens after AnimatePresence paints the new view.
-- In each detail component (`Essay`, `CaseStudy`, new `Tests` detail), add a mount `useEffect` calling `scrollDialogToTop()` so the detail owns its own reset instead of trusting the caller.
-- Keep the existing open-site calls as a first-paint belt-and-braces.
+- One horizontal row: `Lewis Eydman · {post.date} · {post.read} · [tag] [tag]` using `font-mono-mar text-xs text-muted-foreground` with middle-dot separators. Tags render inline as small `TagPill`s at the end of the row.
+- Wraps naturally on narrow widths (`flex flex-wrap items-center gap-x-3 gap-y-2`).
+- Drop the `border-y … py-4` block; use a single `border-b border-border pb-3` under the strip.
+- The `Essay · {post.date}` kicker inside the body `<header>` becomes redundant — remove it since the meta strip carries the same info.
+
+Result: ~80–100px reclaimed above the article body on both mobile and desktop, with the title landing much closer to the fold.
+
+## 4. Scroll-to-top on every card click — verification pass
+
+Current state (already implemented across turns): `scrollDialogToTop()` uses double-RAF + `behavior:"auto"`; each detail component (`Essay`, `CaseStudy`, `TestDetail`) also calls it in a mount `useEffect`; each opener (`openBlog`, `openProject`, `openTest`) calls it on click; the `PopoverSummaryStrip` cards go through those same openers.
+
+Audit-only tasks (no changes expected unless a gap is found while reading):
+- Confirm the Appraisals section has no detail view that needs a reset (it's index-only — filter changes don't warrant a scroll reset).
+- Confirm the ExperienceTimeline has no clickable detail view (it's a static list).
+- Confirm `PopoverSummaryStrip` doesn't wrap card clicks in any handler that swallows the opener's `scrollDialogToTop()` call.
+
+If the audit finds a gap, patch it in the same turn; otherwise no code change for §4.
 
 ## Technical notes
 
-- No changes to `SectionDialog`, `PopoverSummaryStrip` API, routing, or timeline data.
-- Styling stays within existing tokens (`sepia`, `brass`, `border`, `bg-background/85`, `font-mono-mar`, `pillButtonClasses`, `hairline`, `paper-grain`).
-- Timeline rail values (`left-[0.45rem]`, dot size, `top-[2.1rem]` alignment) copied verbatim from About so the two sections line up pixel-for-pixel.
+- No changes to `SectionDialog`, `PopoverSummaryStrip` API, routing, or data.
+- Middle-dot separator: literal `·` character with `text-muted-foreground/60` for tonal separation.
+- All sizing values stay inside existing tokens (`font-mono-mar`, `font-display`, `sepia`, `border`, `bg-background/85`).
+- Removing the summary strip from detail views is a pure conditional-render change — no state/effect coupling to untangle.
