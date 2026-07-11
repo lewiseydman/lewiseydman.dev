@@ -1,8 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import thumb from "@/assets/thumb-disputatio.jpg";
 import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
+import { BackToIndexButton } from "./primitives/BackToIndexButton";
 import { scrollDialogToTop } from "@/lib/scroll-dialog-top";
 
 type Test = {
@@ -127,23 +127,30 @@ export function Tests() {
             </ol>
           </motion.div>
         ) : (
-          <motion.div
-            key={open.id}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.35 }}
-            className="flex flex-col gap-6"
-          >
-            <button
-              type="button"
-              onClick={() => setOpenId(null)}
-              className="font-mono-mar group flex items-center gap-2 self-start hover:text-foreground"
-            >
-              <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-0.5" />
-              Back to Disputationes
-            </button>
-            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border bg-card">
+          <TestDetail key={open.id} open={open} onBack={() => setOpenId(null)} />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function TestDetail({ open, onBack }: { open: Test; onBack: () => void }) {
+  useEffect(() => {
+    scrollDialogToTop();
+  }, []);
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.35 }}
+      className="flex flex-col gap-6"
+    >
+      <div className="sticky top-0 z-10 -mx-5 flex items-center justify-between gap-3 border-b border-border bg-background/85 px-5 py-1.5 backdrop-blur-md md:-mx-14 md:px-14">
+        <BackToIndexButton onClick={onBack} label="Back to Disputationes" />
+        <span className="font-mono-mar">Disputatio · {open.num}</span>
+      </div>
+      <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border bg-card">
               <img
                 src={thumb}
                 alt={open.title}
@@ -161,9 +168,6 @@ export function Tests() {
               <p className="font-display text-xl italic text-sepia md:text-2xl">{open.summary}</p>
               <p className="mt-2 text-[1.0625rem] leading-[1.75] text-foreground">{open.detail}</p>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }
