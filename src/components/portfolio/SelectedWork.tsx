@@ -206,6 +206,10 @@ function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }
     [project.notebook],
   );
 
+  useEffect(() => {
+    scrollDialogToTop();
+  }, []);
+
   // Detect overflow relative to the collapsed cap. Runs on mount + on window
   // resize — no ResizeObserver needed since the collapsed cap is a fixed rem.
   useEffect(() => {
@@ -230,7 +234,7 @@ function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }
       className="flex flex-col gap-8"
     >
       {/* Sticky back header with project chip on the right */}
-      <div className="sticky top-0 z-10 -mx-5 flex items-center justify-between gap-3 border-b border-border bg-background/85 px-5 py-2 backdrop-blur-md md:-mx-14 md:px-14">
+      <div className="sticky top-0 z-10 -mx-5 flex items-center justify-between gap-3 border-b border-border bg-background/85 px-5 py-1.5 backdrop-blur-md md:-mx-14 md:px-14">
         <BackToIndexButton onClick={onBack} label="Back to Opera" />
         <div className="font-mono-mar flex min-w-0 items-center gap-2 truncate text-right">
           <span className="hidden sm:inline">Opus · {project.num}</span>
