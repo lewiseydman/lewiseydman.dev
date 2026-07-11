@@ -275,6 +275,7 @@ function Essay({ post, onBack }: { post: Blog; onBack: () => void }) {
     // Find the dialog scroll container.
     const el = document.querySelector<HTMLElement>("[data-dialog-scroll]");
     setScroller(el);
+    scrollDialogToTop();
   }, []);
 
   useThrottledScroll(scroller, (top) => setShowTopBtn(top > 600), [scroller]);
@@ -292,7 +293,7 @@ function Essay({ post, onBack }: { post: Blog; onBack: () => void }) {
       className="flex flex-col gap-8"
     >
       {/* Sticky back header */}
-      <div className="sticky top-0 z-10 -mx-5 flex items-center justify-between gap-3 border-b border-border bg-background/85 px-5 py-2 backdrop-blur-md md:-mx-14 md:px-14">
+      <div className="sticky top-0 z-10 -mx-5 flex items-center justify-between gap-3 border-b border-border bg-background/85 px-5 py-1.5 backdrop-blur-md md:-mx-14 md:px-14">
         <BackToIndexButton onClick={onBack} label="Back to Codex" />
         <span className="font-mono-mar truncate">{post.date}</span>
       </div>
