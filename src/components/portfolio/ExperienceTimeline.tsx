@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Download } from "lucide-react";
 import { pillButtonClasses } from "./primitives/pillButton";
+import { SectionLabel } from "./primitives/SectionLabel";
 
 const experience = [
   {
@@ -70,25 +71,27 @@ function Gear({ teeth = 8, className = "h-8 w-8" }: { teeth?: number; className?
 
 export function ExperienceTimeline() {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-12 md:gap-16">
       {/* Header — mirrors Laudes / Appraisals */}
-      <p className="font-display text-2xl leading-snug md:text-3xl">
-        Cursus &mdash;{" "}
-        <span className="italic text-sepia">
-          a mechanical chronology, in eight working years.
-        </span>
-      </p>
-      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
-        <span className="font-mono-mar">Actions ·</span>
-        <a
-          href="/Lewis_Eydman_Resume.pdf"
-          download="Lewis_Eydman_Resume.pdf"
-          className={pillButtonClasses("primary", "min-h-9 px-3 py-1.5 text-xs")}
-        >
-          <Download className="h-3.5 w-3.5 transition-transform group-hover:translate-y-0.5" />
-          Download Résumé
-        </a>
-      </div>
+      <header className="flex flex-col gap-4">
+        <p className="font-display text-2xl leading-snug md:text-3xl">
+          Cursus &mdash;{" "}
+          <span className="italic text-sepia">
+            a mechanical chronology, in eight working years.
+          </span>
+        </p>
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+          <span className="font-mono-mar">Actions ·</span>
+          <a
+            href="/Lewis_Eydman_Resume.pdf"
+            download="Lewis_Eydman_Resume.pdf"
+            className={pillButtonClasses("primary", undefined, "sm")}
+          >
+            <Download className="h-3.5 w-3.5 transition-transform group-hover:translate-y-0.5" />
+            Download Résumé
+          </a>
+        </div>
+      </header>
 
       {/* Manuscript rail — mirrors About > Disciplines */}
       <div className="relative flex flex-col">
@@ -129,14 +132,11 @@ export function ExperienceTimeline() {
       </div>
 
       {/* education footer */}
-      <section className="border-t border-border pt-8">
-        <div className="mb-5 flex items-center gap-3">
-          <span className="font-mono-mar">Studia · Education</span>
-          <span className="hairline h-px flex-1" />
-        </div>
-        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="flex flex-col gap-4">
+        <SectionLabel>Studia · Education</SectionLabel>
+        <ul className="grid gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3">
           {education.map((e) => (
-            <li key={e.title} className="flex flex-col gap-1 rounded-sm border border-border bg-card/40 p-4">
+            <li key={e.title} className="flex flex-col gap-1 rounded-sm border border-border bg-card/40 p-4 sm:p-6 lg:p-8">
               <span className="font-mono-mar">{e.year}</span>
               <span className="font-display text-lg leading-tight">{e.title}</span>
               <span className="font-display italic text-sepia">{e.org}</span>

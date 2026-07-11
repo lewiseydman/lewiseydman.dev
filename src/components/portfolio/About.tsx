@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
 import portrait from "@/assets/portrait.png";
-import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
+import { SectionLabel } from "./primitives/SectionLabel";
 
 const disciplines = [
   {
@@ -104,14 +104,14 @@ function PortraitBlock() {
 
 export function About() {
   return (
-    <div className="flex flex-col gap-12">
+    <div className="flex flex-col gap-12 md:gap-16">
       {/* Editorial intro */}
-      <section className="flex flex-col gap-5">
+      <section className="flex flex-col gap-4">
         <span className="font-mono-mar">Lewis Eydman · De Ipso</span>
         <h2 className="font-display text-4xl leading-[1.05] tracking-[-0.015em] md:text-5xl">
           Product, engineering, and design in one <span className="italic text-sepia">opinionated practice.</span>
         </h2>
-        <div className="grid gap-6 text-[0.95rem] leading-[1.7] text-muted-foreground md:grid-cols-2 md:gap-10">
+        <div className="grid gap-6 text-[0.95rem] leading-[1.7] text-muted-foreground md:grid-cols-2 md:gap-8">
           <p>
             I&rsquo;m a product engineer who can sketch the interface in the morning, ship the React in the afternoon,
             and argue both sides of the technical trade-off. I care about helping ambitious teams present their products
@@ -126,12 +126,9 @@ export function About() {
       </section>
 
       {/* At a glance band */}
-      <section className="flex flex-col gap-5">
-        <div className="flex items-center gap-3">
-          <span className="font-mono-mar">At a glance</span>
-          <span className="hairline h-px flex-1" />
-        </div>
-        <div className="grid gap-4 md:grid-cols-3">
+      <section className="flex flex-col gap-4">
+        <SectionLabel>At a glance</SectionLabel>
+        <div className="grid gap-6 md:grid-cols-3 md:gap-8">
           {[
             {
               kicker: "Current",
@@ -146,7 +143,7 @@ export function About() {
               body: "Service design, UI/UX, full-stack React.",
             },
           ].map((c) => (
-            <div key={c.kicker} className="flex flex-col gap-3 rounded-sm border border-border bg-card/40 p-5">
+            <div key={c.kicker} className="flex flex-col gap-3 rounded-sm border border-border bg-card/40 p-4 sm:p-6 lg:p-8">
               <span className="font-mono text-[0.6rem] uppercase tracking-widest text-sepia">{c.kicker}</span>
               <p className="text-[0.95rem] leading-relaxed text-foreground">{c.body}</p>
             </div>
@@ -155,7 +152,7 @@ export function About() {
       </section>
 
       {/* What I do / How I work — numbered two-column */}
-      <section className="grid gap-10 md:grid-cols-2 md:gap-14">
+      <section className="grid gap-8 md:grid-cols-2 md:gap-12">
         {[
           { title: "What I do", items: whatIDo },
           { title: "How I work", items: howIWork },
@@ -177,7 +174,7 @@ export function About() {
       </section>
 
       {/* Portrait + Disciplines (manuscript block — kept) */}
-      <section className="grid gap-10 border-t border-border pt-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
+      <section className="grid gap-8 border-t border-border pt-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12 lg:pt-0 lg:border-t-0">
         <PortraitBlock />
 
         <div className="relative flex flex-col">
@@ -224,11 +221,8 @@ export function About() {
       </section>
 
       {/* Stats */}
-      <section className="border-t border-border pt-8">
-        <div className="mb-5 flex items-center gap-3">
-          <span className="font-mono-mar">Summa · Experience</span>
-          <span className="hairline h-px flex-1" />
-        </div>
+      <section className="flex flex-col gap-4">
+        <SectionLabel>Summa · Experience</SectionLabel>
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
           {stats.map(([n, l]) => (
             <div key={l} className="flex flex-col">
@@ -240,12 +234,9 @@ export function About() {
       </section>
 
       {/* Marginalia / Interests */}
-      <section className="border-t border-border pt-8">
-        <div className="mb-5 flex items-center gap-3">
-          <span className="font-mono-mar">Vita Lateralis · Interests</span>
-          <span className="hairline h-px flex-1" />
-        </div>
-        <div className="grid gap-6 md:grid-cols-[0.85fr_1.15fr] md:gap-14">
+      <section className="flex flex-col gap-4">
+        <SectionLabel>Vita Lateralis · Interests</SectionLabel>
+        <div className="grid gap-6 md:grid-cols-[0.85fr_1.15fr] md:gap-12">
           <p className="font-display text-xl italic leading-relaxed text-sepia md:text-2xl">
             Curious at heart — the same instinct that drives the work fills the weekends.
           </p>

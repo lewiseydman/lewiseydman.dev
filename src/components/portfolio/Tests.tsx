@@ -1,8 +1,9 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import thumb from "@/assets/thumb-disputatio.jpg";
 import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
-import { BackToIndexButton } from "./primitives/BackToIndexButton";
+import { FolioCard } from "./primitives/FolioCard";
+import { DialogSubHeader } from "./primitives/DialogSubHeader";
 import { scrollDialogToTop } from "@/lib/scroll-dialog-top";
 
 type Test = {
@@ -67,7 +68,7 @@ export function Tests() {
   };
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-12 md:gap-16">
       {!open ? (
         <PopoverSummaryStrip
           label="Disputationes · Featured"
@@ -88,45 +89,29 @@ export function Tests() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3 }}
-            className="flex flex-col gap-8"
+            className="flex flex-col gap-8 md:gap-12"
           >
             <p className="font-display text-2xl leading-snug md:text-3xl">
               Small <span className="italic text-sepia">disputationes</span> &mdash; experiments, studies, and things I
               have found beautiful lately.
             </p>
-            <ol className="grid gap-px overflow-hidden rounded-sm border border-border bg-border lg:grid-cols-2">
+            <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border lg:grid-cols-2">
               {tests.map((t, i) => (
-                <motion.li
+                <FolioCard
                   key={t.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: i * 0.06 }}
-                >
-                  <button
-                    type="button"
-                    onClick={() => openTest(t.id)}
-                    className="group flex h-full w-full flex-col gap-4 bg-background p-5 text-left transition-colors hover:bg-card md:p-6"
-                  >
-                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border bg-card">
-                      <img
-                        src={thumb}
-                        alt=""
-                        loading="lazy"
-                        className="h-full w-full object-cover mix-blend-multiply transition-transform duration-700 group-hover:scale-[1.03] dark:mix-blend-screen"
-                      />
-                      <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
-                    </div>
-                    <div className="flex items-baseline justify-between">
-                      <span className="font-mono-mar">{`Disputatio · ${t.num}`}</span>
-                      <span className="font-mono-mar">{t.domain}</span>
-                    </div>
-                    <h3 className="font-display text-2xl md:text-3xl">{t.title}</h3>
-                    <p className="text-sm leading-relaxed text-muted-foreground">{t.summary}</p>
-                    <div className="mt-auto h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
-                  </button>
-                </motion.li>
+                  onClick={() => openTest(t.id)}
+                  ariaLabel={`Open disputatio: ${t.title}`}
+                  thumb={thumb}
+                  alt=""
+                  overlayTopLeft={<>Disputatio · {t.num}</>}
+                  overlayTopRight={<>{t.domain}</>}
+                  kicker={`Disputatio · ${t.num}`}
+                  title={t.title}
+                  body={t.summary}
+                  index={i}
+                />
               ))}
-            </ol>
+            </div>
           </motion.div>
         ) : (
           <TestDetail key={open.id} open={open} onBack={() => setOpenId(null)} />
@@ -146,30 +131,31 @@ function TestDetail({ open, onBack }: { open: Test; onBack: () => void }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ duration: 0.35 }}
-      className="flex flex-col gap-6"
+      className="flex flex-col gap-8 md:gap-12"
     >
-      <div className="sticky top-0 z-10 -mx-5 flex items-center justify-between gap-3 border-b border-border bg-background/85 px-5 py-1.5 backdrop-blur-md md:-mx-14 md:px-14">
-        <BackToIndexButton onClick={onBack} label="Back to Disputationes" />
-        <span className="font-mono-mar">Disputatio · {open.num}</span>
-      </div>
+      <DialogSubHeader
+        onBack={onBack}
+        backLabel="Back to Disputationes"
+        right={<>Disputatio · {open.num}</>}
+      />
       <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border bg-card">
-              <img
-                src={thumb}
-                alt={open.title}
-                className="h-full w-full object-cover mix-blend-multiply dark:mix-blend-screen"
-              />
-              <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
-            </div>
-            <div className="flex flex-col gap-3">
-              <div className="font-mono-mar flex items-center gap-3">
-                <span>Disputatio · {open.num}</span>
-                <span className="hairline h-px w-8" />
-                <span>{open.domain}</span>
-              </div>
-              <h2 className="font-display text-3xl tracking-[-0.01em] md:text-5xl">{open.title}</h2>
-              <p className="font-display text-xl italic text-sepia md:text-2xl">{open.summary}</p>
-              <p className="mt-2 text-[1.0625rem] leading-[1.75] text-foreground">{open.detail}</p>
-            </div>
+        <img
+          src={thumb}
+          alt={open.title}
+          className="h-full w-full object-cover mix-blend-multiply dark:mix-blend-screen"
+        />
+        <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
+      </div>
+      <div className="flex flex-col gap-3">
+        <div className="font-mono-mar flex items-center gap-3">
+          <span>Disputatio · {open.num}</span>
+          <span className="hairline h-px w-8" />
+          <span>{open.domain}</span>
+        </div>
+        <h2 className="font-display text-3xl tracking-[-0.01em] md:text-5xl">{open.title}</h2>
+        <p className="font-display text-xl italic text-sepia md:text-2xl">{open.summary}</p>
+        <p className="text-[1.0625rem] leading-[1.75] text-foreground">{open.detail}</p>
+      </div>
     </motion.div>
   );
 }

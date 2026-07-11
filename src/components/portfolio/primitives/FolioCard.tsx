@@ -51,8 +51,8 @@ export const FolioCard = forwardRef<HTMLButtonElement, Props>(function FolioCard
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.4, delay: Math.min(index, 6) * 0.05 }}
-      className={`group relative flex h-full w-full flex-col gap-5 bg-background text-left transition-colors hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 ${
-        padded ? "p-5 md:p-7" : ""
+      className={`group relative flex h-full w-full flex-col gap-4 bg-background text-left transition-colors hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 ${
+        padded ? "p-4 sm:p-6 lg:p-8" : ""
       } ${className}`}
     >
       <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border bg-card">
@@ -78,7 +78,7 @@ export const FolioCard = forwardRef<HTMLButtonElement, Props>(function FolioCard
         </h3>
       </div>
       {body ? <div className="text-sm leading-relaxed text-muted-foreground">{body}</div> : null}
-      {footer ? <div className="mt-auto flex flex-wrap items-end justify-between gap-3 pt-1">{footer}</div> : null}
+      {footer ? <div className="mt-auto flex flex-wrap items-end justify-between gap-3">{footer}</div> : null}
       <div className="h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
     </motion.button>
   );

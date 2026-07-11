@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
+import { SectionLabel } from "./primitives/SectionLabel";
 
 export type SummaryItem = {
   kicker: string;
@@ -88,14 +89,10 @@ export function PopoverSummaryStrip({ items, label = "Folio" }: Props) {
   };
 
   return (
-    <div className="flex flex-col gap-3 border-b border-border pb-8">
-      <div className="font-mono-mar flex items-center gap-3">
-        <span>{label}</span>
-        <span className="hairline h-px flex-1" />
-        <span>
-          {items.length} {items.length === 1 ? "entry" : "entries"}
-        </span>
-      </div>
+    <div className="flex flex-col gap-4 border-b border-border pb-6">
+      <SectionLabel right={`${items.length} ${items.length === 1 ? "entry" : "entries"}`}>
+        {label}
+      </SectionLabel>
       <div
         ref={scrollerRef}
         onPointerDown={onPointerDown}

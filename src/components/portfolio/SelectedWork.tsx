@@ -7,9 +7,9 @@ import { useExpandWithLoading } from "@/hooks/use-expand-with-loading";
 import { scrollDialogToTop } from "@/lib/scroll-dialog-top";
 import { FolioCard } from "./primitives/FolioCard";
 import { TagPill, TagPillRow } from "./primitives/TagPill";
-import { BackToIndexButton } from "./primitives/BackToIndexButton";
 import { ReadingProgressBar } from "./primitives/ReadingProgressBar";
 import { pillButtonClasses } from "./primitives/pillButton";
+import { DialogSubHeader } from "./primitives/DialogSubHeader";
 import { useSectionHash } from "@/hooks/use-section-hash";
 
 type Project = {
@@ -132,7 +132,7 @@ export function SelectedWork() {
   }, [openId]);
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-12 md:gap-16">
       {open ? <ReadingProgressBar /> : null}
       {!open ? (
         <PopoverSummaryStrip
@@ -154,7 +154,7 @@ export function SelectedWork() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3 }}
-            className="flex flex-col gap-8"
+            className="flex flex-col gap-8 md:gap-12"
           >
             <p className="font-display text-2xl leading-snug md:text-3xl">
               Case studies &mdash;{" "}
@@ -233,19 +233,21 @@ function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ duration: 0.35 }}
-      className="flex flex-col gap-6 md:gap-8"
+      className="flex flex-col gap-8 md:gap-12"
     >
-      {/* Sticky back header with project chip on the right */}
-      <div className="sticky top-0 z-10 -mx-5 flex items-center justify-between gap-3 border-b border-border bg-background/85 px-5 py-1.5 backdrop-blur-md md:-mx-14 md:px-14">
-        <BackToIndexButton onClick={onBack} label="Back to Opera" />
-        <div className="font-mono-mar flex min-w-0 items-center gap-2 truncate text-right">
-          <span className="hidden sm:inline">Opus · {project.num}</span>
-          <span className="hairline hidden h-px w-6 sm:inline-block" />
-          <span className="truncate">{project.title}</span>
-        </div>
-      </div>
+      <DialogSubHeader
+        onBack={onBack}
+        backLabel="Back to Opera"
+        right={
+          <>
+            <span className="hidden sm:inline">Opus · {project.num}</span>
+            <span className="hairline hidden h-px w-6 sm:inline-block" />
+            <span className="truncate">{project.title}</span>
+          </>
+        }
+      />
 
-      <header className="flex flex-col gap-2 border-b border-border pb-4 md:gap-3 md:pb-6">
+      <header className="flex flex-col gap-3 border-b border-border pb-6">
         {/* Meta row: single horizontal line at every breakpoint */}
         <div className="font-mono-mar flex flex-wrap items-center gap-x-2 gap-y-1">
           <span>Opus · {project.num}</span>
@@ -270,7 +272,7 @@ function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }
         <div aria-hidden className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
       </div>
       {/* Caption strip: mobile-first three-row grid; single row on sm+ */}
-      <div className="grid gap-6 border-t border-border pt-6 sm:flex sm:flex-wrap sm:items-end sm:justify-between">
+      <div className="grid gap-4 border-t border-border pt-6 sm:flex sm:flex-wrap sm:items-end sm:justify-between sm:gap-6">
         <div className="flex flex-col">
           <span className="font-mono-mar">Outcome</span>
           <span className="font-display text-2xl italic text-sepia">{project.outcome}</span>
@@ -293,7 +295,7 @@ function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }
         </div>
       </div>
       {/* Notebook — grid-rows collapse */}
-      <section className="flex flex-col gap-6 border-t border-border pt-8">
+      <section className="flex flex-col gap-4 border-t border-border pt-8">
         <div className="flex items-baseline justify-between">
           <h4 className="font-display text-2xl tracking-[-0.01em] md:text-3xl">
             Notebook <span className="italic text-sepia">— marginalia</span>
@@ -305,7 +307,7 @@ function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }
             className="relative overflow-hidden transition-[max-height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
             style={{ maxHeight: overflows && !expanded ? "22rem" : "9999px" }}
           >
-            <div ref={contentRef} className="flex flex-col gap-5">
+            <div ref={contentRef} className="flex flex-col gap-4">
               {paragraphs.map((p, i) => (
                 <p key={i} className="max-w-prose text-[1.05rem] leading-[1.75] text-foreground">
                   {p}

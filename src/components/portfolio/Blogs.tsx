@@ -7,9 +7,11 @@ import { useExpandWithLoading } from "@/hooks/use-expand-with-loading";
 import { scrollDialogToTop } from "@/lib/scroll-dialog-top";
 import { FolioCard } from "./primitives/FolioCard";
 import { TagPill } from "./primitives/TagPill";
-import { BackToIndexButton } from "./primitives/BackToIndexButton";
 import { ReadingProgressBar } from "./primitives/ReadingProgressBar";
 import { pillButtonClasses } from "./primitives/pillButton";
+import { IconPillButton } from "./primitives/IconPillButton";
+import { DialogSubHeader } from "./primitives/DialogSubHeader";
+import { SectionLabel } from "./primitives/SectionLabel";
 import { useSectionHash } from "@/hooks/use-section-hash";
 import { useThrottledScroll } from "@/hooks/use-throttled-scroll";
 
@@ -114,7 +116,7 @@ export function Blogs() {
   }, [openId, hero.id]);
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-12 md:gap-16">
       {open ? <ReadingProgressBar /> : null}
       {!open ? (
         <PopoverSummaryStrip
@@ -137,7 +139,7 @@ export function Blogs() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3 }}
-            className="flex flex-col gap-12"
+            className="flex flex-col gap-12 md:gap-16"
           >
             {/* Hero feature — article semantics with a proper CTA */}
             <motion.article
@@ -145,7 +147,7 @@ export function Blogs() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="group grid w-full gap-8 text-left md:grid-cols-[1.1fr_1fr] md:items-center"
+              className="group grid w-full gap-6 text-left md:grid-cols-[1.1fr_1fr] md:items-center md:gap-8"
             >
               <button
                 type="button"
@@ -181,7 +183,7 @@ export function Blogs() {
                   </button>
                 </h3>
                 <p className="font-display text-lg italic text-sepia sm:text-xl md:text-2xl">{hero.dek}</p>
-                <div className="flex flex-wrap gap-2 pt-1">
+                <div className="flex flex-wrap gap-2">
                   {hero.tags.map((t) => (
                     <TagPill key={t}>{t}</TagPill>
                   ))}
@@ -189,7 +191,7 @@ export function Blogs() {
                 <button
                   type="button"
                   onClick={() => openBlog(hero.id)}
-                  className={pillButtonClasses("primary", "mt-2 self-start")}
+                  className={pillButtonClasses("primary", "self-start")}
                 >
                   Read essay
                   <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover/cta:-translate-y-0.5 group-hover/cta:translate-x-0.5" />
@@ -199,11 +201,8 @@ export function Blogs() {
 
             {/* Archive list */}
             <section className="flex flex-col gap-4">
-              <div className="flex items-center gap-3">
-                <span className="font-mono-mar">Archivum · earlier folios</span>
-                <span className="hairline h-px flex-1" />
-              </div>
-              <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border lg:grid-cols-2">
+              <SectionLabel>Archivum · earlier folios</SectionLabel>
+              <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:gap-px lg:grid-cols-2">
                 {visibleRest.map((b, i) => {
                   const isLast = i === visibleRest.length - 1;
                   const isOddLast = isLast && visibleRest.length % 2 === 1;
@@ -236,7 +235,7 @@ export function Blogs() {
                 })}
               </div>
               {remaining > 0 && (
-                <div className="flex items-center gap-3 pt-2">
+                <div className="flex items-center gap-3">
                   <span className="hairline h-px flex-1" />
                   <button
                     type="button"
@@ -292,13 +291,9 @@ function Essay({ post, onBack }: { post: Blog; onBack: () => void }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ duration: 0.35 }}
-      className="flex flex-col gap-8"
+      className="flex flex-col gap-8 md:gap-12"
     >
-      {/* Sticky back header */}
-      <div className="sticky top-0 z-10 -mx-5 flex items-center justify-between gap-3 border-b border-border bg-background/85 px-5 py-1.5 backdrop-blur-md md:-mx-14 md:px-14">
-        <BackToIndexButton onClick={onBack} label="Back to Codex" />
-        <span className="font-mono-mar truncate">{post.date}</span>
-      </div>
+      <DialogSubHeader onBack={onBack} backLabel="Back to Codex" right={<>{post.date}</>} />
 
       {/* Meta strip — single horizontal line above the body */}
       <div className="font-mono-mar flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-border pb-3">
@@ -363,15 +358,14 @@ function Essay({ post, onBack }: { post: Blog; onBack: () => void }) {
       </div>
 
       {showTopBtn ? (
-        <button
-          type="button"
+        <IconPillButton
+          variant="primary"
+          label="Back to top of post"
           onClick={scrollToTop}
-          aria-label="Back to top of post"
-          title="Back to top"
-          className="group fixed bottom-4 right-4 z-40 inline-flex h-11 w-11 items-center justify-center rounded-full border border-sepia/60 bg-background/90 text-sepia shadow-md backdrop-blur transition-all hover:border-sepia hover:bg-sepia hover:text-parchment sm:bottom-6 sm:right-6"
+          className="fixed bottom-4 right-4 z-40 sm:bottom-6 sm:right-6"
         >
           <ArrowUp className="h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
-        </button>
+        </IconPillButton>
       ) : null}
     </motion.article>
   );

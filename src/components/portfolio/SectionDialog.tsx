@@ -29,7 +29,7 @@ export function SectionDialog({
           className="fixed left-1/2 top-1/2 z-50 flex h-[88vh] w-[min(96vw,72rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-sm border border-border bg-background shadow-[0_30px_80px_-30px_rgba(0,0,0,0.35)] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
         >
           {/* header */}
-          <div className="relative shrink-0 border-b border-border bg-card/60 px-6 py-5 md:px-10 md:py-6">
+          <div className="relative shrink-0 border-b border-border bg-card/60 px-5 py-4 md:px-8 md:py-5 lg:px-12">
             <div className="absolute inset-0 blueprint-grid-fine opacity-30" />
             <div className="absolute inset-0 paper-grain opacity-60" />
             <div className="relative flex items-end justify-between gap-6">
@@ -67,7 +67,9 @@ export function SectionDialog({
           {/* body — unified padding for every section */}
           <div data-dialog-scroll className="dialog-scroll relative flex-1 overflow-y-auto">
             <div className="absolute inset-0 paper-grain pointer-events-none opacity-40" />
-            <div className="relative mx-auto w-full max-w-5xl px-5 py-8 md:px-14 md:py-16">{children}</div>
+            <div className="relative mx-auto w-full max-w-5xl px-5 py-8 md:px-8 md:py-12 lg:px-12 lg:py-16">
+              {children}
+            </div>
           </div>
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
