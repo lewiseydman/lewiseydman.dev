@@ -68,16 +68,18 @@ export function Tests() {
 
   return (
     <div className="flex flex-col gap-8">
-      <PopoverSummaryStrip
-        label="Disputationes · Featured"
-        items={tests.slice(0, 3).map((t) => ({
-          kicker: `Disputatio · ${t.num}`,
-          title: t.title,
-          dek: t.domain,
-          thumb,
-          onClick: () => openTest(t.id),
-        }))}
-      />
+      {!open ? (
+        <PopoverSummaryStrip
+          label="Disputationes · Featured"
+          items={tests.slice(0, 3).map((t) => ({
+            kicker: `Disputatio · ${t.num}`,
+            title: t.title,
+            dek: t.domain,
+            thumb,
+            onClick: () => openTest(t.id),
+          }))}
+        />
+      ) : null}
       <AnimatePresence mode="wait">
         {!open ? (
           <motion.div
