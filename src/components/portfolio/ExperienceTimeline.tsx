@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Download } from "lucide-react";
 import { pillButtonClasses } from "./primitives/pillButton";
 import { SectionLabel } from "./primitives/SectionLabel";
@@ -40,35 +40,6 @@ const education = [
   { year: "2024", title: "Google UX Design", org: "Google" },
 ];
 
-function Gear({ teeth = 8, className = "h-8 w-8" }: { teeth?: number; className?: string }) {
-  const reduce = useReducedMotion();
-  return (
-    <motion.svg
-      animate={reduce ? {} : { rotate: 360 }}
-      transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-      viewBox="0 0 40 40"
-      className={`${className} text-sepia`}
-    >
-      <g stroke="currentColor" strokeWidth="0.8" fill="none">
-        <circle cx="20" cy="20" r="9" />
-        <circle cx="20" cy="20" r="3" />
-        {Array.from({ length: teeth }).map((_, i) => {
-          const a = (i / teeth) * Math.PI * 2;
-          return (
-            <line
-              key={i}
-              x1={20 + Math.cos(a) * 9}
-              y1={20 + Math.sin(a) * 9}
-              x2={20 + Math.cos(a) * 14}
-              y2={20 + Math.sin(a) * 14}
-            />
-          );
-        })}
-      </g>
-    </motion.svg>
-  );
-}
-
 export function ExperienceTimeline() {
   return (
     <div className="flex flex-col gap-12 md:gap-16">
@@ -96,11 +67,6 @@ export function ExperienceTimeline() {
       {/* Manuscript rail — mirrors About > Disciplines */}
       <div className="relative flex flex-col">
         <div className="pointer-events-none absolute bottom-2 left-[0.45rem] top-2 w-px bg-sepia/30" />
-
-        {/* Section marker at the top of the rail keeps the mechanical motif */}
-        <div className="absolute -left-[0.35rem] -top-3 rounded-full bg-background p-0.5">
-          <Gear teeth={8} className="h-5 w-5" />
-        </div>
 
         <ol className="flex flex-col">
           {experience.map((e, i) => (
