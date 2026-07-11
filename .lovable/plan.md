@@ -1,28 +1,59 @@
-## Changes
+## Goal
 
-### 1. Filter row layout on mobile (`src/components/portfolio/Appraisals.tsx`)
-The current row (`flex flex-wrap items-center gap-2`) puts the "Filter ·" label inline with the pills, which wraps awkwardly on narrow screens and the pills feel cramped.
+Align Cursus (Experience) with Laudes (Appraisals) styling, restructure the timeline to match the About "manuscript rail" pattern (consistent left-rail spine at every breakpoint), standardise a compact sticky "back" control at the top of every detail view, and make popover scroll-to-top reliable.
 
-- Restructure to stack on mobile, inline from `sm:` up:
-  - Wrap in `flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2`.
-  - "Filter ·" label becomes a full-width caption on mobile (no `mr-1`), sits inline on `sm+`.
-  - Pill group wrapped in its own `flex flex-wrap gap-2` so pills wrap cleanly under the label on mobile without the label eating a row slot.
-- Give pills a touch-friendly min-height on mobile (keep `min-h-9` — already fine) and ensure they don't stretch (already handled by flex-wrap).
-- No copy or variant changes.
+## 1. Cursus header styled like Laudes
 
-### 2. Fix the "dark empty background" flash during filter animation (`src/components/portfolio/Appraisals.tsx`)
-Root cause: the `<ul>` uses `gap-px` + `bg-border` to draw hairlines between cards. When the filter changes, `motion.li` items animate from `opacity: 0, y: 8`, so for ~300ms the grid cells are transparent and the `bg-border` shows through as a dark block behind the incoming cards. It's most visible when going from 3–4 cards down to 1–2.
+Rework the top of `src/components/portfolio/ExperienceTimeline.tsx` to mirror `Appraisals.tsx`:
 
-Fix:
-- Swap the border-as-background technique for a per-card border so the container has no dark fill:
-  - `<ul>`: drop `gap-px overflow-hidden rounded-sm border border-border bg-border`, use `grid gap-4 lg:grid-cols-2` instead.
-  - `<motion.li>`: add `rounded-sm border border-border` so each card carries its own outline. Keep existing hover shadow / bg transitions.
-- Wrap the mapped items in `<AnimatePresence mode="popLayout" initial={false}>` and give each `motion.li` an `exit={{ opacity: 0, y: -8 }}` so removed cards fade out instead of snapping, and remaining cards `layout`-animate into their new positions without a visible empty slot.
-- Keep the stagger (`delay: i * 0.05`) but cap it (e.g. `Math.min(i, 3) * 0.05`) so filtering down to 1 item doesn't feel oddly delayed.
+- Replace the `flex … border-b pb-5` intro bar with the Laudes two-block pattern:
+  - `font-display text-2xl md:text-3xl` intro line — plain foreground clause + italic sepia rider.
+  - A quieter action row underneath (`font-mono-mar Actions ·` label + the existing "Download Résumé" pill), same wrap/gap rhythm as the Laudes filter row.
+- Remove the header divider (Laudes has none); keep section `gap-10`.
 
-Net effect: no dark background can show through (there's no shared background), and the crossfade between filter states is smooth.
+## 2. Timeline restructured to match About's manuscript rail
 
-## Out of scope
-- No changes to testimonial copy, relations, or card internals (quote, author block, hover accent line).
-- No changes to other popovers, `SectionDialog`, or the pill button primitive.
-- No visual redesign of the pills themselves — only their container layout on mobile.
+Adopt the exact "left rail + dot node + item" pattern used in About's Portrait/Disciplines section (`src/components/portfolio/About.tsx` §180–223), so both sections read as one design language. This also fixes mobile: today the timeline centers on mobile with gears above/below, burning vertical space.
+
+Rework the body of `ExperienceTimeline.tsx`:
+
+- One layout at every breakpoint (mobile → desktop): a single vertical column with a left rail.
+  - Wrapper: `relative flex flex-col`.
+  - Rail: `pointer-events-none absolute top-2 bottom-2 left-[0.45rem] w-px bg-sepia/30` (identical to About).
+  - Each item: `relative flex gap-5 border-b border-border py-6 last:border-b-0`, with an absolutely-positioned dot node (`h-2 w-2 rounded-full border border-sepia bg-background`) sitting on the rail.
+- Replace the animated Gear SVG with the dot node on mobile/tablet (keeps rhythm and cuts ~40px per item). Preserve one small rotating Gear as the section's marker at the top of the rail only, so the mechanical motif survives without dominating each row.
+- Item content grid: `md:grid-cols-[9rem_1fr] gap-x-6`, meta column (year + org) on the left from `md:` up, role/notes on the right. On mobile, stacks — year and org sit above role/notes, all left-aligned against the rail.
+- Remove the desktop-only alternating two-column layout, the mobile top/bottom spine `<div>` fillers, and the `Gear` node wrapper.
+- Tighten rhythm: `space-y-0` (borders provide separation), remove `lg:space-y-24`.
+- Education footer: switch to `sm:grid-cols-2 lg:grid-cols-3` so tablets get two-up.
+
+Result: timeline visually mirrors About, wider copy column at every size, ~40% less vertical space on phones, important content (first role) stays above the fold on mobile.
+
+## 3. Mobile-stacking audit across all sections
+
+Sweep the popover sections to confirm important content stays above the fold on mobile and stacks consistently:
+
+- `About.tsx`: intro headline + first paragraph already above the fold. Confirm no changes needed — the manuscript rail is the reference.
+- `SelectedWork.tsx` / `Blogs.tsx`: hero card + title already stack correctly; verify `PopoverSummaryStrip` is not pushing hero content below the fold on mobile. If the strip is > ~40% of viewport height on mobile, cap its `min-h`/thumb aspect so hero content stays visible.
+- `Tests.tsx`: intro line + first card should sit above the fold — currently fine.
+- `Appraisals.tsx`: intro line + filter row already stack (from the earlier fix); no changes.
+- `ExperienceTimeline.tsx`: covered by §2.
+
+Deliverable: no structural changes to sections that already stack well; only the strip cap if measured overflow warrants it.
+
+## 4. Compact sticky "back" at the top of every detail view
+
+- `Blogs.tsx` `Essay` and `SelectedWork.tsx` `CaseStudy`: already have a sticky back bar — tighten to `py-1.5`, ensure it's the very first child.
+- `Tests.tsx` detail view: wrap in the same sticky pattern (`sticky top-0 z-10 -mx-5 md:-mx-14 border-b bg-background/85 backdrop-blur-md px-5 md:px-14 py-1.5`) using `BackToIndexButton` with "Back to Disputationes" and a right-side `Disputatio · {num}` chip.
+
+## 5. Reliable "scroll to top" on every card click
+
+- Update `src/lib/scroll-dialog-top.ts` to run two nested RAFs with `behavior: "auto"`, so the reset happens after AnimatePresence paints the new view.
+- In each detail component (`Essay`, `CaseStudy`, new `Tests` detail), add a mount `useEffect` calling `scrollDialogToTop()` so the detail owns its own reset instead of trusting the caller.
+- Keep the existing open-site calls as a first-paint belt-and-braces.
+
+## Technical notes
+
+- No changes to `SectionDialog`, `PopoverSummaryStrip` API, routing, or timeline data.
+- Styling stays within existing tokens (`sepia`, `brass`, `border`, `bg-background/85`, `font-mono-mar`, `pillButtonClasses`, `hairline`, `paper-grain`).
+- Timeline rail values (`left-[0.45rem]`, dot size, `top-[2.1rem]` alignment) copied verbatim from About so the two sections line up pixel-for-pixel.
