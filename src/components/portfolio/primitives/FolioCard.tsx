@@ -51,7 +51,7 @@ export const FolioCard = forwardRef<HTMLButtonElement, Props>(function FolioCard
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.4, delay: Math.min(index, 6) * 0.05 }}
-      className={`group relative flex h-full w-full flex-col gap-5 bg-background text-left transition-colors hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 ${
+      className={`group relative flex h-full w-full flex-col gap-4 bg-background text-left transition-colors hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 ${
         padded ? "p-4 sm:p-6 lg:p-8" : ""
       } ${className}`}
     >
