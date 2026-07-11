@@ -93,17 +93,18 @@ export function PopoverSummaryStrip({ items, label = "Folio" }: Props) {
       <SectionLabel right={`${items.length} ${items.length === 1 ? "entry" : "entries"}`}>
         {label}
       </SectionLabel>
-      <div
-        ref={scrollerRef}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={endDrag}
-        onPointerCancel={endDrag}
-        onClickCapture={suppressClickIfDragged}
-        className={`flex gap-3 overflow-x-auto pb-2 scrollbar-hide lg:grid lg:grid-cols-3 lg:overflow-visible lg:pb-0 ${
-          isDragging ? "cursor-grabbing select-none" : "lg:cursor-auto cursor-grab"
-        }`}
-      >
+      <div className="relative -mr-5 md:-mr-8 lg:mr-0">
+        <div
+          ref={scrollerRef}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={endDrag}
+          onPointerCancel={endDrag}
+          onClickCapture={suppressClickIfDragged}
+          className={`flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth pb-2 pr-8 scrollbar-hide lg:grid lg:grid-cols-3 lg:overflow-visible lg:pb-0 lg:pr-0 ${
+            isDragging ? "cursor-grabbing select-none" : "lg:cursor-auto cursor-grab"
+          }`}
+        >
         {items.map((item, i) => {
           const Tag = item.onClick ? "button" : "div";
           return (
@@ -151,6 +152,12 @@ export function PopoverSummaryStrip({ items, label = "Folio" }: Props) {
             </motion.div>
           );
         })}
+        </div>
+        {/* Right-edge fade on mobile to hint at scroll */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background via-background/70 to-transparent lg:hidden"
+        />
       </div>
     </div>
   );
