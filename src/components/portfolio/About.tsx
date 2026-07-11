@@ -1,7 +1,6 @@
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
 import portrait from "@/assets/portrait.png";
-import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
 import { SectionLabel } from "./primitives/SectionLabel";
 
 const disciplines = [
