@@ -1,4 +1,5 @@
 import { ArrowLeft } from "lucide-react";
+import { pillButtonClasses } from "./pillButton";
 
 type Props = {
   onClick: () => void;
@@ -10,7 +11,7 @@ export function BackToIndexButton({ onClick, label }: Props) {
     <button
       type="button"
       onClick={onClick}
-      className="font-mono-mar group flex min-h-11 items-center gap-2 self-start rounded-full px-2 py-2 -ml-2 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40"
+      className={pillButtonClasses("ghost", "-ml-1 self-start border-transparent hover:border-transparent hover:bg-transparent", "sm")}
     >
       <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-0.5" />
       {label}
