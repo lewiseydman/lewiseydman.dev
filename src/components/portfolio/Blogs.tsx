@@ -248,9 +248,7 @@ export function Blogs() {
                     ) : (
                       <Plus className="h-3 w-3 transition-transform group-hover:rotate-90" />
                     )}
-                    Reveal {Math.min(3, remaining)} earlier folio
-                    {Math.min(3, remaining) === 1 ? "" : "s"}
-                    <span className="hidden text-muted-foreground sm:inline">· {remaining} remaining</span>
+                    Reveal more
                   </button>
                   <span className="hairline h-px flex-1" />
                 </div>
