@@ -1,4 +1,5 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { motion, useReducedMotion } from "framer-motion";
 import { X } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -21,6 +22,7 @@ export function SectionDialog({
   kicker,
   children,
 }: Props) {
+  const reduce = useReducedMotion();
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
@@ -40,7 +42,7 @@ export function SectionDialog({
                   {kicker ? <span className="shrink-0 truncate">{kicker}</span> : null}
                 </div>
                 <DialogPrimitive.Title asChild>
-                  <h2 className="font-display text-3xl tracking-[-0.01em] md:text-5xl">
+                  <h2 className="type-h2">
                     {english}
                     <span className="italic text-sepia"> · {latin}</span>
                   </h2>
@@ -48,7 +50,7 @@ export function SectionDialog({
               </div>
               <DialogPrimitive.Close
                 aria-label="Close"
-                className="group relative flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border bg-background/80 text-sepia shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-brass hover:bg-background hover:text-foreground hover:shadow-[0_4px_12px_color-mix(in_oklab,var(--brass)_15%,transparent)] active:translate-y-0 active:scale-95 active:bg-muted active:shadow-inner focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2"
+                className="group relative flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border bg-background/80 text-sepia shadow-sm interactive hover:-translate-y-0.5 hover:border-brass hover:bg-background hover:text-foreground hover:shadow-[0_4px_12px_color-mix(in_oklab,var(--brass)_15%,transparent)] active:translate-y-0 active:scale-95 active:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 {/* Decorative external brass ring on hover */}
                 <span className="absolute -inset-1.5 scale-110 rounded-full border border-brass/0 opacity-0 transition-all duration-500 group-hover:scale-100 group-hover:border-brass/30 group-hover:opacity-100" />
@@ -67,9 +69,15 @@ export function SectionDialog({
           {/* body — unified padding for every section */}
           <div data-dialog-scroll className="dialog-scroll relative flex-1 overflow-y-auto">
             <div className="absolute inset-0 paper-grain pointer-events-none opacity-40" />
-            <div className="relative mx-auto w-full max-w-5xl px-5 py-8 md:px-8 md:py-12 lg:px-12 lg:py-16">
+            <motion.div
+              key={`${latin}-${english}`}
+              initial={reduce ? undefined : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+              className="relative mx-auto w-full max-w-5xl px-5 py-8 md:px-8 md:py-12 lg:px-12 lg:py-16"
+            >
               {children}
-            </div>
+            </motion.div>
           </div>
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
