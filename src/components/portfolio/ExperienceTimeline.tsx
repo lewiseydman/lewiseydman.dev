@@ -43,13 +43,9 @@ const education = [
 export function ExperienceTimeline() {
   return (
     <div className="flex flex-col gap-12 md:gap-16">
-      {/* Header — mirrors Laudes / Appraisals */}
       <header className="flex flex-col gap-4">
         <p className="font-display text-2xl leading-snug md:text-3xl">
-          Cursus &mdash;{" "}
-          <span className="italic text-sepia">
-            a mechanical chronology, in eight working years.
-          </span>
+          <span className="italic text-sepia">My chronology of eight working years.</span>
         </p>
         <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
           <span className="font-mono-mar">Actions ·</span>
@@ -102,7 +98,10 @@ export function ExperienceTimeline() {
         <SectionLabel>Studia · Education</SectionLabel>
         <ul className="grid gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3">
           {education.map((e) => (
-            <li key={e.title} className="flex flex-col gap-1 rounded-sm border border-border bg-card/40 p-4 sm:p-6 lg:p-8">
+            <li
+              key={e.title}
+              className="flex flex-col gap-1 rounded-sm border border-border bg-card/40 p-4 sm:p-6 lg:p-8"
+            >
               <span className="font-mono-mar">{e.year}</span>
               <span className="font-display text-lg leading-tight">{e.title}</span>
               <span className="font-display italic text-sepia">{e.org}</span>
