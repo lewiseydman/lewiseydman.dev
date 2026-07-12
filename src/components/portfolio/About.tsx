@@ -111,7 +111,7 @@ export function About() {
           Product, engineering, and design in one<br></br>
           <span className="italic text-sepia">opinionated practice.</span>
         </h2>
-        <div className="grid gap-6 text-[0.95rem] leading-[1.7] text-muted-foreground md:grid-cols-2 md:gap-8">
+        <div className="mt-6 grid gap-6 text-[0.95rem] leading-[1.7] text-muted-foreground md:mt-8 md:grid-cols-2 md:gap-8">
           <p>
             I&rsquo;m a product engineer who can sketch the interface in the morning, ship the React in the afternoon,
             and argue both sides of the technical trade-off. I care about helping ambitious teams present their products
