@@ -104,8 +104,8 @@ function PortraitBlock() {
 
 export function About() {
   return (
-    <div className="flex flex-col gap-12 md:gap-16">
-      <section className="flex flex-col gap-4">
+    <div className="flex flex-col gap-10 md:gap-14 lg:gap-16">
+      <section className="flex flex-col gap-4 md:gap-5 lg:gap-6">
         <span className="font-mono-mar">Lewis Eydman · De Ipso</span>
         <h2 className="font-display text-4xl leading-[1.05] tracking-[-0.015em] md:text-5xl">
           Product, engineering, and design in one<br></br>
@@ -125,9 +125,9 @@ export function About() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-4">
+      <section className="flex flex-col gap-4 md:gap-5 lg:gap-6">
         <SectionLabel>At a glance</SectionLabel>
-        <div className="grid gap-6 md:grid-cols-3 md:gap-8">
+        <div className="grid gap-6 md:grid-cols-3 md:gap-7 lg:gap-8">
           {[
             {
               kicker: "Current",
@@ -153,12 +153,12 @@ export function About() {
         </div>
       </section>
 
-      <section className="grid gap-8 md:grid-cols-2 md:gap-12">
+      <section className="grid gap-6 md:grid-cols-2 md:gap-10 lg:gap-12">
         {[
           { title: "What I do", items: whatIDo },
           { title: "How I work", items: howIWork },
         ].map((col) => (
-          <div key={col.title} className="flex flex-col gap-4">
+          <div key={col.title} className="flex flex-col gap-4 md:gap-5 lg:gap-6">
             <h3 className="font-display text-2xl tracking-[-0.01em] md:text-3xl">{col.title}</h3>
             <ul className="flex flex-col">
               {col.items.map((line, i) => (
@@ -174,7 +174,7 @@ export function About() {
         ))}
       </section>
 
-      <section className="grid gap-8 border-t border-border pt-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12 lg:pt-0 lg:border-t-0">
+      <section className="grid gap-6 border-t border-border pt-6 md:gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12 lg:pt-0 lg:border-t-0">
         <PortraitBlock />
 
         <div className="relative flex flex-col">
@@ -186,7 +186,7 @@ export function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.55, delay: 0.08 * i }}
-              className="relative flex gap-6 border-b border-border py-7 last:border-b-0"
+              className="relative flex gap-6 border-b border-border py-6 md:py-7 lg:py-8 last:border-b-0"
             >
               <span className="absolute left-0 top-[2.1rem] flex h-[0.9rem] w-[0.9rem] items-center justify-center">
                 <span className="h-2 w-2 rounded-full border border-sepia bg-background" />
@@ -194,7 +194,7 @@ export function About() {
               <div className="w-16 shrink-0 pl-7 pt-1">
                 <span className="font-mono-mar block">{d.numeral}</span>
               </div>
-              <div className="flex flex-1 flex-col gap-2">
+              <div className="flex flex-1 flex-col gap-2 md:gap-3">
                 <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
                   <h3 className="font-display text-3xl tracking-[-0.01em] md:text-4xl">{d.label}</h3>
                   <p className="font-display text-base italic text-sepia md:text-lg">— {d.principle}</p>
@@ -219,21 +219,21 @@ export function About() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-4">
+      <section className="flex flex-col gap-4 md:gap-5 lg:gap-6">
         <SectionLabel>Achievements</SectionLabel>
-        <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-6 md:gap-7 lg:gap-8 sm:grid-cols-4">
           {stats.map(([n, l]) => (
             <div key={l} className="flex flex-col">
               <span className="font-display text-4xl text-foreground md:text-5xl">{n}</span>
-              <span className="font-mono-mar mt-2">{l}</span>
+              <span className="font-mono-mar mt-2 md:mt-3">{l}</span>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="flex flex-col gap-4">
+      <section className="flex flex-col gap-4 md:gap-5 lg:gap-6">
         <SectionLabel>Interests</SectionLabel>
-        <div className="grid gap-6 md:grid-cols-[0.85fr_1.15fr] md:gap-12">
+        <div className="grid gap-6 md:grid-cols-[0.85fr_1.15fr] md:gap-8 lg:gap-12">
           <p className="font-display text-xl italic leading-relaxed text-sepia md:text-2xl">
             Curious at heart. The same instinct that drives the work fills the weekends.
           </p>
