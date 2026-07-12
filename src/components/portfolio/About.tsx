@@ -192,7 +192,7 @@ export function About() {
                 <span className="h-2 w-2 rounded-full border border-sepia bg-background" />
               </span>
               <div className="w-16 shrink-0 pl-7 pt-1">
-                <span className="font-mono-mar block">§ {d.numeral}</span>
+                <span className="font-mono-mar block">{d.numeral}</span>
               </div>
               <div className="flex flex-1 flex-col gap-2">
                 <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
