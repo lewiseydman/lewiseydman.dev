@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useMemo } from "react";
 import { SectionLabel } from "./primitives/SectionLabel";
 
 const experience = [
@@ -39,6 +40,11 @@ const education = [
 ];
 
 export function ExperienceTimeline() {
+  const romanRoles = useMemo(
+    () => ["I", "II", "III", "IV", "V", "VI", "VII", "VIII"],
+    [],
+  );
+
   return (
     <div className="flex flex-col gap-12 md:gap-16">
       <header className="flex flex-col gap-4">
@@ -47,47 +53,90 @@ export function ExperienceTimeline() {
         </p>
       </header>
 
-      <ol className="flex flex-col">
-        {experience.map((e, i) => (
-          <motion.li
-            key={e.year}
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.55, delay: 0.06 * i }}
-            className="group flex flex-col gap-4 border-b border-border py-6 first:pt-0 last:border-b-0 md:py-8"
-          >
-            <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3">
-              <span className="font-mono-mar shrink-0 transition-colors duration-300 group-hover:text-brass">
-                {`Cursus · ${String(i + 1).padStart(2, "0")}`}
+      <div className="relative">
+        {/* Vertical rail — animated draw-in */}
+        <motion.span
+          aria-hidden
+          initial={{ scaleY: 0 }}
+          whileInView={{ scaleY: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          style={{ transformOrigin: "top" }}
+          className="pointer-events-none absolute bottom-0 left-[11px] top-0 w-px bg-gradient-to-b from-transparent via-sepia/40 to-transparent md:left-[15px]"
+        />
+
+        <ol className="flex flex-col">
+          {experience.map((e, i) => (
+            <motion.li
+              key={e.year}
+              initial={{ opacity: 0, x: -12 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.55, delay: 0.08 * i, ease: "easeOut" }}
+              className="group relative pb-10 pl-10 last:pb-0 md:pb-14 md:pl-14"
+            >
+              {/* Node */}
+              <span
+                aria-hidden
+                className="absolute left-0 top-1 flex h-6 w-6 items-center justify-center md:h-8 md:w-8"
+              >
+                <span className="absolute inset-0 rounded-full border border-sepia/30 bg-background transition-all duration-500 group-hover:scale-110 group-hover:border-brass group-hover:shadow-[0_0_0_4px_color-mix(in_oklab,var(--brass)_12%,transparent)]" />
+                <span className="relative h-1.5 w-1.5 rounded-full bg-sepia transition-colors duration-500 group-hover:bg-brass md:h-2 md:w-2" />
               </span>
-              <span className="hairline hidden h-px flex-1 sm:block" aria-hidden />
-              <span className="font-mono-mar shrink-0 transition-colors duration-300 group-hover:text-brass sm:text-right">
-                {e.year}
+
+              {/* Numeral chip floating just below the node — decorative anchor */}
+              <span
+                aria-hidden
+                className="font-mono-mar absolute left-0 top-9 w-6 text-center text-[10px] text-muted-foreground transition-colors duration-500 group-hover:text-brass md:top-11 md:w-8 md:text-xs"
+              >
+                {romanRoles[i]}
               </span>
-            </div>
-            <div className="flex flex-col gap-1">
-              <h3 className="font-display text-2xl tracking-[-0.01em] md:text-4xl">{e.role}</h3>
-              <span className="font-display italic text-sepia md:text-lg">{e.org}</span>
-            </div>
-            <p className="max-w-prose text-sm leading-relaxed text-muted-foreground md:text-base">{e.notes}</p>
-            <div className="h-px w-0 bg-brass transition-all duration-500 group-hover:w-full" />
-          </motion.li>
-        ))}
-      </ol>
+
+              {/* Date pill */}
+              <div className="mb-3 inline-flex items-center gap-2">
+                <span className="font-mono-mar rounded-full border border-border bg-card/60 px-2.5 py-0.5 text-[11px] text-muted-foreground transition-colors duration-500 group-hover:border-brass/40 group-hover:text-brass md:text-xs">
+                  {e.year}
+                </span>
+              </div>
+
+              {/* Body */}
+              <h3 className="font-display text-2xl leading-tight tracking-[-0.01em] transition-colors duration-500 group-hover:text-foreground md:text-4xl">
+                {e.role}
+              </h3>
+              <p className="font-display mt-1 text-base italic text-sepia md:text-lg">{e.org}</p>
+              <p className="mt-3 max-w-prose text-sm leading-relaxed text-muted-foreground md:text-base">
+                {e.notes}
+              </p>
+
+              {/* Underline flourish */}
+              <div className="mt-5 h-px w-8 bg-sepia/40 transition-all duration-500 group-hover:w-24 group-hover:bg-brass" />
+            </motion.li>
+          ))}
+        </ol>
+      </div>
 
       <section className="flex flex-col gap-4">
         <SectionLabel>Academia</SectionLabel>
         <ul className="grid gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3">
-          {education.map((e) => (
-            <li
+          {education.map((e, i) => (
+            <motion.li
               key={e.title}
-              className="flex flex-col gap-1 rounded-sm border border-border bg-card/40 p-4 sm:p-6 lg:p-8"
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.5, delay: 0.06 * i, ease: "easeOut" }}
+              className="group relative flex flex-col gap-1 overflow-hidden rounded-sm border border-border bg-card/40 p-4 transition-all duration-500 hover:-translate-y-0.5 hover:border-brass/50 hover:bg-card/70 sm:p-6 lg:p-8"
             >
-              <span className="font-mono-mar">{e.year}</span>
+              <span className="font-mono-mar text-xs text-muted-foreground transition-colors duration-500 group-hover:text-brass">
+                {e.year}
+              </span>
               <span className="font-display text-lg leading-tight">{e.title}</span>
               <span className="font-display italic text-sepia">{e.org}</span>
-            </li>
+              <span
+                aria-hidden
+                className="absolute inset-x-0 bottom-0 h-px w-0 bg-brass transition-all duration-500 group-hover:w-full"
+              />
+            </motion.li>
           ))}
         </ul>
       </section>
