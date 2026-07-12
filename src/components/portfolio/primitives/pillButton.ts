@@ -28,10 +28,14 @@ const sizes: Record<PillSize, string> = {
 };
 
 const variants: Record<PillVariant, string> = {
+  // The site's hero CTA — sepia outline that fills to sepia on hover. Kept as
+  // `primary` so every existing call site continues to render correctly.
   primary:
-    "border-sepia bg-sepia text-parchment shadow-sm hover:bg-brass hover:border-brass hover:shadow-md",
+    "border border-sepia/60 bg-background text-sepia hover:border-sepia hover:bg-sepia hover:text-parchment",
+  // Filled surface CTA for secondary emphasis (paired with a primary).
   secondary:
     "border-border bg-card text-foreground hover:border-sepia/60 hover:bg-muted hover:text-foreground",
+  // Explicit alias of primary for callers reaching for the shadcn vocabulary.
   outline:
     "border border-sepia/60 bg-background text-sepia hover:border-sepia hover:bg-sepia hover:text-parchment",
   ghost:
@@ -41,7 +45,7 @@ const variants: Record<PillVariant, string> = {
 };
 
 export function pillButtonClasses(
-  variant: PillVariant = "outline",
+  variant: PillVariant = "primary",
   className?: string,
   size: PillSize = "md",
 ) {
