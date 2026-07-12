@@ -213,12 +213,12 @@ export function VitruvianStage() {
       >
         <span className="font-mono-mar">Proportio · Hominis · Fig. 01</span>
         <h1 className="font-display text-5xl tracking-[-0.01em] md:text-5xl">
-          Lewis <span className="italic text-sepia">Eydman</span> — Product Engineer
+          Lewis <span className="italic text-sepia">Eydman</span>
         </h1>
         <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
-          Product Engineer Bridging{" "}
-          <span className="text-foreground underline decoration-sepia/40 underline-offset-4">Design</span> &{" "}
-          <span className="text-foreground underline decoration-sepia/40 underline-offset-4">Development</span>.
+          Product Engineer bridging{" "}
+          <span className="text-foreground underline decoration-sepia/40 underline-offset-4">design</span> &{" "}
+          <span className="text-foreground underline decoration-sepia/40 underline-offset-4">development</span>.
         </p>
       </motion.div>
 
