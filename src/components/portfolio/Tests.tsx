@@ -102,7 +102,6 @@ export function Tests() {
             className="group relative mb-3 block w-full break-inside-avoid overflow-hidden rounded-sm border border-border bg-card shadow-[0_10px_30px_-20px_color-mix(in_oklab,var(--ink)_25%,transparent)] transition-shadow duration-500 ease-out hover:shadow-[0_24px_60px_-24px_color-mix(in_oklab,var(--ink)_35%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass md:mb-4"
           >
             <motion.img
-              layoutId={`disputatio-thumb-${t.id}`}
               src={t.thumb}
               alt={t.title}
               loading="lazy"
@@ -134,14 +133,12 @@ export function Tests() {
               key={open.id}
               layoutId={`disputatio-${open.id}`}
               onClick={(e) => e.stopPropagation()}
-              transition={{ type: "spring", stiffness: 260, damping: 32, mass: 0.9 }}
-              className="relative overflow-hidden rounded-sm border border-parchment/20 bg-card shadow-[0_40px_100px_-30px_rgba(0,0,0,0.5)]"
+              transition={{ type: "spring", stiffness: 220, damping: 30, mass: 0.85 }}
+              className="relative inline-block overflow-hidden rounded-sm border border-parchment/20 bg-card shadow-[0_40px_100px_-30px_rgba(0,0,0,0.5)]"
             >
               <motion.img
-                layoutId={`disputatio-thumb-${open.id}`}
                 src={open.thumb}
                 alt={open.title}
-                transition={{ type: "spring", stiffness: 260, damping: 32, mass: 0.9 }}
                 className="block max-h-[88vh] max-w-[92vw] object-contain"
               />
               <motion.button
