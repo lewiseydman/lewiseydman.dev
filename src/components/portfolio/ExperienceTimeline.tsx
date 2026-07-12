@@ -95,7 +95,7 @@ export function ExperienceTimeline() {
 
       {/* education footer */}
       <section className="flex flex-col gap-4">
-        <SectionLabel>Studia · Education</SectionLabel>
+        <SectionLabel>Education · Studia</SectionLabel>
         <ul className="grid gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3">
           {education.map((e) => (
             <li

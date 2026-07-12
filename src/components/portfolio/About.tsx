@@ -222,7 +222,7 @@ export function About() {
 
       {/* Stats */}
       <section className="flex flex-col gap-4">
-        <SectionLabel>Summa · Experience</SectionLabel>
+        <SectionLabel>Experience · Summa</SectionLabel>
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
           {stats.map(([n, l]) => (
             <div key={l} className="flex flex-col">
@@ -235,7 +235,7 @@ export function About() {
 
       {/* Marginalia / Interests */}
       <section className="flex flex-col gap-4">
-        <SectionLabel>Vita Lateralis · Interests</SectionLabel>
+        <SectionLabel>Interests · Vita Lateralis</SectionLabel>
         <div className="grid gap-6 md:grid-cols-[0.85fr_1.15fr] md:gap-12">
           <p className="font-display text-xl italic leading-relaxed text-sepia md:text-2xl">
             Curious at heart — the same instinct that drives the work fills the weekends.
