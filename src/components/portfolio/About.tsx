@@ -236,7 +236,7 @@ export function About() {
         <SectionLabel>Interests</SectionLabel>
         <div className="grid gap-6 md:grid-cols-[0.85fr_1.15fr] md:gap-12">
           <p className="font-display text-xl italic leading-relaxed text-sepia md:text-2xl">
-            Curious at heart — the same instinct that drives the work fills the weekends.
+            Curious at heart. The same instinct that drives the work fills the weekends.
           </p>
           <div className="flex flex-wrap content-start items-start gap-1.5 self-start">
             {interests.map((t) => (
