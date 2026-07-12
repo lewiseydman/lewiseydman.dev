@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
+import { Maximize2, Minimize2 } from "lucide-react";
 import fallbackThumb from "@/assets/thumb-disputatio.jpg";
 
 // ─── Per-tile artwork ────────────────────────────────────────────────────────
@@ -108,6 +109,12 @@ export function Tests() {
               className="absolute inset-0 h-full w-full object-cover mix-blend-multiply dark:mix-blend-screen"
             />
             <div className="pointer-events-none absolute inset-0 paper-grain opacity-40" />
+            <span
+              aria-hidden
+              className="pointer-events-none absolute right-2 top-2 flex h-8 w-8 translate-y-1 items-center justify-center rounded-full border border-parchment/30 bg-ink/55 text-parchment opacity-0 shadow-sm backdrop-blur-sm transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 md:right-3 md:top-3"
+            >
+              <Maximize2 className="h-3.5 w-3.5" />
+            </span>
           </motion.button>
         ))}
       </div>
@@ -119,7 +126,7 @@ export function Tests() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
             onClick={close}
             className="fixed inset-0 z-[60] flex items-center justify-center bg-ink/85 p-4 backdrop-blur-sm md:p-8"
           >
@@ -127,14 +134,30 @@ export function Tests() {
               key={open.id}
               layoutId={`disputatio-${open.id}`}
               onClick={(e) => e.stopPropagation()}
+              transition={{ type: "spring", stiffness: 260, damping: 32, mass: 0.9 }}
               className="relative overflow-hidden rounded-sm border border-parchment/20 bg-card shadow-[0_40px_100px_-30px_rgba(0,0,0,0.5)]"
             >
               <motion.img
                 layoutId={`disputatio-thumb-${open.id}`}
                 src={open.thumb}
                 alt={open.title}
+                transition={{ type: "spring", stiffness: 260, damping: 32, mass: 0.9 }}
                 className="block max-h-[88vh] max-w-[92vw] object-contain"
               />
+              <motion.button
+                type="button"
+                onClick={close}
+                aria-label="Close"
+                initial={{ opacity: 0, scale: 0.85 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.85 }}
+                transition={{ duration: 0.25, delay: 0.15, ease: "easeOut" }}
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.92 }}
+                className="absolute right-2 top-2 flex h-9 w-9 items-center justify-center rounded-full border border-parchment/30 bg-ink/60 text-parchment shadow-md backdrop-blur-sm transition-colors hover:border-brass hover:text-brass focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass md:right-3 md:top-3 md:h-10 md:w-10"
+              >
+                <Minimize2 className="h-4 w-4" />
+              </motion.button>
             </motion.div>
           </motion.div>
         ) : null}
