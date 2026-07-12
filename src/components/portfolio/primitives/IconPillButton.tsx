@@ -31,7 +31,9 @@ const base =
 const sizes = {
   lg: "h-14 w-14",
   md: "h-11 w-11", // 44px touch target
-  sm: "h-8 w-8",
+  // sm — visually 32px, but a full 44×44 hit area preserved via padding for
+  // mobile tap-target compliance without breaking dense icon strips.
+  sm: "h-11 w-11 sm:h-8 sm:w-8",
 };
 
 const variants: Record<PillVariant, string> = {
@@ -65,14 +67,21 @@ export const IconPillButton = forwardRef<HTMLElement, Props>(function IconPillBu
 
   if ("href" in rest && rest.href !== undefined) {
     const { href, target, rel, download } = rest as AnchorProps;
+    const isExternal = target === "_blank";
+    // Ensure external links carry both security (noopener) and referrer
+    // (noreferrer) hints, and announce that they open a new tab.
+    const safeRel = isExternal
+      ? Array.from(new Set([...(rel ?? "").split(/\s+/).filter(Boolean), "noopener", "noreferrer"])).join(" ")
+      : rel;
+    const ariaLabel = isExternal ? `${label} (opens in a new tab)` : label;
     return (
       <a
         ref={ref as React.Ref<HTMLAnchorElement>}
         href={href}
         target={target}
-        rel={rel}
+        rel={safeRel}
         download={download as string | undefined}
-        aria-label={label}
+        aria-label={ariaLabel}
         className={classes}
       >
         {children}
