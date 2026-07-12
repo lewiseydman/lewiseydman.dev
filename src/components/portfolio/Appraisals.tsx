@@ -101,7 +101,7 @@ export function Appraisals() {
                 <span className="text-sepia transition-colors duration-300 group-hover:text-brass">&rdquo;</span>
               </blockquote>
               <div className="mt-auto flex flex-col gap-0.5 border-t border-border pt-4 transition-colors duration-300 group-hover:border-sepia/40">
-                <span className="font-display text-base text-foreground transition-colors duration-300 group-hover:text-brass md:text-lg">
+                <span className="font-display text-base text-foreground md:text-lg">
                   {t.name}
                 </span>
                 <span className="font-mono-mar">{t.org ? `${t.role} · ${t.org}` : t.role}</span>
