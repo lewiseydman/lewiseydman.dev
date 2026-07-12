@@ -41,8 +41,8 @@ export function SectionDialog({
                 </div>
                 <DialogPrimitive.Title asChild>
                   <h2 className="font-display text-3xl tracking-[-0.01em] md:text-5xl">
-                    {latin}
-                    <span className="italic text-sepia"> · {english}</span>
+                    {english}
+                    <span className="italic text-sepia"> · {latin}</span>
                   </h2>
                 </DialogPrimitive.Title>
               </div>

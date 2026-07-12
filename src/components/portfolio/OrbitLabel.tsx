@@ -69,11 +69,11 @@ export function OrbitLabel({ item, innerR, outerR, tailLen = 0.17, index, onOpen
         } max-w-[9rem]`}
       >
         <span className="font-mono-mar whitespace-nowrap text-[0.6rem] opacity-70 transition-opacity group-hover:opacity-100">
-          {item.numeral} · {item.english}
+          {item.numeral} · {item.latin}
         </span>
         <span className="font-display whitespace-nowrap text-lg leading-tight tracking-[-0.01em] lg:text-xl xl:text-2xl">
           <span className="relative inline-block">
-            {item.latin}
+            {item.english}
             <motion.span
               aria-hidden
               className="absolute -bottom-0.5 left-0 h-px w-full origin-left bg-sepia"

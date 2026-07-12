@@ -120,7 +120,7 @@ export function Blogs() {
       {open ? <ReadingProgressBar /> : null}
       {!open ? (
         <PopoverSummaryStrip
-          label="Codex · featured"
+          label="Featured"
           items={blogs.slice(0, 3).map((b) => ({
             kicker: b.date,
             title: b.title,
@@ -201,7 +201,7 @@ export function Blogs() {
 
             {/* Archive list */}
             <section className="flex flex-col gap-4">
-              <SectionLabel>Archivum · earlier folios</SectionLabel>
+              <SectionLabel>Earlier folios · Archivum</SectionLabel>
               <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:gap-px lg:grid-cols-2">
                 {visibleRest.map((b, i) => {
                   const isLast = i === visibleRest.length - 1;
