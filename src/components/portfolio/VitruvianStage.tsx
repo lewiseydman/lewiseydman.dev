@@ -213,7 +213,7 @@ export function VitruvianStage() {
       >
         <span className="font-mono-mar">Proportio · Hominis · Fig. 01</span>
         <h1 className="font-display text-5xl tracking-[-0.01em] md:text-5xl">
-          Lewis <span className="italic text-sepia">Eydman</span>
+          Lewis <span className="italic text-sepia">Eydman</span> — Product Engineer
         </h1>
         <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
           Product Engineer Bridging{" "}

@@ -1,0 +1,16 @@
+# Lewis Eydman
+
+> Portfolio of Lewis Eydman — Product Engineer bridging UX/UI design and full-stack development. Selected work, writings, experiments, and résumé.
+
+## Pages
+
+- [Home](/): Overview, sections index, and contact.
+
+## Sections
+
+- [About](/#vita): Background and approach.
+- [Work](/#opera): Selected projects and case studies.
+- [Experience](/#cursus): Career timeline and roles.
+- [Tests](/#disputatio): Experiments and visual studies.
+- [Appraisals](/#laudes): Testimonials and endorsements.
+- [Blogs](/#codex): Essays on product, design, and engineering.
