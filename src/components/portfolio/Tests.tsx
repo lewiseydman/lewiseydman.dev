@@ -99,7 +99,7 @@ export function Tests() {
             transition={{ duration: 0.35, delay: Math.min(i, 8) * 0.03 }}
             whileHover={{ scale: 1.03, y: -2 }}
             style={{ aspectRatio: t.aspect }}
-            className="relative mb-3 block w-full break-inside-avoid overflow-hidden rounded-sm border border-border bg-card shadow-[0_10px_30px_-20px_color-mix(in_oklab,var(--ink)_25%,transparent)] transition-shadow duration-500 ease-out hover:shadow-[0_24px_60px_-24px_color-mix(in_oklab,var(--ink)_35%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass md:mb-4"
+            className="group relative mb-3 block w-full break-inside-avoid overflow-hidden rounded-sm border border-border bg-card shadow-[0_10px_30px_-20px_color-mix(in_oklab,var(--ink)_25%,transparent)] transition-shadow duration-500 ease-out hover:shadow-[0_24px_60px_-24px_color-mix(in_oklab,var(--ink)_35%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass md:mb-4"
           >
             <motion.img
               layoutId={`disputatio-thumb-${t.id}`}
