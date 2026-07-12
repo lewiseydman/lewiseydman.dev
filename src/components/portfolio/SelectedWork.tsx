@@ -157,7 +157,6 @@ export function SelectedWork() {
             className="flex flex-col gap-8 md:gap-12"
           >
             <p className="font-display text-2xl leading-snug md:text-3xl">
-              Case studies &mdash;{" "}
               <span className="italic text-sepia">products built, shipped, and learned from.</span>
             </p>
             <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
