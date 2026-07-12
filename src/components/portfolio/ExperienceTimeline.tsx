@@ -43,8 +43,8 @@ export function ExperienceTimeline() {
   const romanRoles = useMemo(() => ["IV", "III", "II", "I", "V", "VI", "VII", "VIII"], []);
 
   return (
-    <div className="flex flex-col gap-12 md:gap-16">
-      <header className="flex flex-col gap-4">
+    <div className="flex flex-col gap-10 md:gap-14 lg:gap-16">
+      <header className="flex flex-col gap-4 md:gap-5 lg:gap-6">
         <p className="font-display text-2xl leading-snug md:text-3xl">
           <span className="italic text-sepia">A working chronology of eight years.</span>
         </p>
@@ -112,9 +112,9 @@ export function ExperienceTimeline() {
         </ol>
       </div>
 
-      <section className="flex flex-col gap-4">
+      <section className="flex flex-col gap-4 md:gap-5 lg:gap-6">
         <SectionLabel>Academia</SectionLabel>
-        <ul className="grid gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3">
+        <ul className="grid gap-6 md:gap-7 lg:gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {education.map((e, i) => (
             <motion.li
               key={e.title}
