@@ -36,7 +36,7 @@ const sections: Record<
   opera: {
     numeral: "II",
     latin: "Opera",
-    english: "Selected Work",
+    english: "Works",
     kicker: "Opera",
     node: <SelectedWork />,
   },
