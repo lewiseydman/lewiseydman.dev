@@ -41,6 +41,69 @@ const testimonials: Testimonial[] = [
     role: "Founder",
     relation: "Client",
   },
+  {
+    quote:
+      "Lewis has a rare instinct for balancing craft and pragmatism. He'll happily push back on a spec if the outcome would be worse for the user, and he'll always come back with a better option. That made every project we shipped together noticeably sharper.",
+    name: "Sam Whittaker",
+    role: "Product Manager",
+    org: "Apply Digital",
+    relation: "Colleague",
+  },
+  {
+    quote:
+      "We came to Lewis with a rough brief and left with a brand system, a site, and a way of thinking about our product we didn't have before. He treats small companies with the same seriousness as the big ones.",
+    name: "Priya Anand",
+    role: "Co-founder",
+    org: "Loom & Ledger",
+    relation: "Client",
+  },
+  {
+    quote:
+      "One of those engineers who can hold the design intent in their head while writing the code. Reviews from Lewis always made the work better — never just style nits, always the substance.",
+    name: "Marcus Feld",
+    role: "Staff Engineer",
+    org: "Apply Digital",
+    relation: "Colleague",
+  },
+  {
+    quote:
+      "The rebuild Lewis delivered doubled our conversion within a quarter and, honestly, made the team proud to send the link to friends again. That second part is harder to measure and just as important.",
+    name: "Elena Ruiz",
+    role: "Head of Growth",
+    org: "Northwind Studio",
+    relation: "Built for",
+  },
+  {
+    quote:
+      "Lewis quietly raised the bar for everyone around him. Not through big statements — through the standard of the work he put in front of us every week.",
+    name: "Tomás Oliveira",
+    role: "Design Director",
+    org: "ITS",
+    relation: "Colleague",
+  },
+  {
+    quote:
+      "Working with Lewis felt like hiring a small studio, not a freelancer. Strategy, design, build, and follow-through all handled with the same care. Rare combination.",
+    name: "Anonymous",
+    role: "Operator",
+    relation: "Client",
+  },
+  {
+    quote:
+      "He asks the questions no one else is asking in the room, and then does the work to answer them. Our launch was better for it, and so was the team culture after he left.",
+    name: "Hannah Boateng",
+    role: "Programme Lead",
+    org: "Civic Futures",
+    relation: "Built for",
+  },
+  {
+    quote:
+      "Genuinely thoughtful collaborator. Lewis takes feedback well, gives it kindly, and always leaves the codebase and the Figma file in a better state than he found them.",
+    name: "Rory MacLean",
+    role: "Senior Developer",
+    org: "Apply Digital",
+    relation: "Colleague",
+  },
 ];
 
 export function Appraisals() {
