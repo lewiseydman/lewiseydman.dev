@@ -156,7 +156,6 @@ export function Blogs() {
             transition={{ duration: 0.3 }}
             className="flex flex-col gap-10 md:gap-12"
           >
-            {/* Hero feature — article semantics with a proper CTA */}
             <motion.article
               aria-labelledby={`codex-hero-${hero.id}`}
               initial={{ opacity: 0, y: 12 }}
@@ -214,9 +213,8 @@ export function Blogs() {
               </div>
             </motion.article>
 
-            {/* Archive list */}
             <section className="flex flex-col gap-4">
-              <SectionLabel>Earlier folios · Archivum</SectionLabel>
+              <SectionLabel>Archives</SectionLabel>
               <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:gap-px lg:grid-cols-2">
                 {visibleRest.map((b, i) => {
                   const isLast = i === visibleRest.length - 1;
@@ -284,9 +282,7 @@ function Essay({ post, onBack }: { post: Blog; onBack: () => void }) {
   const [showTopBtn, setShowTopBtn] = useState(false);
 
   useEffect(() => {
-    // Focus the article title on open for screen-reader flow.
     titleRef.current?.focus();
-    // Find the dialog scroll container.
     const el = document.querySelector<HTMLElement>("[data-dialog-scroll]");
     setScroller(el);
     scrollDialogToTop();
