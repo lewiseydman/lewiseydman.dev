@@ -70,6 +70,7 @@ const tests: Test[] = [
 
 export function Tests() {
   const [openId, setOpenId] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
   const open = openId ? (tests.find((t) => t.id === openId) ?? null) : null;
   const close = useCallback(() => setOpenId(null), []);
 
@@ -81,6 +82,14 @@ export function Tests() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, close]);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   return (
     <div className="flex flex-col gap-8 md:gap-12">
