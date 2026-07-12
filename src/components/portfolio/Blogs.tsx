@@ -296,7 +296,7 @@ function Essay({ post, onBack }: { post: Blog; onBack: () => void }) {
       <DialogSubHeader onBack={onBack} backLabel="Back to Codex" right={<>{post.date}</>} />
 
       {/* Header image */}
-      <figure className="relative -mx-5 aspect-[16/9] overflow-hidden border-y border-border bg-card md:-mx-8 md:aspect-[21/9] md:rounded-sm md:border lg:-mx-12">
+      <figure className="relative aspect-[16/9] w-full overflow-hidden rounded-sm border border-border bg-card md:aspect-[21/9]">
         <img
           src={post.thumb ?? defaultThumb}
           alt=""
