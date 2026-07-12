@@ -6,7 +6,7 @@ const experience = [
   {
     year: "Apr 2025 — Now",
     role: "Communications Manager",
-    org: "100Green · UK",
+    org: "100GREEN · UK",
     notes:
       "Own the energy quote journey end-to-end — research, roadmap, Figma, React build, A/B testing, Ofgem compliance. +19% sign-ups May–Jun 2026.",
   },
@@ -27,7 +27,7 @@ const experience = [
   {
     year: "Jul 2019 — Now",
     role: "Designer & Developer",
-    org: "Self-employed · UK",
+    org: "SELF-EMPLOYED · UK",
     notes:
       "Building digital products from research to deployment. Brand design, Figma prototyping, React frontends, and setting up CI/CD pipelines, alongside active open-source contributions. This period also includes a purposeful career break with Phipps Group (landscaping) to recharge and reconnect with people and nature.",
   },
