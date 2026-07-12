@@ -157,7 +157,7 @@ export function SelectedWork() {
             className="flex flex-col gap-8 md:gap-12"
           >
             <p className="font-display text-2xl leading-snug md:text-3xl">
-              <span className="italic text-sepia">Products built, shipped, and learned from.</span>
+              <span className="italic text-sepia">Products designed, built and shipped.</span>
             </p>
             <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
               {projects.map((p, i) => (
