@@ -41,7 +41,7 @@ const education = [
 
 export function ExperienceTimeline() {
   const romanRoles = useMemo(
-    () => ["I", "II", "III", "IV", "V", "VI", "VII", "VIII"],
+    () => ["IV", "III", "II", "I", "V", "VI", "VII", "VIII"],
     [],
   );
 
