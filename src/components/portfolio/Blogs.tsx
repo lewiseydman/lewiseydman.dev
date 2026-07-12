@@ -83,6 +83,21 @@ const blogs: Blog[] = [
       "I am not arguing for ripping out the cloud. I am arguing for keeping a small, unsentimental map of what the cloud is doing for you, and what it is doing to you. The teams I most admire treat their platform the way a good driver treats a car they did not build. They cannot rebuild the engine. They can, absolutely, hear when something has changed.",
     ],
   },
+  {
+    id: "defaults",
+    date: "MMXXV · v",
+    title: "The politics of the default",
+    dek: "Why every default setting is a small act of design government.",
+    read: "5 min",
+    tags: ["design", "systems"],
+    body: [
+      "There is a quiet violence in a default setting. It appears innocent — a checkbox pre-ticked, a notification enabled, a folder chosen for you — but it carries an argument about what the user wants, what they understand, and what they are willing to tolerate.",
+      "The best product teams treat defaults as legislation. Every pre-selected option is a law that most users will live under, not because they have chosen it, but because they have not chosen otherwise. The question is never whether there is a default. The question is who benefits from it, and whether the user would agree if they were asked.",
+      "I have learned to be suspicious of defaults that flatter the builder. The metric that defaults to public, the feature that defaults to on, the price that defaults to annual. Each one looks like a convenience and acts like a nudge. The cumulative effect is a product that is no longer quite yours; it is a product that has made a series of small bets on your behalf, and is now collecting the winnings.",
+      "Good defaults, by contrast, are invisible in the right way. They save the user from a decision they do not want to make, while preserving the decisions that matter. The seatbelt that buckles itself, the document that saves automatically, the alarm that defaults to the time you actually need. These are defaults that serve the user, not the dashboard.",
+      "Designing a default is therefore an ethical act before it is a visual one. It asks you to model the user at their most distracted, to assume their absence, and to build something that behaves honourably while they are not looking. That is the real craft. The rest is just the interface.",
+    ],
+  },
 ];
 
 export function Blogs() {
