@@ -68,9 +68,18 @@ const tests: Test[] = [
   { id: "notification-mute", title: "The polite notification", aspect: "3/4", thumb: fallbackThumb },
 ];
 
+const aspectClasses: Record<string, string> = {
+  "3/4": "aspect-[3/4] md:aspect-[3/4]",
+  "1/1": "aspect-[3/4] md:aspect-square",
+  "4/5": "aspect-[3/4] md:aspect-[4/5]",
+  "3/2": "aspect-[3/4] md:aspect-[3/2]",
+  "4/3": "aspect-[3/4] md:aspect-[4/3]",
+  "9/16": "aspect-[3/4] md:aspect-[9/16]",
+  "2/3": "aspect-[3/4] md:aspect-[2/3]",
+};
+
 export function Tests() {
   const [openId, setOpenId] = useState<string | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
   const open = openId ? (tests.find((t) => t.id === openId) ?? null) : null;
   const close = useCallback(() => setOpenId(null), []);
 
@@ -82,14 +91,6 @@ export function Tests() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, close]);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 767px)");
-    const update = () => setIsMobile(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, []);
 
   return (
     <div className="flex flex-col gap-8 md:gap-12">
