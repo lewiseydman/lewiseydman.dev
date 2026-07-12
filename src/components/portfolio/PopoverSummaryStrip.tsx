@@ -90,9 +90,7 @@ export function PopoverSummaryStrip({ items, label = "Folio" }: Props) {
 
   return (
     <div className="flex flex-col gap-4 border-b border-border pb-6">
-      <SectionLabel right={`${items.length} ${items.length === 1 ? "entry" : "entries"}`}>
-        {label}
-      </SectionLabel>
+      <SectionLabel>{label}</SectionLabel>
       <div className="relative -mr-5 md:-mr-8 lg:mr-0">
         <div
           ref={scrollerRef}
