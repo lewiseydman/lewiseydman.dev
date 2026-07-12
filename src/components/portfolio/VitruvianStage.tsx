@@ -65,7 +65,7 @@ const sections: Record<
     numeral: "IV",
     latin: "Disputatio",
     english: "Tests",
-    kicker: "Disputationes",
+    kicker: "Disputatio",
     node: <Tests />,
   },
 };
@@ -238,8 +238,8 @@ export function VitruvianStage() {
                   {item.numeral}
                 </span>
                 <span className="flex min-w-0 flex-1 flex-col">
-                <span className="font-display text-lg leading-tight">{item.english}</span>
-                <span className="font-mono-mar text-[0.65rem]">{item.latin}</span>
+                  <span className="font-display text-lg leading-tight">{item.english}</span>
+                  <span className="font-mono-mar text-[0.65rem]">{item.latin}</span>
                 </span>
                 <ChevronRight className="h-4 w-4 shrink-0 text-sepia transition-transform group-hover:translate-x-0.5" />
               </button>
