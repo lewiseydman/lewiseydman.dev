@@ -260,7 +260,7 @@ function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }
         </h3>
         <p className="font-display text-base italic text-sepia sm:text-lg md:text-xl">{project.blurb}</p>
       </header>
-      <div className="relative aspect-[16/9] w-full overflow-hidden rounded-sm border border-border bg-card">
+      <div className="relative aspect-[16/9] w-full overflow-hidden rounded-sm border border-border bg-card md:aspect-[21/9]">
         <img
           src={project.thumb ?? defaultThumb}
           alt={`${project.title} — hero visual`}
