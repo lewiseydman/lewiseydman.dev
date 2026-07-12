@@ -5,7 +5,7 @@ import type { PillVariant } from "./pillButton";
 type CommonProps = {
   label: string; // aria-label
   variant?: PillVariant;
-  size?: "sm" | "md";
+  size?: "sm" | "md" | "lg";
   className?: string;
   children: ReactNode;
   showTooltip?: boolean;
