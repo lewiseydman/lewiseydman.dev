@@ -45,7 +45,7 @@ export function ExperienceTimeline() {
   return (
     <div className="flex flex-col gap-12 md:gap-16">
       <header className="flex flex-col gap-4">
-        <p className="font-display text-2xl leading-snug md:text-3xl">
+        <p className="type-h3">
           <span className="italic text-sepia">A working chronology of eight years.</span>
         </p>
       </header>
@@ -78,7 +78,7 @@ export function ExperienceTimeline() {
                   className="absolute top-0 flex h-9 w-9 -translate-x-1/2 items-center justify-center left-[18px] md:h-11 md:w-11 md:left-[22px] lg:left-1/2"
                 >
                   <span className="absolute inset-0 rounded-full border border-sepia/30 bg-background transition-all duration-500 group-hover:scale-110 group-hover:border-brass group-hover:shadow-[0_0_0_4px_color-mix(in_oklab,var(--brass)_12%,transparent)]" />
-                  <span className="font-mono-mar relative text-[11px] font-medium leading-none tracking-tight text-muted-foreground transition-colors duration-500 group-hover:text-brass md:text-[13px]">
+                  <span className="font-mono-mar relative text-xs font-medium leading-none text-muted-foreground transition-colors duration-500 group-hover:text-brass md:text-sm">
                     {romanRoles[i]}
                   </span>
                 </span>
@@ -87,17 +87,17 @@ export function ExperienceTimeline() {
                   className={isRight ? "lg:col-start-2 lg:pl-12 lg:text-left" : "lg:col-start-1 lg:pr-12 lg:text-right"}
                 >
                   <div className={`mb-3 inline-flex items-center gap-2 ${isRight ? "" : "lg:flex-row-reverse"}`}>
-                    <span className="font-mono-mar rounded-full border border-border bg-card/60 px-2.5 py-0.5 text-[11px] text-muted-foreground transition-colors duration-500 group-hover:border-brass/40 group-hover:text-brass md:text-xs">
+                    <span className="font-mono-mar rounded-full border border-border bg-card/60 px-2.5 py-0.5 text-muted-foreground transition-colors duration-500 group-hover:border-brass/40 group-hover:text-brass">
                       {e.year}
                     </span>
                   </div>
 
-                  <h3 className="font-display text-2xl leading-tight tracking-[-0.01em] transition-colors duration-500 group-hover:text-foreground md:text-4xl">
+                  <h3 className="type-h2 interactive group-hover:text-foreground">
                     {e.role}
                   </h3>
-                  <p className="font-display mt-1 text-base italic text-sepia md:text-lg">{e.org}</p>
+                  <p className="type-lede mt-1 text-base md:text-lg">{e.org}</p>
                   <p
-                    className={`mt-3 max-w-prose text-sm leading-relaxed text-muted-foreground md:text-base ${isRight ? "" : "lg:ml-auto"}`}
+                    className={`type-body mt-3 max-w-prose text-muted-foreground ${isRight ? "" : "lg:ml-auto"}`}
                   >
                     {e.notes}
                   </p>
@@ -124,11 +124,11 @@ export function ExperienceTimeline() {
               transition={{ duration: 0.5, delay: 0.06 * i, ease: "easeOut" }}
               className="group relative flex flex-col gap-1 overflow-hidden rounded-sm border border-border bg-card/40 p-4 transition-all duration-500 hover:-translate-y-0.5 hover:border-brass/50 hover:bg-card/70 sm:p-6 lg:p-8"
             >
-              <span className="font-mono-mar text-xs text-muted-foreground transition-colors duration-500 group-hover:text-brass">
+              <span className="font-mono-mar text-muted-foreground transition-colors duration-500 group-hover:text-brass">
                 {e.year}
               </span>
-              <span className="font-display text-lg leading-tight">{e.title}</span>
-              <span className="font-display italic text-sepia">{e.org}</span>
+              <span className="type-h4">{e.title}</span>
+              <span className="type-lede text-base">{e.org}</span>
               <span
                 aria-hidden
                 className="absolute inset-x-0 bottom-0 h-px w-0 bg-brass transition-all duration-500 group-hover:w-full"
