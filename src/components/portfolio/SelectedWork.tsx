@@ -136,7 +136,7 @@ export function SelectedWork() {
       {open ? <ReadingProgressBar /> : null}
       {!open ? (
         <PopoverSummaryStrip
-          label="Opera · Featured"
+          label="Featured"
           items={projects.slice(0, 3).map((p) => ({
             kicker: `Opus · ${p.num}`,
             title: p.title,

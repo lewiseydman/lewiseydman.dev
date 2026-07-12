@@ -71,7 +71,7 @@ export function Tests() {
     <div className="flex flex-col gap-12 md:gap-16">
       {!open ? (
         <PopoverSummaryStrip
-          label="Disputationes · Featured"
+          label="Featured"
           items={tests.slice(0, 3).map((t) => ({
             kicker: `Disputatio · ${t.num}`,
             title: t.title,
