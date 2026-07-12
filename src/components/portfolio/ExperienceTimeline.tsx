@@ -94,7 +94,7 @@ export function ExperienceTimeline() {
                     </span>
                   </div>
 
-                  <h3 className="type-h2 interactive group-hover:text-foreground">
+                  <h3 className="type-h2 md:type-h3 interactive group-hover:text-foreground">
                     {e.role}
                   </h3>
                   <p className="type-lede mt-1 text-base md:text-lg">{e.org}</p>
