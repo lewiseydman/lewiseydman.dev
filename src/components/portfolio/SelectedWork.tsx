@@ -52,7 +52,7 @@ const projects: Project[] = [
     id: "atlas",
     num: "II",
     title: "Atlas Maps",
-    role: "PM · Prototyping",
+    role: "Consumer",
     year: "2024",
     outcome: "+1.2M MAU in twelve months",
     blurb:
