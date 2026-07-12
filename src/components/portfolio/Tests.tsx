@@ -1,10 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import thumb from "@/assets/thumb-disputatio.jpg";
-import { PopoverSummaryStrip } from "./PopoverSummaryStrip";
-import { FolioCard } from "./primitives/FolioCard";
 import { DialogSubHeader } from "./primitives/DialogSubHeader";
 import { scrollDialogToTop } from "@/lib/scroll-dialog-top";
+import { cn } from "@/lib/utils";
 
 type Test = {
   id: string;
@@ -13,6 +12,7 @@ type Test = {
   domain: string;
   summary: string;
   detail: string;
+  span?: string;
 };
 
 const tests: Test[] = [
@@ -25,6 +25,7 @@ const tests: Test[] = [
       "A single-screen weather UI built around one decision: should I take a coat? Everything else is marginalia.",
     detail:
       "A study in selective abstraction. The forecast is real, but the surface answers exactly one question. Built as a vertical slab of typography with a single conditional glyph at the top.",
+    span: "sm:row-span-2 lg:row-span-2",
   },
   {
     id: "loop-motion",
@@ -45,6 +46,7 @@ const tests: Test[] = [
       "A week of photographing hand-painted shop signage. Notes on the persistence of warm serifs in cold cities.",
     detail:
       "Collected, sorted, and re-drawn in Figma over an evening. The lesson, repeated: the most distinctive type in any city is the type that was never sold as a typeface.",
+    span: "lg:row-span-2",
   },
   {
     id: "calm-dashboard",
@@ -69,18 +71,6 @@ export function Tests() {
 
   return (
     <div className="flex flex-col gap-12 md:gap-16">
-      {!open ? (
-        <PopoverSummaryStrip
-          label="Featured"
-          items={tests.slice(0, 3).map((t) => ({
-            kicker: `Disputatio · ${t.num}`,
-            title: t.title,
-            dek: t.domain,
-            thumb,
-            onClick: () => openTest(t.id),
-          }))}
-        />
-      ) : null}
       <AnimatePresence mode="wait">
         {!open ? (
           <motion.div
@@ -95,19 +85,47 @@ export function Tests() {
               Small <span className="italic text-sepia">disputationes</span> &mdash; experiments, studies, and things I
               have found beautiful lately.
             </p>
-            <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border lg:grid-cols-2">
+            <div className="grid auto-rows-[10rem] grid-cols-1 gap-3 sm:grid-cols-2 sm:auto-rows-[11rem] md:gap-4 lg:grid-cols-3 lg:auto-rows-[12rem]">
               {tests.map((t, i) => (
-                <FolioCard
+                <motion.button
                   key={t.id}
+                  layoutId={`disputatio-${t.id}`}
                   onClick={() => openTest(t.id)}
-                  ariaLabel={`Open disputatio: ${t.title}`}
-                  thumb={thumb}
-                  alt=""
-                  overlayTopRight={<>{t.domain}</>}
-                  title={t.title}
-                  body={t.summary}
-                  index={i}
-                />
+                  aria-label={`Open disputatio: ${t.title}`}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: Math.min(i, 4) * 0.05 }}
+                  className={cn(
+                    "group relative flex overflow-hidden rounded-sm border border-border bg-card text-left transition-all duration-500 hover:-translate-y-0.5 hover:border-brass hover:shadow-[0_20px_50px_-24px_color-mix(in_oklab,var(--ink)_28%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass",
+                    "row-span-2",
+                    t.span,
+                  )}
+                >
+                  <motion.img
+                    layoutId={`disputatio-thumb-${t.id}`}
+                    src={thumb}
+                    alt=""
+                    className="absolute inset-0 h-full w-full object-cover mix-blend-multiply transition-transform duration-700 ease-out group-hover:scale-[1.03] dark:mix-blend-screen"
+                  />
+                  <div className="pointer-events-none absolute inset-0 paper-grain opacity-40" />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent opacity-90" />
+                  <div className="relative z-10 flex w-full flex-col justify-between p-4 md:p-5">
+                    <div className="flex items-start justify-between gap-3">
+                      <span className="font-mono-mar rounded-full border border-parchment/30 bg-ink/40 px-2 py-0.5 text-parchment backdrop-blur-sm">
+                        {t.num}
+                      </span>
+                      <span className="font-mono-mar text-right text-parchment/90">
+                        {t.domain}
+                      </span>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <h3 className="font-display text-xl leading-tight text-parchment md:text-2xl">
+                        {t.title}
+                      </h3>
+                      <div className="h-px w-8 bg-brass transition-all duration-500 group-hover:w-24" />
+                    </div>
+                  </div>
+                </motion.button>
               ))}
             </div>
           </motion.div>
@@ -136,14 +154,19 @@ function TestDetail({ open, onBack }: { open: Test; onBack: () => void }) {
         backLabel="Back to Disputationes"
         right={<>Disputatio · {open.num}</>}
       />
-      <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border bg-card">
-        <img
+      <motion.div
+        layoutId={`disputatio-${open.id}`}
+        className="relative aspect-[4/5] w-full overflow-hidden rounded-sm border border-border bg-card sm:aspect-[16/10]"
+      >
+        <motion.img
+          layoutId={`disputatio-thumb-${open.id}`}
           src={thumb}
           alt={open.title}
           className="h-full w-full object-cover mix-blend-multiply dark:mix-blend-screen"
         />
-        <div className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
-      </div>
+        <div className="pointer-events-none absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
+        <div className="pointer-events-none absolute inset-0 paper-grain opacity-40" />
+      </motion.div>
       <div className="flex flex-col gap-3">
         <div className="font-mono-mar flex items-center gap-3">
           <span>{open.domain}</span>
