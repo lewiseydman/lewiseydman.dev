@@ -134,16 +134,13 @@ export function Tests() {
               key={open.id}
               layoutId={`disputatio-${open.id}`}
               onClick={(e) => e.stopPropagation()}
-              transition={{ type: "spring", stiffness: 220, damping: 30, mass: 0.8 }}
-              style={{ aspectRatio: open.aspect }}
-              className="relative overflow-hidden rounded-sm border border-parchment/20 bg-card shadow-[0_40px_100px_-30px_rgba(0,0,0,0.5)] max-h-[88vh] max-w-[92vw] h-[88vh]"
+              transition={{ type: "spring", stiffness: 220, damping: 30, mass: 0.85 }}
+              className="relative inline-block overflow-hidden rounded-sm border border-parchment/20 bg-card shadow-[0_40px_100px_-30px_rgba(0,0,0,0.5)]"
             >
               <motion.img
-                layoutId={`disputatio-thumb-${open.id}`}
                 src={open.thumb}
                 alt={open.title}
-                transition={{ type: "spring", stiffness: 220, damping: 30, mass: 0.8 }}
-                className="absolute inset-0 h-full w-full object-cover"
+                className="block max-h-[88vh] max-w-[92vw] object-contain"
               />
               <motion.button
                 type="button"
