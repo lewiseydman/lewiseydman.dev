@@ -56,10 +56,7 @@ export function Appraisals() {
     <div className="flex flex-col gap-12 md:gap-16">
       <header className="flex flex-col gap-4">
         <p className="font-display text-2xl leading-snug md:text-3xl">
-          Laudes &mdash;{" "}
-          <span className="italic text-sepia">
-            a few words from former colleagues, clients, and the people I&rsquo;ve built for.
-          </span>
+          <span className="italic text-sepia">A few words from clients and collaborators.</span>
         </p>
         <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
           <span className="font-mono-mar">Filter ·</span>
@@ -80,32 +77,38 @@ export function Appraisals() {
       </header>
       <ul className="grid gap-6 md:gap-8 lg:grid-cols-2">
         <AnimatePresence mode="popLayout" initial={false}>
-        {filtered.map((t, i) => (
-          <motion.li
-            key={t.name}
-            layout
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.35, delay: Math.min(i, 3) * 0.05 }}
-            className="group relative flex flex-col gap-4 rounded-sm border border-border bg-background p-4 transition-[background-color,box-shadow,border-color] duration-300 ease-out hover:bg-card hover:shadow-[0_12px_40px_-16px_color-mix(in_oklab,var(--ink)_12%,transparent)] focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 sm:p-6 lg:p-8"
-          >
-            <div className="flex items-baseline justify-between">
-              <span className="font-mono-mar transition-colors duration-300 group-hover:text-brass">{`Laus · ${String(i + 1).padStart(2, "0")}`}</span>
-              {t.relation ? <span className="font-mono-mar transition-colors duration-300 group-hover:text-brass">{t.relation}</span> : null}
-            </div>
-            <blockquote className="font-display text-lg italic leading-snug text-foreground transition-colors duration-300 md:text-xl">
-              <span className="text-sepia transition-colors duration-300 group-hover:text-brass">&ldquo;</span>
-              {t.quote}
-              <span className="text-sepia transition-colors duration-300 group-hover:text-brass">&rdquo;</span>
-            </blockquote>
-            <div className="mt-auto flex flex-col gap-0.5 border-t border-border pt-4 transition-colors duration-300 group-hover:border-sepia/40">
-              <span className="font-display text-base text-foreground transition-colors duration-300 group-hover:text-brass md:text-lg">{t.name}</span>
-              <span className="font-mono-mar">{t.org ? `${t.role} · ${t.org}` : t.role}</span>
-            </div>
-            <div className="h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full group-hover:bg-brass" />
-          </motion.li>
-        ))}
+          {filtered.map((t, i) => (
+            <motion.li
+              key={t.name}
+              layout
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.35, delay: Math.min(i, 3) * 0.05 }}
+              className="group relative flex flex-col gap-4 rounded-sm border border-border bg-background p-4 transition-[background-color,box-shadow,border-color] duration-300 ease-out hover:bg-card hover:shadow-[0_12px_40px_-16px_color-mix(in_oklab,var(--ink)_12%,transparent)] focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 sm:p-6 lg:p-8"
+            >
+              <div className="flex items-baseline justify-between">
+                <span className="font-mono-mar transition-colors duration-300 group-hover:text-brass">{`Laus · ${String(i + 1).padStart(2, "0")}`}</span>
+                {t.relation ? (
+                  <span className="font-mono-mar transition-colors duration-300 group-hover:text-brass">
+                    {t.relation}
+                  </span>
+                ) : null}
+              </div>
+              <blockquote className="font-display text-lg italic leading-snug text-foreground transition-colors duration-300 md:text-xl">
+                <span className="text-sepia transition-colors duration-300 group-hover:text-brass">&ldquo;</span>
+                {t.quote}
+                <span className="text-sepia transition-colors duration-300 group-hover:text-brass">&rdquo;</span>
+              </blockquote>
+              <div className="mt-auto flex flex-col gap-0.5 border-t border-border pt-4 transition-colors duration-300 group-hover:border-sepia/40">
+                <span className="font-display text-base text-foreground transition-colors duration-300 group-hover:text-brass md:text-lg">
+                  {t.name}
+                </span>
+                <span className="font-mono-mar">{t.org ? `${t.role} · ${t.org}` : t.role}</span>
+              </div>
+              <div className="h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full group-hover:bg-brass" />
+            </motion.li>
+          ))}
         </AnimatePresence>
       </ul>
     </div>
