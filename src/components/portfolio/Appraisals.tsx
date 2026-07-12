@@ -119,7 +119,7 @@ export function Appraisals() {
     <div className="flex flex-col gap-12 md:gap-16">
       <header className="flex flex-col gap-4">
         <p className="font-display text-2xl leading-snug md:text-3xl">
-          <span className="italic text-sepia">A few words from clients and collaborators.</span>
+          <span className="italic text-sepia">Words from clients and collaborators.</span>
         </p>
         <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
           <span className="font-mono-mar">Filter ·</span>
@@ -164,9 +164,7 @@ export function Appraisals() {
                 <span className="text-sepia transition-colors duration-300 group-hover:text-brass">&rdquo;</span>
               </blockquote>
               <div className="mt-auto flex flex-col gap-0.5 border-t border-border pt-4 transition-colors duration-300 group-hover:border-sepia/40">
-                <span className="font-display text-base text-foreground md:text-lg">
-                  {t.name}
-                </span>
+                <span className="font-display text-base text-foreground md:text-lg">{t.name}</span>
                 <span className="font-mono-mar">{t.org ? `${t.role} · ${t.org}` : t.role}</span>
               </div>
               <div className="h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full group-hover:bg-brass" />
