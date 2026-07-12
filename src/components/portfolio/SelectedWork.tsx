@@ -132,7 +132,7 @@ export function SelectedWork() {
   }, [openId]);
 
   return (
-    <div className="flex flex-col gap-8 md:gap-12">
+    <div className="flex flex-col gap-8 md:gap-10 lg:gap-12">
       {open ? <ReadingProgressBar /> : null}
       {!open ? (
         <PopoverSummaryStrip
@@ -154,7 +154,7 @@ export function SelectedWork() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3 }}
-            className="flex flex-col gap-8 md:gap-12"
+            className="flex flex-col gap-8 md:gap-10 lg:gap-12"
           >
             <p className="font-display text-2xl leading-snug md:text-3xl">
               <span className="italic text-sepia">Products designed, built and shipped.</span>
@@ -232,7 +232,7 @@ function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ duration: 0.35 }}
-      className="flex flex-col gap-8 md:gap-12"
+      className="flex flex-col gap-8 md:gap-10 lg:gap-12"
     >
       <DialogSubHeader
         onBack={onBack}
@@ -246,7 +246,7 @@ function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }
         }
       />
 
-      <header className="flex flex-col gap-3 border-b border-border pb-6">
+      <header className="flex flex-col gap-3 md:gap-4 border-b border-border pb-6">
         {/* Meta row: single horizontal line at every breakpoint */}
         <div className="font-mono-mar flex flex-wrap items-center gap-x-2 gap-y-1">
           <span>Opus · {project.num}</span>
@@ -271,7 +271,7 @@ function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }
         <div aria-hidden className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
       </div>
       {/* Caption strip: mobile-first three-row grid; single row on sm+ */}
-      <div className="grid gap-4 border-t border-border pt-6 sm:flex sm:flex-wrap sm:items-end sm:justify-between sm:gap-6">
+      <div className="grid gap-4 border-t border-border pt-6 sm:flex sm:flex-wrap sm:items-end sm:justify-between sm:gap-6 md:gap-8 lg:gap-10">
         <div className="flex flex-col">
           <span className="font-mono-mar">Outcome</span>
           <span className="font-display text-2xl italic text-sepia">{project.outcome}</span>
@@ -294,7 +294,7 @@ function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }
         </div>
       </div>
       {/* Notebook — grid-rows collapse */}
-      <section className="flex flex-col gap-4 border-t border-border pt-8">
+      <section className="flex flex-col gap-4 md:gap-5 lg:gap-6 border-t border-border pt-8">
         <div className="flex items-baseline justify-between">
           <h4 className="font-display text-2xl tracking-[-0.01em] md:text-3xl">
             Notebook <span className="italic text-sepia">— marginalia</span>
@@ -306,7 +306,7 @@ function CaseStudy({ project, onBack }: { project: Project; onBack: () => void }
             className="relative overflow-hidden transition-[max-height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
             style={{ maxHeight: overflows && !expanded ? "22rem" : "9999px" }}
           >
-            <div ref={contentRef} className="flex flex-col gap-4">
+            <div ref={contentRef} className="flex flex-col gap-4 md:gap-5 lg:gap-6">
               {paragraphs.map((p, i) => (
                 <p key={i} className="max-w-prose text-[1.05rem] leading-[1.75] text-foreground">
                   {p}
