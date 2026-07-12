@@ -1,77 +1,44 @@
-## 1. Experience · Cursus — new timeline
+## Disputationes — masonry lightbox rebuild
 
-Replace the current manuscript rail in `src/components/portfolio/ExperienceTimeline.tsx` with a distinctive but on-brand timeline that reads clearly at every breakpoint.
+Rework `src/components/portfolio/Tests.tsx` into a Pinterest-style masonry gallery with a lightbox viewer, matching the reference video's simplicity.
 
-**Delete first**
+### Layout — masonry grid
 
-- Remove the "Actions ·" text (the fifth selected element — label span).
-
-**New layout — "codex ledger"**
-
-- Keep the existing intro `p` (`"My chronology of eight working years."`).
-- Replace the rail with a **two-column ledger** that reuses existing tokens (`border`, `sepia`, `brass`, `font-mono-mar`, `font-display`):
-
-```text
-┌──────────────────────────────────────────────────────────┐
-│ Cursus · 01                          Apr 2025 — Now      │
-│ ────────────────────────────────────────────────────────  │
-│ Communications Manager                                    │
-│ 100Green · UK                        (italic sepia)      │
-│                                                           │
-│ Own the energy quote journey end-to-end…                 │
-└──────────────────────────────────────────────────────────┘
-```
-
-- Desktop / tablet: a single vertical column of full-width "folio rows" separated by hairline borders (no dots, no rail). Each row has a top meta line (`Cursus · NN` left, date range right, connected by a hairline `hairline` divider), a large `font-display` role title, an italic sepia org line, and a prose note.
-- Hover: brass underline sweep on the role title (reuse the `h-px w-0 → group-hover:w-full` pattern from `Appraisals.tsx`), meta text tints to brass.
-- Mobile (`<sm`): meta line stacks (numeral on top, date on next line, right-aligned), role title drops to `text-2xl`, note stays full width. No horizontal scroll, no cramped 9rem date column.
-- Motion: keep the existing `whileInView` fade/slide with a small stagger.
-- Keep the existing **Education · Studia** footer grid unchanged (already standardised).
-
-**Why this works**
-
-- Removes the awkward mobile grid (`md:grid-cols-[9rem_1fr]`) that currently truncates on tablet.
-- Reuses the Appraisals card language so Cursus and Laudes read as siblings without duplicating them.
-- Numbered `Cursus · NN` matches Folio / Laus / Disputatio numbering used sitewide.
-
-## 2. Disputationes (Tests) — bento gallery rebuild
-
-Rebuild `src/components/portfolio/Tests.tsx` using the video as the layout & interaction reference, adapted to the site's parchment/sepia palette (no black canvas).
-
-**Header**
-
-- Kicker `Folder · Disputationes`, then a one-line dek: *"Visual explorations and interface studies."* (mirrors the video's `FOLDER / Shots / Visual explorations…`).
-- Remove the current `PopoverSummaryStrip` featured row — the bento is the browse surface.
-
-**Bento grid (index view)**
-
-- Asymmetric CSS grid, no repeated `FolioCard` list. Layout:
-  - Mobile: single column, image-forward tiles.
-  - `sm`: 2 columns, mixed row spans.
-  - `lg`: 3 columns with a `grid-auto-rows` base and per-tile `col-span-*` / `row-span-*` to create the video's asymmetric rhythm (e.g. tall left, tall right, two shorter middle).
+- Replace the current fixed-row asymmetric grid with a **CSS columns masonry**:
+  - Mobile: `columns-2`
+  - `sm`: `columns-3`
+  - `lg`: `columns-4`
+  - Gap via `gap-3 md:gap-4`, each tile `break-inside-avoid mb-3 md:mb-4`
 - Each tile:
-  - Full-bleed thumbnail (reuse `@/assets/thumb-disputatio.jpg` for now; each entry keeps its own `thumb` field so future tiles can differ).
-  - Subtle rounded border (`rounded-sm border border-border`), `paper-grain` overlay for texture, hover: gentle scale + brass ring.
-  - Corner meta only: numeral (`I`, `II`, …) top-left, domain top-right in `font-mono-mar`. Title appears on hover as a bottom-anchored caption band that slides up — keeps the grid quiet like the reference.
-- Layout `motion` for smooth reflow between index and detail.
+  - Full-bleed thumbnail with its own natural aspect ratio (varied per entry: 3/4, 4/5, 1/1, 4/3, 3/2, 2/3, 9/16) so the masonry actually staggers.
+  - Rounded `rounded-sm border border-border`, `paper-grain` overlay, hover: subtle scale + brass border + bottom caption band that fades in with the title.
+  - Corner numeral (`I`–`XX`) top-left only. Domain removed from the tile face — it lives in the lightbox — to keep the grid quiet like the video.
+- Numerals: extend `src/lib/roman.ts` usage or inline a small `1..20 → I..XX` map.
 
-**Detail view (click a tile)**
+### Interaction — lightbox (no detail page)
 
-- Replace the current stacked detail with a **focused viewer** matching the video: the selected tile expands to a large hero image centred in the dialog body, with the rest of the grid faded and pushed behind (no route change, same dialog).
-- Layout inside the detail:
-  - Sticky `DialogSubHeader` (already exists) with `Back to Disputationes`.
-  - Large hero image (`aspect-[16/10]` on desktop, `aspect-[4/5]` on mobile) with the same paper-grain + blueprint overlay currently used.
-  - Below the image: `font-mono-mar` domain line, `font-display` title, italic sepia summary, prose detail — kept tight, no extra chrome.
-- Use `layoutId={test.id}` on the tile image + hero image so Framer Motion animates the expansion (the "click a card → it grows into place" moment from the video).
-- Keep `scrollDialogToTop()` on open/close so the popover always resets.
+- Clicking a tile opens a **lightbox overlay inside the same SectionDialog body**, not a routed detail view. No `DialogSubHeader`, no back button chrome.
+- Lightbox structure:
+  - Fixed overlay covering the dialog body: `absolute inset-0 z-20 bg-ink/85 backdrop-blur-sm`, animated via `AnimatePresence` (fade + subtle zoom).
+  - Centred hero image, `max-h-[85%] max-w-[92%] object-contain`, animated with `layoutId={test.id}` from the tile so it grows into place (the video's core interaction).
+  - Small caption strip under the image: numeral · domain · title in `font-mono-mar` / `font-display italic sepia`. One line, no prose.
+  - Close affordances: top-right `X` button (reuse the tactile brass close pattern), click on backdrop, and `Escape` key.
+  - Prev / Next arrows (left/right edges) + `←` / `→` keys to cycle through all 20. Wraps around.
+- Remove `TestDetail`, `DialogSubHeader` import, and per-test `detail` prose field.
 
-**Data**
+### Data — 20 entries
 
-- Keep the four existing entries. No new copy required.
+Expand `tests` to 20 items covering plausible design/eng experiments (interface studies, motion, typography, dashboards, iconography, colour, print, data-vis, etc.). Each entry keeps `id`, `num` (roman I–XX), `title`, `domain`, `summary` (used only as the lightbox caption's short line), and a new `aspect` field driving the tile ratio. All 20 reuse `@/assets/thumb-disputatio.jpg` for now — the field stays per-tile so real thumbnails can drop in later.
 
-## Technical notes
+### Header
 
-- Files touched: `src/components/portfolio/ExperienceTimeline.tsx`, `src/components/portfolio/Tests.tsx`.
-- No new deps. Reuses `framer-motion`, existing tokens (`sepia`, `brass`, `parchment`, `hairline`, `paper-grain`, `blueprint-grid-fine`), and existing primitives (`DialogSubHeader`, `SectionLabel`, `scrollDialogToTop`).
-- No changes to `SectionDialog`, routing, or other popovers.
-- Verify: build passes, `#cursus` and Disputationes deep links still open, keyboard focus reaches every tile, mobile has no horizontal overflow.
+- Keep the current one-line dek: *"Visual explorations and design studies."*
+- Featured strip (`PopoverSummaryStrip`) is already hidden for Tests per the earlier refactor — no change.
+
+### Technical notes
+
+- File touched: `src/components/portfolio/Tests.tsx` only.
+- No new deps. Uses existing `framer-motion`, tokens (`sepia`, `brass`, `parchment`, `ink`, `paper-grain`), and the same thumb asset.
+- Masonry via CSS `columns-*` + `break-inside-avoid` — no JS layout library, works down to 320px.
+- Keyboard: `Esc` closes, `←`/`→` navigate; focus trapped inside overlay while open; tile buttons remain in tab order when closed.
+- Verify: build passes, deep link `#disputationes` still opens the section, no horizontal overflow on mobile, lightbox `layoutId` animation runs at 60fps on mid-range mobile.
