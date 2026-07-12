@@ -117,7 +117,7 @@ export function PopoverSummaryStrip({ items, label = "Folio" }: Props) {
                 {...(item.onClick
                   ? { type: "button" as const, onClick: item.onClick }
                   : {})}
-                className={`group relative flex w-full items-center gap-3 overflow-hidden rounded-sm border border-border bg-card/40 px-3 py-2.5 text-left transition-colors hover:border-sepia/60 hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+                className={`group relative flex w-full items-center gap-3 overflow-hidden rounded-sm border border-border bg-card/40 px-3 py-2.5 text-left transition-colors hover:border-sepia/60 hover:bg-card ${
                   item.onClick ? "cursor-pointer" : "cursor-default"
                 }`}
               >

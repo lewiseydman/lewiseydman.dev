@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
  */
 export function TagPill({ children }: { children: ReactNode }) {
   return (
-    <span className="type-tag interactive rounded-full border border-border px-2 py-0.5 hover:border-sepia/60 hover:text-foreground">
+    <span className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground">
       {children}
     </span>
   );

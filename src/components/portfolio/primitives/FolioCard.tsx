@@ -73,11 +73,11 @@ export const FolioCard = forwardRef<HTMLButtonElement, Props>(function FolioCard
       </div>
       {kicker ? <div className="font-mono-mar">{kicker}</div> : null}
       <div className="flex flex-col gap-1">
-        <h3 className="type-h3 interactive group-hover:text-sepia">
+        <h3 className="font-display text-2xl leading-tight tracking-[-0.005em] transition-colors group-hover:text-sepia md:text-3xl">
           {title}
         </h3>
       </div>
-      {body ? <div className="type-body-sm text-muted-foreground">{body}</div> : null}
+      {body ? <div className="text-sm leading-relaxed text-muted-foreground">{body}</div> : null}
       {footer ? <div className="mt-auto flex flex-wrap items-end justify-between gap-3">{footer}</div> : null}
       <div className="h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
     </motion.button>

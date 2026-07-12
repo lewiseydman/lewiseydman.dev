@@ -5,7 +5,7 @@ import type { PillVariant } from "./pillButton";
 type CommonProps = {
   label: string; // aria-label
   variant?: PillVariant;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md";
   className?: string;
   children: ReactNode;
   showTooltip?: boolean;
@@ -26,27 +26,18 @@ type AnchorProps = CommonProps & {
 type Props = ButtonProps | AnchorProps;
 
 const base =
-  "group relative inline-flex items-center justify-center rounded-full border transition-[color,background-color,border-color,transform,box-shadow,opacity] duration-200 ease-out will-change-transform hover:-translate-y-px active:translate-y-0 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-60";
+  "group relative inline-flex items-center justify-center rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40";
 
 const sizes = {
-  lg: "h-14 w-14",
   md: "h-11 w-11", // 44px touch target
-  // sm — visually 32px, but a full 44×44 hit area preserved via padding for
-  // mobile tap-target compliance without breaking dense icon strips.
-  sm: "h-11 w-11 sm:h-8 sm:w-8",
+  sm: "h-8 w-8",
 };
 
 const variants: Record<PillVariant, string> = {
   primary:
-    "border-sepia/60 bg-background/90 text-sepia shadow-sm backdrop-blur hover:border-sepia hover:bg-sepia hover:text-parchment",
-  secondary:
-    "border-border bg-card text-foreground hover:border-sepia/60 hover:bg-muted",
-  outline:
-    "border-sepia/60 bg-background/90 text-sepia shadow-sm backdrop-blur hover:border-sepia hover:bg-sepia hover:text-parchment",
+    "border border-sepia/60 bg-background/90 text-sepia shadow-sm backdrop-blur hover:border-sepia hover:bg-sepia hover:text-parchment",
   ghost:
-    "border-transparent bg-transparent text-sepia hover:border-border hover:bg-sepia/[0.04] hover:text-foreground",
-  danger:
-    "border-destructive/60 bg-background text-destructive hover:border-destructive hover:bg-destructive hover:text-destructive-foreground",
+    "border border-transparent bg-transparent text-sepia hover:border-border hover:bg-sepia/[0.04] hover:text-foreground",
 };
 
 const tooltipClass =
@@ -67,21 +58,14 @@ export const IconPillButton = forwardRef<HTMLElement, Props>(function IconPillBu
 
   if ("href" in rest && rest.href !== undefined) {
     const { href, target, rel, download } = rest as AnchorProps;
-    const isExternal = target === "_blank";
-    // Ensure external links carry both security (noopener) and referrer
-    // (noreferrer) hints, and announce that they open a new tab.
-    const safeRel = isExternal
-      ? Array.from(new Set([...(rel ?? "").split(/\s+/).filter(Boolean), "noopener", "noreferrer"])).join(" ")
-      : rel;
-    const ariaLabel = isExternal ? `${label} (opens in a new tab)` : label;
     return (
       <a
         ref={ref as React.Ref<HTMLAnchorElement>}
         href={href}
         target={target}
-        rel={safeRel}
+        rel={rel}
         download={download as string | undefined}
-        aria-label={ariaLabel}
+        aria-label={label}
         className={classes}
       >
         {children}

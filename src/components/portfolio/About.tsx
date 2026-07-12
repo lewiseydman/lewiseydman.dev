@@ -107,11 +107,11 @@ export function About() {
     <div className="flex flex-col gap-12 md:gap-16">
       <section className="flex flex-col gap-4">
         <span className="font-mono-mar">Lewis Eydman · De Ipso</span>
-        <h2 className="type-display">
+        <h2 className="font-display text-4xl leading-[1.05] tracking-[-0.015em] md:text-5xl">
           Product, engineering, and design in one<br></br>
           <span className="italic text-sepia">opinionated practice.</span>
         </h2>
-        <div className="type-body grid gap-6 text-muted-foreground md:grid-cols-2 md:gap-8">
+        <div className="grid gap-6 text-[0.95rem] leading-[1.7] text-muted-foreground md:grid-cols-2 md:gap-8">
           <p>
             I&rsquo;m a product engineer who can sketch the interface in the morning, ship the React in the afternoon,
             and argue both sides of the technical trade-off. I care about helping ambitious teams present their products
@@ -146,8 +146,8 @@ export function About() {
               key={c.kicker}
               className="flex flex-col gap-3 rounded-sm border border-border bg-card/40 p-4 sm:p-6 lg:p-8"
             >
-              <span className="font-mono-mar">{c.kicker}</span>
-              <p className="type-body text-foreground">{c.body}</p>
+              <span className="font-mono text-[0.6rem] uppercase tracking-widest text-sepia">{c.kicker}</span>
+              <p className="text-[0.95rem] leading-relaxed text-foreground">{c.body}</p>
             </div>
           ))}
         </div>
@@ -159,14 +159,14 @@ export function About() {
           { title: "How I work", items: howIWork },
         ].map((col) => (
           <div key={col.title} className="flex flex-col gap-4">
-            <h3 className="type-h3">{col.title}</h3>
+            <h3 className="font-display text-2xl tracking-[-0.01em] md:text-3xl">{col.title}</h3>
             <ul className="flex flex-col">
               {col.items.map((line, i) => (
                 <li key={line} className="flex items-baseline gap-4 border-b border-border py-3 last:border-b-0">
-                  <span className="font-mono-mar w-8 shrink-0">
+                  <span className="font-mono w-8 shrink-0 text-[0.65rem] uppercase tracking-widest text-sepia">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="type-body text-foreground">{line}</span>
+                  <span className="text-[0.95rem] leading-snug text-foreground">{line}</span>
                 </li>
               ))}
             </ul>
@@ -196,15 +196,18 @@ export function About() {
               </div>
               <div className="flex flex-1 flex-col gap-2">
                 <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                  <h3 className="type-h3">{d.label}</h3>
-                  <p className="type-lede text-base md:text-lg">— {d.principle}</p>
+                  <h3 className="font-display text-3xl tracking-[-0.01em] md:text-4xl">{d.label}</h3>
+                  <p className="font-display text-base italic text-sepia md:text-lg">— {d.principle}</p>
                 </div>
-                <p className="type-body-sm max-w-prose text-muted-foreground">{d.body}</p>
+                <p className="max-w-prose text-sm leading-relaxed text-muted-foreground">{d.body}</p>
                 <div className="mt-1 flex flex-wrap items-center gap-2 pt-1">
                   <span className="font-mono-mar">Skills · </span>
                   <div className="flex flex-wrap gap-1.5">
                     {d.tools.map((t) => (
-                      <span key={t} className="type-tag rounded-full border border-border px-2 py-0.5">
+                      <span
+                        key={t}
+                        className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground"
+                      >
                         {t}
                       </span>
                     ))}
@@ -221,7 +224,7 @@ export function About() {
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
           {stats.map(([n, l]) => (
             <div key={l} className="flex flex-col">
-              <span className="type-display">{n}</span>
+              <span className="font-display text-4xl text-foreground md:text-5xl">{n}</span>
               <span className="font-mono-mar mt-2">{l}</span>
             </div>
           ))}
@@ -231,12 +234,15 @@ export function About() {
       <section className="flex flex-col gap-4">
         <SectionLabel>Interests</SectionLabel>
         <div className="grid gap-6 md:grid-cols-[0.85fr_1.15fr] md:gap-12">
-          <p className="type-lede">
+          <p className="font-display text-xl italic leading-relaxed text-sepia md:text-2xl">
             Curious at heart. The same instinct that drives the work fills the weekends.
           </p>
           <div className="flex flex-wrap content-start items-start gap-1.5 self-start">
             {interests.map((t) => (
-              <span key={t} className="type-tag rounded-full border border-border px-2 py-0.5">
+              <span
+                key={t}
+                className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground"
+              >
                 {t}
               </span>
             ))}

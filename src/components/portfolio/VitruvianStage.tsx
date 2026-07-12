@@ -65,7 +65,7 @@ const sections: Record<
     numeral: "IV",
     latin: "Disputatio",
     english: "Tests",
-    kicker: "Disputatio",
+    kicker: "Disputationes",
     node: <Tests />,
   },
 };
@@ -216,9 +216,9 @@ export function VitruvianStage() {
           Lewis <span className="italic text-sepia">Eydman</span>
         </h1>
         <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
-          Product Engineer bridging{" "}
-          <span className="text-foreground underline decoration-sepia/40 underline-offset-4">design</span> &{" "}
-          <span className="text-foreground underline decoration-sepia/40 underline-offset-4">development</span>.
+          Product Engineer Bridging{" "}
+          <span className="text-foreground underline decoration-sepia/40 underline-offset-4">Design</span> &{" "}
+          <span className="text-foreground underline decoration-sepia/40 underline-offset-4">Development</span>.
         </p>
       </motion.div>
 
@@ -238,8 +238,8 @@ export function VitruvianStage() {
                   {item.numeral}
                 </span>
                 <span className="flex min-w-0 flex-1 flex-col">
-                  <span className="font-display text-lg leading-tight">{item.english}</span>
-                  <span className="font-mono-mar text-[0.65rem]">{item.latin}</span>
+                <span className="font-display text-lg leading-tight">{item.english}</span>
+                <span className="font-mono-mar text-[0.65rem]">{item.latin}</span>
                 </span>
                 <ChevronRight className="h-4 w-4 shrink-0 text-sepia transition-transform group-hover:translate-x-0.5" />
               </button>

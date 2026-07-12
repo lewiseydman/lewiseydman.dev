@@ -4,7 +4,7 @@ import { VitruvianStage } from "@/components/portfolio/VitruvianStage";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Lewis Eydman — Product Engineer, design & dev" },
+      { title: "Lewis Eydman — Product Engineer bridging design & development" },
       {
         name: "description",
         content:
