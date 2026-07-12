@@ -97,7 +97,7 @@ export function Tests() {
   }, [open, close]);
 
   return (
-    <div className="flex flex-col gap-8 md:gap-12">
+    <div className="flex flex-col gap-8 md:gap-10 lg:gap-12">
       <p className="font-display text-2xl leading-snug md:text-3xl">
         <span className="italic text-sepia">Visual studies and inspiration.</span>
       </p>
