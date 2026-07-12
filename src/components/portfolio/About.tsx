@@ -108,7 +108,8 @@ export function About() {
       <section className="flex flex-col gap-4">
         <span className="font-mono-mar">Lewis Eydman · De Ipso</span>
         <h2 className="font-display text-4xl leading-[1.05] tracking-[-0.015em] md:text-5xl">
-          Product, engineering, and design in one <span className="italic text-sepia">opinionated practice.</span>
+          Product, engineering, and design in one<br></br>
+          <span className="italic text-sepia">opinionated practice.</span>
         </h2>
         <div className="grid gap-6 text-[0.95rem] leading-[1.7] text-muted-foreground md:grid-cols-2 md:gap-8">
           <p>
