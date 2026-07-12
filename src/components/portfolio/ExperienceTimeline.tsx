@@ -40,16 +40,13 @@ const education = [
 ];
 
 export function ExperienceTimeline() {
-  const romanRoles = useMemo(
-    () => ["IV", "III", "II", "I", "V", "VI", "VII", "VIII"],
-    [],
-  );
+  const romanRoles = useMemo(() => ["IV", "III", "II", "I", "V", "VI", "VII", "VIII"], []);
 
   return (
     <div className="flex flex-col gap-12 md:gap-16">
       <header className="flex flex-col gap-4">
         <p className="font-display text-2xl leading-snug md:text-3xl">
-          <span className="italic text-sepia">My chronology of eight working years.</span>
+          <span className="italic text-sepia">A working chronology of eight years.</span>
         </p>
       </header>
 
@@ -89,11 +86,7 @@ export function ExperienceTimeline() {
                 </span>
 
                 <div
-                  className={
-                    isRight
-                      ? "lg:col-start-2 lg:pl-12 lg:text-left"
-                      : "lg:col-start-1 lg:pr-12 lg:text-right"
-                  }
+                  className={isRight ? "lg:col-start-2 lg:pl-12 lg:text-left" : "lg:col-start-1 lg:pr-12 lg:text-right"}
                 >
                   {/* Date pill */}
                   <div className={`mb-3 inline-flex items-center gap-2 ${isRight ? "" : "lg:flex-row-reverse"}`}>
@@ -107,12 +100,16 @@ export function ExperienceTimeline() {
                     {e.role}
                   </h3>
                   <p className="font-display mt-1 text-base italic text-sepia md:text-lg">{e.org}</p>
-                  <p className={`mt-3 max-w-prose text-sm leading-relaxed text-muted-foreground md:text-base ${isRight ? "" : "lg:ml-auto"}`}>
+                  <p
+                    className={`mt-3 max-w-prose text-sm leading-relaxed text-muted-foreground md:text-base ${isRight ? "" : "lg:ml-auto"}`}
+                  >
                     {e.notes}
                   </p>
 
                   {/* Underline flourish */}
-                  <div className={`mt-5 h-px w-8 bg-sepia/40 transition-all duration-500 group-hover:w-24 group-hover:bg-brass ${isRight ? "" : "lg:ml-auto"}`} />
+                  <div
+                    className={`mt-5 h-px w-8 bg-sepia/40 transition-all duration-500 group-hover:w-24 group-hover:bg-brass ${isRight ? "" : "lg:ml-auto"}`}
+                  />
                 </div>
               </motion.li>
             );
