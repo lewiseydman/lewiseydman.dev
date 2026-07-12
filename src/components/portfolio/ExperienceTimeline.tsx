@@ -47,7 +47,6 @@ export function ExperienceTimeline() {
         </p>
       </header>
 
-      {/* Codex ledger */}
       <ol className="flex flex-col">
         {experience.map((e, i) => (
           <motion.li
@@ -68,22 +67,17 @@ export function ExperienceTimeline() {
               </span>
             </div>
             <div className="flex flex-col gap-1">
-              <h3 className="font-display text-2xl tracking-[-0.01em] md:text-4xl">
-                {e.role}
-              </h3>
+              <h3 className="font-display text-2xl tracking-[-0.01em] md:text-4xl">{e.role}</h3>
               <span className="font-display italic text-sepia md:text-lg">{e.org}</span>
             </div>
-            <p className="max-w-prose text-sm leading-relaxed text-muted-foreground md:text-base">
-              {e.notes}
-            </p>
+            <p className="max-w-prose text-sm leading-relaxed text-muted-foreground md:text-base">{e.notes}</p>
             <div className="h-px w-0 bg-brass transition-all duration-500 group-hover:w-full" />
           </motion.li>
         ))}
       </ol>
 
-      {/* education footer */}
       <section className="flex flex-col gap-4">
-        <SectionLabel>Education · Studia</SectionLabel>
+        <SectionLabel>Academia</SectionLabel>
         <ul className="grid gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3">
           {education.map((e) => (
             <li
