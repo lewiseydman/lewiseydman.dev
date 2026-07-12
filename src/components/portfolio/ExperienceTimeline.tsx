@@ -4,18 +4,11 @@ import { SectionLabel } from "./primitives/SectionLabel";
 
 const experience = [
   {
-    year: "Apr 2025 — Now",
-    role: "Communications Manager",
-    org: "100Green · UK",
+    year: "Jul 2019 — Now",
+    role: "Designer & Developer",
+    org: "Self-employed · UK",
     notes:
-      "Own the energy quote journey end-to-end — research, roadmap, Figma, React build, A/B testing, Ofgem compliance. +19% sign-ups May–Jun 2026.",
-  },
-  {
-    year: "Jun 2021 — Apr 2024",
-    role: "Frontend Developer",
-    org: "ITS · UK",
-    notes:
-      "Product-leaning frontend on an agile team. Scalable React/JSON-LD across PLPs/PDPs, a new email framework, Playwright/Cypress E2E. +37.5% conversion.",
+      "Building digital products from research to deployment. Brand design, Figma prototyping, React frontends, and setting up CI/CD pipelines, alongside active open-source contributions. This period also includes a purposeful career break with Phipps Group (landscaping) to recharge and reconnect with people and nature.",
   },
   {
     year: "Jul 2019 — Jun 2021",
@@ -25,11 +18,18 @@ const experience = [
       "Co-led the BigCommerce migration. Built the data-driven design templates the marketing, design, and dev teams still work from.",
   },
   {
-    year: "Jul 2019 — Now",
-    role: "Designer & Developer",
-    org: "Self-employed · UK",
+    year: "Jun 2021 — Apr 2024",
+    role: "Frontend Developer",
+    org: "ITS · UK",
     notes:
-      "Building digital products from research to deployment. Brand design, Figma prototyping, React frontends, and setting up CI/CD pipelines, alongside active open-source contributions. This period also includes a purposeful career break with Phipps Group (landscaping) to recharge and reconnect with people and nature.",
+      "Product-leaning frontend on an agile team. Scalable React/JSON-LD across PLPs/PDPs, a new email framework, Playwright/Cypress E2E. +37.5% conversion.",
+  },
+  {
+    year: "Apr 2025 — Now",
+    role: "Communications Manager",
+    org: "100Green · UK",
+    notes:
+      "Own the energy quote journey end-to-end — research, roadmap, Figma, React build, A/B testing, Ofgem compliance. +19% sign-ups May–Jun 2026.",
   },
 ];
 
