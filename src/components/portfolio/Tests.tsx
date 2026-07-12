@@ -1,7 +1,8 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import { Maximize2, Minimize2 } from "lucide-react";
 import fallbackThumb from "@/assets/thumb-disputatio.jpg";
+import { cn } from "@/lib/utils";
 
 // ─── Per-tile artwork ────────────────────────────────────────────────────────
 // Drop real art in when it's ready. Convention:
