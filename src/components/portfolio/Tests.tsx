@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useEffect, useState } from "react";
 import fallbackThumb from "@/assets/thumb-disputatio.jpg";
 
 // ─── Per-tile artwork ────────────────────────────────────────────────────────
@@ -66,6 +67,19 @@ const tests: Test[] = [
 ];
 
 export function Tests() {
+  const [openId, setOpenId] = useState<string | null>(null);
+  const open = openId ? tests.find((t) => t.id === openId) ?? null : null;
+  const close = useCallback(() => setOpenId(null), []);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, close]);
+
   return (
     <div className="flex flex-col gap-8 md:gap-12">
       <p className="font-display text-2xl leading-snug md:text-3xl">
@@ -73,25 +87,58 @@ export function Tests() {
       </p>
       <div className="columns-1 gap-3 md:columns-2 md:gap-4 lg:columns-3 xl:columns-4">
         {tests.map((t, i) => (
-          <motion.div
+          <motion.button
             key={t.id}
+            type="button"
+            layoutId={`disputatio-${t.id}`}
+            onClick={() => setOpenId(t.id)}
+            aria-label={t.title}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, delay: Math.min(i, 8) * 0.03 }}
             whileHover={{ scale: 1.03, y: -2 }}
             style={{ aspectRatio: t.aspect }}
-            className="relative mb-3 block w-full break-inside-avoid overflow-hidden rounded-sm border border-border bg-card shadow-[0_10px_30px_-20px_color-mix(in_oklab,var(--ink)_25%,transparent)] transition-shadow duration-500 ease-out hover:shadow-[0_24px_60px_-24px_color-mix(in_oklab,var(--ink)_35%,transparent)] md:mb-4"
+            className="relative mb-3 block w-full break-inside-avoid overflow-hidden rounded-sm border border-border bg-card shadow-[0_10px_30px_-20px_color-mix(in_oklab,var(--ink)_25%,transparent)] transition-shadow duration-500 ease-out hover:shadow-[0_24px_60px_-24px_color-mix(in_oklab,var(--ink)_35%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass md:mb-4"
           >
-            <img
+            <motion.img
+              layoutId={`disputatio-thumb-${t.id}`}
               src={t.thumb}
               alt={t.title}
               loading="lazy"
               className="absolute inset-0 h-full w-full object-cover mix-blend-multiply dark:mix-blend-screen"
             />
             <div className="pointer-events-none absolute inset-0 paper-grain opacity-40" />
-          </motion.div>
+          </motion.button>
         ))}
       </div>
+
+      <AnimatePresence>
+        {open ? (
+          <motion.div
+            key="lightbox"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={close}
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-ink/85 p-4 backdrop-blur-sm md:p-8"
+          >
+            <motion.div
+              key={open.id}
+              layoutId={`disputatio-${open.id}`}
+              onClick={(e) => e.stopPropagation()}
+              className="relative overflow-hidden rounded-sm border border-parchment/20 bg-card shadow-[0_40px_100px_-30px_rgba(0,0,0,0.5)]"
+            >
+              <motion.img
+                layoutId={`disputatio-thumb-${open.id}`}
+                src={open.thumb}
+                alt={open.title}
+                className="block max-h-[88vh] max-w-[92vw] object-contain"
+              />
+            </motion.div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }
