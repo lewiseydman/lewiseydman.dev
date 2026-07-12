@@ -51,7 +51,7 @@ export const FolioCard = forwardRef<HTMLButtonElement, Props>(function FolioCard
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.4, delay: Math.min(index, 6) * 0.05 }}
-      className={`group relative flex h-full w-full flex-col gap-4 bg-background text-left transition-colors hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 ${
+      className={`group relative flex h-full w-full flex-col gap-4 md:gap-5 bg-background text-left transition-colors hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40 ${
         padded ? "p-4 sm:p-6 lg:p-8" : ""
       } ${className}`}
     >
@@ -72,13 +72,13 @@ export const FolioCard = forwardRef<HTMLButtonElement, Props>(function FolioCard
         ) : null}
       </div>
       {kicker ? <div className="font-mono-mar">{kicker}</div> : null}
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 md:gap-2">
         <h3 className="font-display text-2xl leading-tight tracking-[-0.005em] transition-colors group-hover:text-sepia md:text-3xl">
           {title}
         </h3>
       </div>
       {body ? <div className="text-sm leading-relaxed text-muted-foreground">{body}</div> : null}
-      {footer ? <div className="mt-auto flex flex-wrap items-end justify-between gap-3">{footer}</div> : null}
+      {footer ? <div className="mt-auto flex flex-wrap items-end justify-between gap-3 md:gap-4">{footer}</div> : null}
       <div className="h-px w-0 bg-sepia transition-all duration-500 group-hover:w-full" />
     </motion.button>
   );
