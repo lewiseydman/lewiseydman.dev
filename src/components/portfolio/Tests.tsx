@@ -84,7 +84,7 @@ export function Tests() {
   return (
     <div className="flex flex-col gap-8 md:gap-12">
       <p className="font-display text-2xl leading-snug md:text-3xl">
-        <span className="italic text-sepia">Visual explorations and studies.</span>
+        <span className="italic text-sepia">Visual studies & inspiration.</span>
       </p>
       <div className="columns-1 gap-3 md:columns-2 md:gap-4 lg:columns-3 xl:columns-4">
         {tests.map((t, i) => (
