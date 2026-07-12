@@ -51,7 +51,6 @@ export function ExperienceTimeline() {
       </header>
 
       <div className="relative">
-        {/* Vertical rail — animated draw-in */}
         <motion.span
           aria-hidden
           initial={{ scaleY: 0 }}
@@ -64,7 +63,7 @@ export function ExperienceTimeline() {
 
         <ol className="flex flex-col">
           {experience.map((e, i) => {
-            const isRight = i % 2 === 1; // desktop side
+            const isRight = i % 2 === 1;
             return (
               <motion.li
                 key={e.year}
@@ -74,7 +73,6 @@ export function ExperienceTimeline() {
                 transition={{ duration: 0.55, delay: 0.08 * i, ease: "easeOut" }}
                 className="group relative pb-10 pl-14 last:pb-0 md:pb-14 md:pl-20 lg:grid lg:grid-cols-2 lg:gap-24 lg:pb-20 lg:pl-0"
               >
-                {/* Node with numeral inside */}
                 <span
                   aria-hidden
                   className="absolute top-0 flex h-9 w-9 -translate-x-1/2 items-center justify-center left-[18px] md:h-11 md:w-11 md:left-[22px] lg:left-1/2"
@@ -88,14 +86,12 @@ export function ExperienceTimeline() {
                 <div
                   className={isRight ? "lg:col-start-2 lg:pl-12 lg:text-left" : "lg:col-start-1 lg:pr-12 lg:text-right"}
                 >
-                  {/* Date pill */}
                   <div className={`mb-3 inline-flex items-center gap-2 ${isRight ? "" : "lg:flex-row-reverse"}`}>
                     <span className="font-mono-mar rounded-full border border-border bg-card/60 px-2.5 py-0.5 text-[11px] text-muted-foreground transition-colors duration-500 group-hover:border-brass/40 group-hover:text-brass md:text-xs">
                       {e.year}
                     </span>
                   </div>
 
-                  {/* Body */}
                   <h3 className="font-display text-2xl leading-tight tracking-[-0.01em] transition-colors duration-500 group-hover:text-foreground md:text-4xl">
                     {e.role}
                   </h3>
@@ -106,7 +102,6 @@ export function ExperienceTimeline() {
                     {e.notes}
                   </p>
 
-                  {/* Underline flourish */}
                   <div
                     className={`mt-5 h-px w-8 bg-sepia/40 transition-all duration-500 group-hover:w-24 group-hover:bg-brass ${isRight ? "" : "lg:ml-auto"}`}
                   />
