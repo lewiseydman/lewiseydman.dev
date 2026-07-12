@@ -295,6 +295,18 @@ function Essay({ post, onBack }: { post: Blog; onBack: () => void }) {
     >
       <DialogSubHeader onBack={onBack} backLabel="Back to Codex" right={<>{post.date}</>} />
 
+      {/* Header image */}
+      <figure className="relative -mx-5 aspect-[16/9] overflow-hidden border-y border-border bg-card md:-mx-8 md:aspect-[21/9] md:rounded-sm md:border lg:-mx-12">
+        <img
+          src={post.thumb ?? defaultThumb}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="h-full w-full object-cover mix-blend-multiply dark:mix-blend-screen"
+        />
+        <div aria-hidden className="absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
+      </figure>
+
       {/* Meta strip — single horizontal line above the body */}
       <div className="font-mono-mar flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-border pb-3">
         <span>Lewis Eydman</span>
