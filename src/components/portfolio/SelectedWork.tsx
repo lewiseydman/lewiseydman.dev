@@ -31,7 +31,7 @@ const projects: Project[] = [
     id: "helios",
     num: "I",
     title: "Helios Console",
-    role: "Lead Product · Design Systems",
+    role: "B2B",
     year: "2025",
     outcome: "Cut onboarding time by 64%",
     blurb:
@@ -52,7 +52,7 @@ const projects: Project[] = [
     id: "atlas",
     num: "II",
     title: "Atlas Maps",
-    role: "PM · Prototyping",
+    role: "Consumer",
     year: "2024",
     outcome: "+1.2M MAU in twelve months",
     blurb:
@@ -72,7 +72,7 @@ const projects: Project[] = [
     id: "aviary",
     num: "III",
     title: "Aviary",
-    role: "Founder · Design & Engineering",
+    role: "SaaS",
     year: "2023",
     outcome: "Acquired, post YC W23",
     blurb:
@@ -92,7 +92,7 @@ const projects: Project[] = [
     id: "specimen",
     num: "IV",
     title: "Specimen",
-    role: "PM · Research",
+    role: "Health",
     year: "2022",
     outcome: "Adopted by 7 research labs",
     blurb:
