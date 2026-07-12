@@ -62,56 +62,61 @@ export function ExperienceTimeline() {
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
           style={{ transformOrigin: "top" }}
-          className="pointer-events-none absolute bottom-0 left-[11px] top-0 w-px bg-gradient-to-b from-transparent via-sepia/40 to-transparent md:left-[15px]"
+          className="pointer-events-none absolute bottom-0 top-0 w-px bg-gradient-to-b from-transparent via-sepia/40 to-transparent left-[15px] md:left-[19px] lg:left-1/2 lg:-translate-x-1/2"
         />
 
         <ol className="flex flex-col">
-          {experience.map((e, i) => (
-            <motion.li
-              key={e.year}
-              initial={{ opacity: 0, x: -12 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.55, delay: 0.08 * i, ease: "easeOut" }}
-              className="group relative pb-10 pl-10 last:pb-0 md:pb-14 md:pl-14"
-            >
-              {/* Node */}
-              <span
-                aria-hidden
-                className="absolute left-0 top-1 flex h-6 w-6 items-center justify-center md:h-8 md:w-8"
+          {experience.map((e, i) => {
+            const isRight = i % 2 === 1; // desktop side
+            return (
+              <motion.li
+                key={e.year}
+                initial={{ opacity: 0, x: -12 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.55, delay: 0.08 * i, ease: "easeOut" }}
+                className="group relative pb-10 pl-12 last:pb-0 md:pb-14 md:pl-16 lg:grid lg:grid-cols-2 lg:gap-16 lg:pb-20 lg:pl-0"
               >
-                <span className="absolute inset-0 rounded-full border border-sepia/30 bg-background transition-all duration-500 group-hover:scale-110 group-hover:border-brass group-hover:shadow-[0_0_0_4px_color-mix(in_oklab,var(--brass)_12%,transparent)]" />
-                <span className="relative h-1.5 w-1.5 rounded-full bg-sepia transition-colors duration-500 group-hover:bg-brass md:h-2 md:w-2" />
-              </span>
-
-              {/* Numeral chip floating just below the node — decorative anchor */}
-              <span
-                aria-hidden
-                className="font-mono-mar absolute left-0 top-9 w-6 text-center text-[10px] text-muted-foreground transition-colors duration-500 group-hover:text-brass md:top-11 md:w-8 md:text-xs"
-              >
-                {romanRoles[i]}
-              </span>
-
-              {/* Date pill */}
-              <div className="mb-3 inline-flex items-center gap-2">
-                <span className="font-mono-mar rounded-full border border-border bg-card/60 px-2.5 py-0.5 text-[11px] text-muted-foreground transition-colors duration-500 group-hover:border-brass/40 group-hover:text-brass md:text-xs">
-                  {e.year}
+                {/* Node with numeral inside */}
+                <span
+                  aria-hidden
+                  className="absolute top-0 flex h-8 w-8 items-center justify-center left-[15px] -translate-x-1/2 md:h-10 md:w-10 md:left-[19px] lg:left-1/2"
+                >
+                  <span className="absolute inset-0 rounded-full border border-sepia/30 bg-background transition-all duration-500 group-hover:scale-110 group-hover:border-brass group-hover:shadow-[0_0_0_4px_color-mix(in_oklab,var(--brass)_12%,transparent)]" />
+                  <span className="font-mono-mar relative text-[10px] leading-none text-muted-foreground transition-colors duration-500 group-hover:text-brass md:text-xs">
+                    {romanRoles[i]}
+                  </span>
                 </span>
-              </div>
 
-              {/* Body */}
-              <h3 className="font-display text-2xl leading-tight tracking-[-0.01em] transition-colors duration-500 group-hover:text-foreground md:text-4xl">
-                {e.role}
-              </h3>
-              <p className="font-display mt-1 text-base italic text-sepia md:text-lg">{e.org}</p>
-              <p className="mt-3 max-w-prose text-sm leading-relaxed text-muted-foreground md:text-base">
-                {e.notes}
-              </p>
+                <div
+                  className={
+                    isRight
+                      ? "lg:col-start-2 lg:pl-10 lg:text-left"
+                      : "lg:col-start-1 lg:pr-10 lg:text-right"
+                  }
+                >
+                  {/* Date pill */}
+                  <div className={`mb-3 inline-flex items-center gap-2 ${isRight ? "" : "lg:flex-row-reverse"}`}>
+                    <span className="font-mono-mar rounded-full border border-border bg-card/60 px-2.5 py-0.5 text-[11px] text-muted-foreground transition-colors duration-500 group-hover:border-brass/40 group-hover:text-brass md:text-xs">
+                      {e.year}
+                    </span>
+                  </div>
 
-              {/* Underline flourish */}
-              <div className="mt-5 h-px w-8 bg-sepia/40 transition-all duration-500 group-hover:w-24 group-hover:bg-brass" />
-            </motion.li>
-          ))}
+                  {/* Body */}
+                  <h3 className="font-display text-2xl leading-tight tracking-[-0.01em] transition-colors duration-500 group-hover:text-foreground md:text-4xl">
+                    {e.role}
+                  </h3>
+                  <p className="font-display mt-1 text-base italic text-sepia md:text-lg">{e.org}</p>
+                  <p className={`mt-3 max-w-prose text-sm leading-relaxed text-muted-foreground md:text-base ${isRight ? "" : "lg:ml-auto"}`}>
+                    {e.notes}
+                  </p>
+
+                  {/* Underline flourish */}
+                  <div className={`mt-5 h-px w-8 bg-sepia/40 transition-all duration-500 group-hover:w-24 group-hover:bg-brass ${isRight ? "" : "lg:ml-auto"}`} />
+                </div>
+              </motion.li>
+            );
+          })}
         </ol>
       </div>
 
