@@ -82,8 +82,7 @@ export function Tests() {
             className="flex flex-col gap-8 md:gap-12"
           >
             <p className="font-display text-2xl leading-snug md:text-3xl">
-              Small <span className="italic text-sepia">disputationes</span> &mdash; experiments, studies, and things I
-              have found beautiful lately.
+              <span className="italic text-sepia">Visual explorations and design studies.</span>
             </p>
             <div className="grid auto-rows-[10rem] grid-cols-1 gap-3 sm:grid-cols-2 sm:auto-rows-[11rem] md:gap-4 lg:grid-cols-3 lg:auto-rows-[12rem]">
               {tests.map((t, i) => (
@@ -114,14 +113,10 @@ export function Tests() {
                       <span className="font-mono-mar rounded-full border border-parchment/30 bg-ink/40 px-2 py-0.5 text-parchment backdrop-blur-sm">
                         {t.num}
                       </span>
-                      <span className="font-mono-mar text-right text-parchment/90">
-                        {t.domain}
-                      </span>
+                      <span className="font-mono-mar text-right text-parchment/90">{t.domain}</span>
                     </div>
                     <div className="flex flex-col gap-1">
-                      <h3 className="font-display text-xl leading-tight text-parchment md:text-2xl">
-                        {t.title}
-                      </h3>
+                      <h3 className="font-display text-xl leading-tight text-parchment md:text-2xl">{t.title}</h3>
                       <div className="h-px w-8 bg-brass transition-all duration-500 group-hover:w-24" />
                     </div>
                   </div>
@@ -149,11 +144,7 @@ function TestDetail({ open, onBack }: { open: Test; onBack: () => void }) {
       transition={{ duration: 0.35 }}
       className="flex flex-col gap-8 md:gap-12"
     >
-      <DialogSubHeader
-        onBack={onBack}
-        backLabel="Back to Disputationes"
-        right={<>Disputatio · {open.num}</>}
-      />
+      <DialogSubHeader onBack={onBack} backLabel="Back to Disputationes" right={<>Disputatio · {open.num}</>} />
       <motion.div
         layoutId={`disputatio-${open.id}`}
         className="relative aspect-[4/5] w-full overflow-hidden rounded-sm border border-border bg-card sm:aspect-[16/10]"
