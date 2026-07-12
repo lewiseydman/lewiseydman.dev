@@ -80,8 +80,12 @@ const aspectClasses: Record<string, string> = {
 
 export function Tests() {
   const [openId, setOpenId] = useState<string | null>(null);
+  const [closingId, setClosingId] = useState<string | null>(null);
   const open = openId ? (tests.find((t) => t.id === openId) ?? null) : null;
-  const close = useCallback(() => setOpenId(null), []);
+  const close = useCallback(() => {
+    if (openId) setClosingId(openId);
+    setOpenId(null);
+  }, [openId]);
 
   useEffect(() => {
     if (!open) return;
@@ -98,15 +102,19 @@ export function Tests() {
         <span className="italic text-sepia">Visual studies and inspiration.</span>
       </p>
       <LayoutGroup>
-        <div className="relative z-0 columns-1 gap-3 md:columns-2 md:gap-4 lg:columns-3 xl:columns-4">
+        <div className="relative z-0 columns-1 gap-3 md:columns-2 md:gap-4 lg:columns-3 xl:columns-3">
           {tests.map((t, i) => {
             const isOpen = openId === t.id;
+            const isClosing = closingId === t.id;
             return (
               <motion.button
                 key={t.id}
                 type="button"
                 layoutId={`disputatio-${t.id}`}
                 onClick={() => setOpenId(t.id)}
+                onLayoutAnimationComplete={() => {
+                  if (closingId === t.id) setClosingId(null);
+                }}
                 aria-label={t.title}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -115,7 +123,7 @@ export function Tests() {
                 className={cn(
                   "group relative mb-3 block w-full break-inside-avoid overflow-hidden rounded-sm border border-border bg-card shadow-[0_10px_30px_-20px_color-mix(in_oklab,var(--ink)_25%,transparent)] transition-shadow duration-500 ease-out hover:shadow-[0_24px_60px_-24px_color-mix(in_oklab,var(--ink)_35%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass md:mb-4",
                   aspectClasses[t.aspect],
-                  isOpen && "z-30"
+                  (isOpen || isClosing) && "z-30"
                 )}
               >
                 <motion.img
