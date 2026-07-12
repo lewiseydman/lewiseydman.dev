@@ -96,79 +96,87 @@ export function Tests() {
       <p className="font-display text-2xl leading-snug md:text-3xl">
         <span className="italic text-sepia">Visual studies and inspiration.</span>
       </p>
-      <div className="columns-1 gap-3 md:columns-2 md:gap-4 lg:columns-3 xl:columns-4">
-        {tests.map((t, i) => (
-          <motion.button
-            key={t.id}
-            type="button"
-            layoutId={`disputatio-${t.id}`}
-            onClick={() => setOpenId(t.id)}
-            aria-label={t.title}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, delay: Math.min(i, 8) * 0.03 }}
-            whileHover={{ scale: 1.03, y: -2 }}
-            style={{ aspectRatio: t.aspect }}
-            className="group relative mb-3 block w-full break-inside-avoid overflow-hidden rounded-sm border border-border bg-card shadow-[0_10px_30px_-20px_color-mix(in_oklab,var(--ink)_25%,transparent)] transition-shadow duration-500 ease-out hover:shadow-[0_24px_60px_-24px_color-mix(in_oklab,var(--ink)_35%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass md:mb-4"
-          >
-            <motion.img
-              src={t.thumb}
-              alt={t.title}
-              loading="lazy"
-              className="absolute inset-0 h-full w-full object-cover mix-blend-multiply dark:mix-blend-screen"
-            />
-            <div className="pointer-events-none absolute inset-0 paper-grain opacity-40" />
-            <span
-              aria-hidden
-              className="pointer-events-none absolute right-2 top-2 flex h-8 w-8 translate-y-1 items-center justify-center rounded-full border border-parchment/30 bg-ink/55 text-parchment opacity-0 shadow-sm backdrop-blur-sm transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 md:right-3 md:top-3"
-            >
-              <Maximize2 className="h-3.5 w-3.5" />
-            </span>
-          </motion.button>
-        ))}
-      </div>
-
-      <AnimatePresence>
-        {open ? (
-          <motion.div
-            key="lightbox"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            onClick={close}
-            className="fixed inset-0 z-[60] flex items-center justify-center bg-ink/85 p-4 backdrop-blur-sm md:p-8"
-          >
-            <motion.div
-              key={open.id}
-              layoutId={`disputatio-${open.id}`}
-              onClick={(e) => e.stopPropagation()}
-              transition={{ type: "spring", stiffness: 220, damping: 30, mass: 0.85 }}
-              className="relative inline-block overflow-hidden rounded-sm border border-parchment/20 bg-card shadow-[0_40px_100px_-30px_rgba(0,0,0,0.5)]"
-            >
-              <motion.img
-                src={open.thumb}
-                alt={open.title}
-                className="block max-h-[88vh] max-w-[92vw] object-contain"
-              />
+      <LayoutGroup>
+        <div className="relative z-0 columns-1 gap-3 md:columns-2 md:gap-4 lg:columns-3 xl:columns-4">
+          {tests.map((t, i) => {
+            const isOpen = openId === t.id;
+            return (
               <motion.button
+                key={t.id}
                 type="button"
-                onClick={close}
-                aria-label="Close"
-                initial={{ opacity: 0, scale: 0.85 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.85 }}
-                transition={{ duration: 0.25, delay: 0.15, ease: "easeOut" }}
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.92 }}
-                className="absolute right-2 top-2 flex h-9 w-9 items-center justify-center rounded-full border border-parchment/30 bg-ink/60 text-parchment shadow-md backdrop-blur-sm transition-colors hover:border-brass hover:text-brass focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass md:right-3 md:top-3 md:h-10 md:w-10"
+                layoutId={`disputatio-${t.id}`}
+                onClick={() => setOpenId(t.id)}
+                aria-label={t.title}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, delay: Math.min(i, 8) * 0.03 }}
+                whileHover={{ scale: 1.03, y: -2 }}
+                style={{ aspectRatio: isMobile ? "3/4" : t.aspect }}
+                className={cn(
+                  "group relative mb-3 block w-full break-inside-avoid overflow-hidden rounded-sm border border-border bg-card shadow-[0_10px_30px_-20px_color-mix(in_oklab,var(--ink)_25%,transparent)] transition-shadow duration-500 ease-out hover:shadow-[0_24px_60px_-24px_color-mix(in_oklab,var(--ink)_35%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass md:mb-4",
+                  isOpen && "z-30"
+                )}
               >
-                <Minimize2 className="h-4 w-4" />
+                <motion.img
+                  src={t.thumb}
+                  alt={t.title}
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover mix-blend-multiply dark:mix-blend-screen"
+                />
+                <div className="pointer-events-none absolute inset-0 paper-grain opacity-40" />
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute right-2 top-2 flex h-8 w-8 translate-y-1 items-center justify-center rounded-full border border-parchment/30 bg-ink/55 text-parchment opacity-0 shadow-sm backdrop-blur-sm transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 md:right-3 md:top-3"
+                >
+                  <Maximize2 className="h-3.5 w-3.5" />
+                </span>
               </motion.button>
+            );
+          })}
+        </div>
+
+        <AnimatePresence>
+          {open ? (
+            <motion.div
+              key="lightbox"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              onClick={close}
+              className="fixed inset-0 z-[60] flex items-center justify-center bg-ink/85 p-4 backdrop-blur-sm md:p-8"
+            >
+              <motion.div
+                key={open.id}
+                layoutId={`disputatio-${open.id}`}
+                onClick={(e) => e.stopPropagation()}
+                transition={{ type: "spring", stiffness: 220, damping: 30, mass: 0.85 }}
+                className="relative z-50 inline-block overflow-hidden rounded-sm border border-parchment/20 bg-card shadow-[0_40px_100px_-30px_rgba(0,0,0,0.5)]"
+              >
+                <motion.img
+                  src={open.thumb}
+                  alt={open.title}
+                  className="block max-h-[88vh] max-w-[92vw] object-contain"
+                />
+                <motion.button
+                  type="button"
+                  onClick={close}
+                  aria-label="Close"
+                  initial={{ opacity: 0, scale: 0.85 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.85 }}
+                  transition={{ duration: 0.25, delay: 0.15, ease: "easeOut" }}
+                  whileHover={{ scale: 1.08 }}
+                  whileTap={{ scale: 0.92 }}
+                  className="absolute right-2 top-2 flex h-9 w-9 items-center justify-center rounded-full border border-parchment/30 bg-ink/60 text-parchment shadow-md backdrop-blur-sm transition-colors hover:border-brass hover:text-brass focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass md:right-3 md:top-3 md:h-10 md:w-10"
+                >
+                  <Minimize2 className="h-4 w-4" />
+                </motion.button>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+          ) : null}
+        </AnimatePresence>
+      </LayoutGroup>
     </div>
   );
 }
