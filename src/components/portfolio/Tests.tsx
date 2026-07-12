@@ -1,8 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import thumb from "@/assets/thumb-disputatio.jpg";
-import { DialogSubHeader } from "./primitives/DialogSubHeader";
-import { scrollDialogToTop } from "@/lib/scroll-dialog-top";
 import { cn } from "@/lib/utils";
 
 type Test = {
@@ -11,161 +10,162 @@ type Test = {
   title: string;
   domain: string;
   summary: string;
-  detail: string;
-  span?: string;
+  aspect: string;
+  thumb: string;
 };
 
-const tests: Test[] = [
-  {
-    id: "weather-glance",
-    num: "I",
-    title: "Weather, at a glance",
-    domain: "Interface experiment",
-    summary:
-      "A single-screen weather UI built around one decision: should I take a coat? Everything else is marginalia.",
-    detail:
-      "A study in selective abstraction. The forecast is real, but the surface answers exactly one question. Built as a vertical slab of typography with a single conditional glyph at the top.",
-    span: "sm:row-span-2 lg:row-span-2",
-  },
-  {
-    id: "loop-motion",
-    num: "II",
-    title: "An honest loading loop",
-    domain: "Motion study",
-    summary:
-      "Most loading spinners lie. This one shows the actual queue position and animates only when work is happening.",
-    detail:
-      "A motion experiment exploring what a loading indicator could look like if it were forced to tell the truth. The animation pauses when the worker stalls. Users prefer it; product engineers do not.",
-  },
-  {
-    id: "found-typography",
-    num: "III",
-    title: "Found typography, Lisbon",
-    domain: "Field study",
-    summary:
-      "A week of photographing hand-painted shop signage. Notes on the persistence of warm serifs in cold cities.",
-    detail:
-      "Collected, sorted, and re-drawn in Figma over an evening. The lesson, repeated: the most distinctive type in any city is the type that was never sold as a typeface.",
-    span: "lg:row-span-2",
-  },
-  {
-    id: "calm-dashboard",
-    num: "IV",
-    title: "The calm dashboard",
-    domain: "Design critique",
-    summary:
-      "A subtractive redesign of an operator console — forty-seven widgets to four, with the math to justify each cut.",
-    detail:
-      "Annotated screen-by-screen against the original. Half the value of the exercise was naming, out loud, the politics of every panel that survived.",
-  },
+const ROMAN = [
+  "I","II","III","IV","V","VI","VII","VIII","IX","X",
+  "XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX",
 ];
+
+const RAW: Array<Omit<Test, "num" | "thumb">> = [
+  { id: "weather-glance", title: "Weather, at a glance", domain: "Interface experiment", summary: "A single-screen weather UI built around one decision: should I take a coat?", aspect: "3/4" },
+  { id: "loop-motion", title: "An honest loading loop", domain: "Motion study", summary: "A spinner that shows real queue position and pauses when the worker stalls.", aspect: "1/1" },
+  { id: "found-typography", title: "Found typography, Lisbon", domain: "Field study", summary: "A week of photographing hand-painted shop signage.", aspect: "4/5" },
+  { id: "calm-dashboard", title: "The calm dashboard", domain: "Design critique", summary: "A subtractive redesign — forty-seven widgets down to four.", aspect: "3/2" },
+  { id: "icon-grid", title: "A twelve-glyph icon grid", domain: "Iconography", summary: "Stroke, weight, and terminals unified across a small utility set.", aspect: "1/1" },
+  { id: "colour-drift", title: "Colour drift in dark mode", domain: "Colour study", summary: "Measuring how neutral greys shift under different accent hues.", aspect: "4/3" },
+  { id: "hairline-rules", title: "Hairline rules that survive zoom", domain: "Interface detail", summary: "One-pixel dividers that hold their weight at every DPR.", aspect: "9/16" },
+  { id: "modal-hierarchy", title: "Modals without the modal", domain: "Interaction pattern", summary: "Replacing overlays with in-place expansion for lightweight edits.", aspect: "3/4" },
+  { id: "form-rhythm", title: "Form rhythm", domain: "Interface study", summary: "Baseline, label, and helper text sitting on a single vertical grid.", aspect: "2/3" },
+  { id: "chart-annotation", title: "Charts that annotate themselves", domain: "Data-vis", summary: "Auto-placed callouts on the peaks that actually matter.", aspect: "3/2" },
+  { id: "cursor-affordance", title: "The cursor as affordance", domain: "Interaction detail", summary: "Small, contextual cursor changes doing the work of an entire tooltip.", aspect: "1/1" },
+  { id: "empty-states", title: "Empty states with agency", domain: "Interface writing", summary: "Turning the blank page into a first prompt, not an apology.", aspect: "4/5" },
+  { id: "keyboard-map", title: "A keyboard-first map", domain: "Prototype", summary: "Panning and zoom that never needs the mouse.", aspect: "4/3" },
+  { id: "print-poster", title: "Print poster, screen version", domain: "Poster study", summary: "Translating a risograph poster into an accessible web hero.", aspect: "3/4" },
+  { id: "scroll-cinema", title: "Scroll-driven cinema", domain: "Motion study", summary: "A short film that advances one frame per hundred pixels.", aspect: "9/16" },
+  { id: "audit-trail", title: "The audit trail, humanised", domain: "Enterprise UX", summary: "Turning a JSON firehose into a readable diary.", aspect: "3/2" },
+  { id: "onboard-three", title: "Three-screen onboarding", domain: "Interface exercise", summary: "How much can you cut before people stop understanding?", aspect: "2/3" },
+  { id: "wayfinding-signs", title: "Wayfinding, indoors", domain: "Field study", summary: "Notes from a hospital's signage system that quietly works.", aspect: "1/1" },
+  { id: "typography-scale", title: "One type scale, everywhere", domain: "Design system", summary: "A modular scale audited across marketing, product, and docs.", aspect: "4/5" },
+  { id: "notification-mute", title: "The polite notification", domain: "Interaction study", summary: "What happens when a badge waits its turn instead of interrupting.", aspect: "3/4" },
+];
+
+const tests: Test[] = RAW.map((t, i) => ({ ...t, num: ROMAN[i], thumb }));
 
 export function Tests() {
   const [openId, setOpenId] = useState<string | null>(null);
-  const open = tests.find((t) => t.id === openId) ?? null;
+  const openIndex = openId ? tests.findIndex((t) => t.id === openId) : -1;
+  const open = openIndex >= 0 ? tests[openIndex] : null;
 
-  const openTest = (id: string) => {
-    setOpenId(id);
-    scrollDialogToTop();
-  };
+  const close = useCallback(() => setOpenId(null), []);
+  const step = useCallback(
+    (dir: 1 | -1) => {
+      if (openIndex < 0) return;
+      const next = (openIndex + dir + tests.length) % tests.length;
+      setOpenId(tests[next].id);
+    },
+    [openIndex],
+  );
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+      else if (e.key === "ArrowRight") step(1);
+      else if (e.key === "ArrowLeft") step(-1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, close, step]);
 
   return (
-    <div className="flex flex-col gap-12 md:gap-16">
-      <AnimatePresence mode="wait">
-        {!open ? (
-          <motion.div
-            key="index"
-            initial={{ opacity: 0, y: 8 }}
+    <div className="flex flex-col gap-8 md:gap-12">
+      <p className="font-display text-2xl leading-snug md:text-3xl">
+        <span className="italic text-sepia">Visual explorations and design studies.</span>
+      </p>
+      <div className="columns-2 gap-3 sm:columns-3 md:gap-4 lg:columns-4">
+        {tests.map((t, i) => (
+          <motion.button
+            key={t.id}
+            layoutId={`disputatio-${t.id}`}
+            onClick={() => setOpenId(t.id)}
+            aria-label={`Open ${t.title}`}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.3 }}
-            className="flex flex-col gap-8 md:gap-12"
+            transition={{ duration: 0.35, delay: Math.min(i, 8) * 0.03 }}
+            style={{ aspectRatio: t.aspect }}
+            className={cn(
+              "group relative mb-3 block w-full break-inside-avoid overflow-hidden rounded-sm border border-border bg-card text-left transition-all duration-500 hover:-translate-y-0.5 hover:border-brass hover:shadow-[0_20px_50px_-24px_color-mix(in_oklab,var(--ink)_28%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass md:mb-4",
+            )}
           >
-            <p className="font-display text-2xl leading-snug md:text-3xl">
-              <span className="italic text-sepia">Visual explorations and design studies.</span>
-            </p>
-            <div className="grid auto-rows-[10rem] grid-cols-1 gap-3 sm:grid-cols-2 sm:auto-rows-[11rem] md:gap-4 lg:grid-cols-3 lg:auto-rows-[12rem]">
-              {tests.map((t, i) => (
-                <motion.button
-                  key={t.id}
-                  layoutId={`disputatio-${t.id}`}
-                  onClick={() => openTest(t.id)}
-                  aria-label={`Open disputatio: ${t.title}`}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: Math.min(i, 4) * 0.05 }}
-                  className={cn(
-                    "group relative flex overflow-hidden rounded-sm border border-border bg-card text-left transition-all duration-500 hover:-translate-y-0.5 hover:border-brass hover:shadow-[0_20px_50px_-24px_color-mix(in_oklab,var(--ink)_28%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass",
-                    "row-span-2",
-                    t.span,
-                  )}
-                >
-                  <motion.img
-                    layoutId={`disputatio-thumb-${t.id}`}
-                    src={thumb}
-                    alt=""
-                    className="absolute inset-0 h-full w-full object-cover mix-blend-multiply transition-transform duration-700 ease-out group-hover:scale-[1.03] dark:mix-blend-screen"
-                  />
-                  <div className="pointer-events-none absolute inset-0 paper-grain opacity-40" />
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent opacity-90" />
-                  <div className="relative z-10 flex w-full flex-col justify-between p-4 md:p-5">
-                    <div className="flex items-start justify-between gap-3">
-                      <span className="font-mono-mar rounded-full border border-parchment/30 bg-ink/40 px-2 py-0.5 text-parchment backdrop-blur-sm">
-                        {t.num}
-                      </span>
-                      <span className="font-mono-mar text-right text-parchment/90">{t.domain}</span>
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <h3 className="font-display text-xl leading-tight text-parchment md:text-2xl">{t.title}</h3>
-                      <div className="h-px w-8 bg-brass transition-all duration-500 group-hover:w-24" />
-                    </div>
-                  </div>
-                </motion.button>
-              ))}
+            <motion.img
+              layoutId={`disputatio-thumb-${t.id}`}
+              src={t.thumb}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover mix-blend-multiply transition-transform duration-700 ease-out group-hover:scale-[1.03] dark:mix-blend-screen"
+            />
+            <div className="pointer-events-none absolute inset-0 paper-grain opacity-40" />
+            <span className="font-mono-mar absolute left-2 top-2 rounded-full border border-parchment/30 bg-ink/50 px-2 py-0.5 text-parchment backdrop-blur-sm">
+              {t.num}
+            </span>
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-ink/85 via-ink/40 to-transparent p-3 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 md:p-4">
+              <h3 className="font-display text-sm leading-tight text-parchment md:text-base">{t.title}</h3>
             </div>
+          </motion.button>
+        ))}
+      </div>
+
+      <AnimatePresence>
+        {open ? (
+          <motion.div
+            key="lightbox"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-ink/85 backdrop-blur-sm"
+            onClick={close}
+          >
+            <button
+              type="button"
+              aria-label="Close"
+              onClick={close}
+              className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-parchment/30 bg-ink/40 text-parchment transition hover:border-brass hover:text-brass"
+            >
+              <X className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              aria-label="Previous"
+              onClick={(e) => { e.stopPropagation(); step(-1); }}
+              className="absolute left-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-parchment/30 bg-ink/40 text-parchment transition hover:border-brass hover:text-brass md:left-6"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              type="button"
+              aria-label="Next"
+              onClick={(e) => { e.stopPropagation(); step(1); }}
+              className="absolute right-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-parchment/30 bg-ink/40 text-parchment transition hover:border-brass hover:text-brass md:right-6"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+            <motion.div
+              key={open.id}
+              layoutId={`disputatio-${open.id}`}
+              onClick={(e) => e.stopPropagation()}
+              className="relative flex max-h-[88vh] max-w-[92vw] flex-col overflow-hidden rounded-sm border border-parchment/20 bg-card"
+            >
+              <motion.img
+                layoutId={`disputatio-thumb-${open.id}`}
+                src={open.thumb}
+                alt={open.title}
+                className="max-h-[78vh] max-w-[92vw] object-contain"
+              />
+              <div className="flex items-center justify-between gap-4 border-t border-parchment/15 bg-ink/60 px-4 py-3 text-parchment">
+                <div className="font-mono-mar flex items-center gap-3">
+                  <span>{open.num}</span>
+                  <span className="hairline h-px w-6" />
+                  <span>{open.domain}</span>
+                </div>
+                <h3 className="font-display truncate text-base italic text-parchment/90 md:text-lg">{open.title}</h3>
+              </div>
+            </motion.div>
           </motion.div>
-        ) : (
-          <TestDetail key={open.id} open={open} onBack={() => setOpenId(null)} />
-        )}
+        ) : null}
       </AnimatePresence>
     </div>
-  );
-}
-
-function TestDetail({ open, onBack }: { open: Test; onBack: () => void }) {
-  useEffect(() => {
-    scrollDialogToTop();
-  }, []);
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      transition={{ duration: 0.35 }}
-      className="flex flex-col gap-8 md:gap-12"
-    >
-      <DialogSubHeader onBack={onBack} backLabel="Back to Disputationes" right={<>Disputatio · {open.num}</>} />
-      <motion.div
-        layoutId={`disputatio-${open.id}`}
-        className="relative aspect-[4/5] w-full overflow-hidden rounded-sm border border-border bg-card sm:aspect-[16/10]"
-      >
-        <motion.img
-          layoutId={`disputatio-thumb-${open.id}`}
-          src={thumb}
-          alt={open.title}
-          className="h-full w-full object-cover mix-blend-multiply dark:mix-blend-screen"
-        />
-        <div className="pointer-events-none absolute inset-0 blueprint-grid-fine opacity-30 mix-blend-overlay" />
-        <div className="pointer-events-none absolute inset-0 paper-grain opacity-40" />
-      </motion.div>
-      <div className="flex flex-col gap-3">
-        <div className="font-mono-mar flex items-center gap-3">
-          <span>{open.domain}</span>
-        </div>
-        <h2 className="font-display text-3xl tracking-[-0.01em] md:text-5xl">{open.title}</h2>
-        <p className="font-display text-xl italic text-sepia md:text-2xl">{open.summary}</p>
-        <p className="text-[1.0625rem] leading-[1.75] text-foreground">{open.detail}</p>
-      </div>
-    </motion.div>
   );
 }
