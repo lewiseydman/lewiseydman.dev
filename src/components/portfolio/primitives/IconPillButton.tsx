@@ -5,7 +5,7 @@ import type { PillVariant } from "./pillButton";
 type CommonProps = {
   label: string; // aria-label
   variant?: PillVariant;
-  size?: "sm" | "md";
+  size?: "sm" | "md" | "lg";
   className?: string;
   children: ReactNode;
   showTooltip?: boolean;
@@ -26,18 +26,25 @@ type AnchorProps = CommonProps & {
 type Props = ButtonProps | AnchorProps;
 
 const base =
-  "group relative inline-flex items-center justify-center rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/40";
+  "group relative inline-flex items-center justify-center rounded-full border transition-[color,background-color,border-color,transform,box-shadow,opacity] duration-200 ease-out will-change-transform hover:-translate-y-px active:translate-y-0 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sepia/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-60";
 
 const sizes = {
+  lg: "h-14 w-14",
   md: "h-11 w-11", // 44px touch target
   sm: "h-8 w-8",
 };
 
 const variants: Record<PillVariant, string> = {
   primary:
-    "border border-sepia/60 bg-background/90 text-sepia shadow-sm backdrop-blur hover:border-sepia hover:bg-sepia hover:text-parchment",
+    "border-sepia/60 bg-background/90 text-sepia shadow-sm backdrop-blur hover:border-sepia hover:bg-sepia hover:text-parchment",
+  secondary:
+    "border-border bg-card text-foreground hover:border-sepia/60 hover:bg-muted",
+  outline:
+    "border-sepia/60 bg-background/90 text-sepia shadow-sm backdrop-blur hover:border-sepia hover:bg-sepia hover:text-parchment",
   ghost:
-    "border border-transparent bg-transparent text-sepia hover:border-border hover:bg-sepia/[0.04] hover:text-foreground",
+    "border-transparent bg-transparent text-sepia hover:border-border hover:bg-sepia/[0.04] hover:text-foreground",
+  danger:
+    "border-destructive/60 bg-background text-destructive hover:border-destructive hover:bg-destructive hover:text-destructive-foreground",
 };
 
 const tooltipClass =
