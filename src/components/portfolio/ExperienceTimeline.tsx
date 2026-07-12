@@ -62,7 +62,7 @@ export function ExperienceTimeline() {
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
           style={{ transformOrigin: "top" }}
-          className="pointer-events-none absolute bottom-0 top-0 w-px bg-gradient-to-b from-transparent via-sepia/40 to-transparent left-[15px] md:left-[19px] lg:left-1/2 lg:-translate-x-1/2"
+          className="pointer-events-none absolute bottom-0 top-0 w-px bg-gradient-to-b from-transparent via-sepia/40 to-transparent left-[18px] md:left-[22px] lg:left-1/2 lg:-translate-x-1/2"
         />
 
         <ol className="flex flex-col">
@@ -71,19 +71,19 @@ export function ExperienceTimeline() {
             return (
               <motion.li
                 key={e.year}
-                initial={{ opacity: 0, x: -12 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.55, delay: 0.08 * i, ease: "easeOut" }}
-                className="group relative pb-10 pl-12 last:pb-0 md:pb-14 md:pl-16 lg:grid lg:grid-cols-2 lg:gap-16 lg:pb-20 lg:pl-0"
+                className="group relative pb-10 pl-14 last:pb-0 md:pb-14 md:pl-20 lg:grid lg:grid-cols-2 lg:gap-24 lg:pb-20 lg:pl-0"
               >
                 {/* Node with numeral inside */}
                 <span
                   aria-hidden
-                  className="absolute top-0 flex h-8 w-8 items-center justify-center left-[15px] -translate-x-1/2 md:h-10 md:w-10 md:left-[19px] lg:left-1/2"
+                  className="absolute top-0 flex h-9 w-9 -translate-x-1/2 items-center justify-center left-[18px] md:h-11 md:w-11 md:left-[22px] lg:left-1/2"
                 >
                   <span className="absolute inset-0 rounded-full border border-sepia/30 bg-background transition-all duration-500 group-hover:scale-110 group-hover:border-brass group-hover:shadow-[0_0_0_4px_color-mix(in_oklab,var(--brass)_12%,transparent)]" />
-                  <span className="font-mono-mar relative text-[10px] leading-none text-muted-foreground transition-colors duration-500 group-hover:text-brass md:text-xs">
+                  <span className="font-mono-mar relative text-[11px] font-medium leading-none tracking-tight text-muted-foreground transition-colors duration-500 group-hover:text-brass md:text-[13px]">
                     {romanRoles[i]}
                   </span>
                 </span>
@@ -91,8 +91,8 @@ export function ExperienceTimeline() {
                 <div
                   className={
                     isRight
-                      ? "lg:col-start-2 lg:pl-10 lg:text-left"
-                      : "lg:col-start-1 lg:pr-10 lg:text-right"
+                      ? "lg:col-start-2 lg:pl-12 lg:text-left"
+                      : "lg:col-start-1 lg:pr-12 lg:text-right"
                   }
                 >
                   {/* Date pill */}
