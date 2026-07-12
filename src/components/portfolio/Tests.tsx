@@ -1,5 +1,5 @@
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Maximize2, Minimize2 } from "lucide-react";
 import fallbackThumb from "@/assets/thumb-disputatio.jpg";
 import { cn } from "@/lib/utils";
@@ -81,10 +81,14 @@ const aspectClasses: Record<string, string> = {
 export function Tests() {
   const [openId, setOpenId] = useState<string | null>(null);
   const [closingId, setClosingId] = useState<string | null>(null);
+  const openerRef = useRef<HTMLButtonElement | null>(null);
+  const closeBtnRef = useRef<HTMLButtonElement | null>(null);
   const open = openId ? (tests.find((t) => t.id === openId) ?? null) : null;
   const close = useCallback(() => {
     if (openId) setClosingId(openId);
     setOpenId(null);
+    // Return focus to the tile that opened the lightbox.
+    requestAnimationFrame(() => openerRef.current?.focus());
   }, [openId]);
 
   useEffect(() => {
@@ -93,7 +97,16 @@ export function Tests() {
       if (e.key === "Escape") close();
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    // Move focus into the dialog once it mounts.
+    const t = window.setTimeout(() => closeBtnRef.current?.focus(), 50);
+    // Lock background scroll while open.
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.clearTimeout(t);
+      document.body.style.overflow = prevOverflow;
+    };
   }, [open, close]);
 
   return (
@@ -111,11 +124,15 @@ export function Tests() {
                 key={t.id}
                 type="button"
                 layoutId={`disputatio-${t.id}`}
-                onClick={() => setOpenId(t.id)}
+                onClick={(e) => {
+                  openerRef.current = e.currentTarget;
+                  setOpenId(t.id);
+                }}
                 onLayoutAnimationComplete={() => {
                   if (closingId === t.id) setClosingId(null);
                 }}
-                aria-label={t.title}
+                aria-label={`${t.title} — open larger view`}
+                aria-haspopup="dialog"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.35, delay: Math.min(i, 8) * 0.03 }}
@@ -148,6 +165,9 @@ export function Tests() {
           {open ? (
             <motion.div
               key="lightbox"
+              role="dialog"
+              aria-modal="true"
+              aria-label={open.title}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -168,9 +188,10 @@ export function Tests() {
                   className="block max-h-[88vh] max-w-[92vw] object-contain"
                 />
                 <motion.button
+                  ref={closeBtnRef}
                   type="button"
                   onClick={close}
-                  aria-label="Close"
+                  aria-label="Close larger view"
                   initial={{ opacity: 0, scale: 0.85 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.85 }}
