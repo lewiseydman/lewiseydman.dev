@@ -79,7 +79,7 @@ export function ExperienceTimeline() {
                 >
                   <span className="absolute inset-0 rounded-full border border-sepia/30 bg-background transition-all duration-500 group-hover:scale-110 group-hover:border-brass group-hover:shadow-[0_0_0_4px_color-mix(in_oklab,var(--brass)_12%,transparent)]" />
                   <span className="absolute inset-0 flex items-center justify-center">
-                    <span className="font-mono-mar text-[10px] font-medium leading-none text-muted-foreground transition-colors duration-500 group-hover:text-brass md:text-xs">
+                    <span className="font-mono-mar text-[13px] font-medium leading-none tracking-tight text-muted-foreground transition-colors duration-500 group-hover:text-brass md:text-sm">
                       {romanRoles[i]}
                     </span>
                   </span>
