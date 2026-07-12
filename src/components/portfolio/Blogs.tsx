@@ -131,7 +131,7 @@ export function Blogs() {
   }, [openId, hero.id]);
 
   return (
-    <div className="flex flex-col gap-8 md:gap-12">
+    <div className="flex flex-col gap-8 md:gap-10 lg:gap-12">
       {open ? <ReadingProgressBar /> : null}
       {!open ? (
         <PopoverSummaryStrip
@@ -154,7 +154,7 @@ export function Blogs() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3 }}
-            className="flex flex-col gap-10 md:gap-12"
+            className="flex flex-col gap-8 md:gap-10 lg:gap-12"
           >
             <motion.article
               aria-labelledby={`codex-hero-${hero.id}`}
@@ -182,7 +182,7 @@ export function Blogs() {
                   Feature · {hero.date}
                 </div>
               </button>
-              <div className="flex flex-col gap-3 sm:gap-4">
+              <div className="flex flex-col gap-3 md:gap-4 lg:gap-5">
                 <span className="font-mono-mar">Lewis Eydman · {hero.read}</span>
                 <h3
                   id={`codex-hero-${hero.id}`}
@@ -213,7 +213,7 @@ export function Blogs() {
               </div>
             </motion.article>
 
-            <section className="flex flex-col gap-4">
+            <section className="flex flex-col gap-4 md:gap-5 lg:gap-6">
               <SectionLabel>Archives</SectionLabel>
               <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border md:gap-px lg:grid-cols-2">
                 {visibleRest.map((b, i) => {
@@ -300,7 +300,7 @@ function Essay({ post, onBack }: { post: Blog; onBack: () => void }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ duration: 0.35 }}
-      className="flex flex-col gap-8 md:gap-12"
+      className="flex flex-col gap-8 md:gap-10 lg:gap-12"
     >
       <DialogSubHeader onBack={onBack} backLabel="Back to Codex" right={<>{post.date}</>} />
 
@@ -334,8 +334,8 @@ function Essay({ post, onBack }: { post: Blog; onBack: () => void }) {
       </div>
 
       {/* Body */}
-      <div className="mx-auto flex w-full max-w-[68ch] flex-col gap-7">
-        <header className="flex flex-col gap-3 border-b border-border pb-6">
+      <div className="mx-auto flex w-full max-w-[68ch] flex-col gap-6 md:gap-7 lg:gap-8">
+        <header className="flex flex-col gap-3 md:gap-4 border-b border-border pb-6">
           <h3
             ref={titleRef}
             tabIndex={-1}
