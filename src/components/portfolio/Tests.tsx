@@ -145,21 +145,22 @@ export function Tests() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
               onClick={close}
               className="fixed left-1/2 top-1/2 z-[60] flex h-[88vh] w-[min(96vw,72rem)] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-sm border border-border bg-ink/85 p-6 backdrop-blur-sm md:p-10 lg:p-14"
             >
               <div
                 onClick={(e) => e.stopPropagation()}
-                className="relative z-50 flex h-full w-full items-center justify-center"
+                className="relative z-50 flex h-full w-full items-center justify-center overflow-hidden"
               >
                 <motion.img
                   key={open.id}
                   layoutId={`disputatio-${open.id}`}
-                  transition={{ type: "spring", stiffness: 220, damping: 30, mass: 0.85 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 32, mass: 0.7 }}
                   src={open.thumb.url}
                   alt={open.title}
-                  className="block h-auto w-auto max-h-full max-w-full rounded-sm border border-parchment/20 bg-card object-contain shadow-[0_40px_100px_-30px_rgba(0,0,0,0.5)]"
+                  style={{ maxHeight: "100%", maxWidth: "100%", width: "auto", height: "auto" }}
+                  className="block rounded-sm border border-parchment/20 bg-card object-contain shadow-[0_40px_100px_-30px_rgba(0,0,0,0.5)]"
                 />
                 <motion.button
                   type="button"
