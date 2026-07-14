@@ -1,4 +1,4 @@
-import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
+import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import { Maximize2, Minimize2 } from "lucide-react";
 import fallbackThumb from "@/assets/thumb-disputatio.jpg.asset.json";
@@ -8,6 +8,8 @@ import wide from "@/assets/tests/wide.jpg.asset.json";
 import tallPoster from "@/assets/tests/tall-poster.jpg.asset.json";
 import panorama from "@/assets/tests/panorama.jpg.asset.json";
 import { cn } from "@/lib/utils";
+import { spring, springSnappy, durations, easeOut } from "@/lib/motion";
+import { useSectionHash } from "@/hooks/use-section-hash";
 
 // ─── Per-tile artwork ────────────────────────────────────────────────────────
 // Drop real art in when it's ready. Convention:
@@ -73,13 +75,14 @@ const tests: Test[] = [
 ];
 
 export function Tests() {
-  const [openId, setOpenId] = useState<string | null>(null);
+  const reduce = useReducedMotion();
+  const { item: openId, openItem, closeItem } = useSectionHash();
   const [closingId, setClosingId] = useState<string | null>(null);
   const open = openId ? (tests.find((t) => t.id === openId) ?? null) : null;
   const close = useCallback(() => {
     if (openId) setClosingId(openId);
-    setOpenId(null);
-  }, [openId]);
+    closeItem();
+  }, [openId, closeItem]);
 
   useEffect(() => {
     if (!open) return;
@@ -104,12 +107,12 @@ export function Tests() {
               <motion.button
                 key={t.id}
                 type="button"
-                onClick={() => setOpenId(t.id)}
+                onClick={() => openItem("disputatio", t.id)}
                 aria-label={t.title}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.35, delay: Math.min(i, 8) * 0.03 }}
-                whileHover={{ scale: 1.03, y: -2 }}
+                initial={reduce ? { opacity: 0 } : { opacity: 0, y: 10 }}
+                animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                transition={{ duration: reduce ? 0 : durations.base, delay: reduce ? 0 : Math.min(i, 8) * 0.03, ease: easeOut }}
+                whileHover={reduce ? undefined : { scale: 1.03, y: -2 }}
                 className={cn(
                   "group relative mb-3 block w-full break-inside-avoid overflow-hidden rounded-sm border border-border bg-card shadow-[0_10px_30px_-20px_color-mix(in_oklab,var(--ink)_25%,transparent)] transition-shadow duration-500 ease-out hover:shadow-[0_24px_60px_-24px_color-mix(in_oklab,var(--ink)_35%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass md:mb-4",
                   (isOpen || isClosing) && "z-30"
@@ -120,10 +123,11 @@ export function Tests() {
                   onLayoutAnimationComplete={() => {
                     if (closingId === t.id) setClosingId(null);
                   }}
-                  transition={{ type: "spring", stiffness: 220, damping: 30, mass: 0.85 }}
+                  transition={reduce ? { duration: 0 } : spring}
                   src={t.thumb.url}
                   alt={t.title}
                   loading="lazy"
+                  decoding="async"
                   className="block h-auto w-full mix-blend-multiply dark:mix-blend-screen"
                 />
                 <div className="pointer-events-none absolute inset-0 paper-grain opacity-40" />
@@ -145,7 +149,7 @@ export function Tests() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: reduce ? 0 : durations.base, ease: easeOut }}
               onClick={close}
               className="fixed left-1/2 top-1/2 z-[60] flex h-[88vh] w-[min(96vw,72rem)] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-sm border border-border bg-ink/85 p-6 backdrop-blur-sm md:p-10 lg:p-14"
             >
@@ -156,9 +160,10 @@ export function Tests() {
                 <motion.img
                   key={open.id}
                   layoutId={`disputatio-${open.id}`}
-                  transition={{ type: "spring", stiffness: 260, damping: 32, mass: 0.7 }}
+                  transition={reduce ? { duration: 0 } : springSnappy}
                   src={open.thumb.url}
                   alt={open.title}
+                  decoding="async"
                   style={{ maxHeight: "100%", maxWidth: "100%", width: "auto", height: "auto" }}
                   className="block rounded-sm border border-parchment/20 bg-card object-contain shadow-[0_40px_100px_-30px_rgba(0,0,0,0.5)]"
                 />
@@ -166,12 +171,12 @@ export function Tests() {
                   type="button"
                   onClick={close}
                   aria-label="Close"
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.85 }}
-                  transition={{ duration: 0.25, delay: 0.15, ease: "easeOut" }}
-                  whileHover={{ scale: 1.08 }}
-                  whileTap={{ scale: 0.92 }}
+                  initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.85 }}
+                  animate={reduce ? { opacity: 1 } : { opacity: 1, scale: 1 }}
+                  exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.85 }}
+                  transition={{ duration: reduce ? 0 : durations.fast, delay: reduce ? 0 : 0.15, ease: easeOut }}
+                  whileHover={reduce ? undefined : { scale: 1.08 }}
+                  whileTap={reduce ? undefined : { scale: 0.92 }}
                   className="absolute right-2 top-2 flex h-9 w-9 items-center justify-center rounded-full border border-parchment/30 bg-ink/60 text-parchment shadow-md backdrop-blur-sm transition-colors hover:border-brass hover:text-brass focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass md:right-3 md:top-3 md:h-10 md:w-10"
                 >
                   <Minimize2 className="h-4 w-4" />
