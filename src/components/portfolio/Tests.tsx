@@ -2,6 +2,11 @@ import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import { Maximize2, Minimize2 } from "lucide-react";
 import fallbackThumb from "@/assets/thumb-disputatio.jpg";
+import portraitTall from "@/assets/tests/portrait-tall.jpg";
+import square from "@/assets/tests/square.jpg";
+import wide from "@/assets/tests/wide.jpg";
+import tallPoster from "@/assets/tests/tall-poster.jpg";
+import panorama from "@/assets/tests/panorama.jpg";
 import { cn } from "@/lib/utils";
 
 // ─── Per-tile artwork ────────────────────────────────────────────────────────
@@ -45,26 +50,26 @@ type Test = {
 };
 
 const tests: Test[] = [
-  { id: "weather-glance", title: "Weather, at a glance", thumb: fallbackThumb },
-  { id: "loop-motion", title: "An honest loading loop", thumb: fallbackThumb },
-  { id: "found-typography", title: "Found typography, Lisbon", thumb: fallbackThumb },
-  { id: "calm-dashboard", title: "The calm dashboard", thumb: fallbackThumb },
-  { id: "icon-grid", title: "A twelve-glyph icon grid", thumb: fallbackThumb },
-  { id: "colour-drift", title: "Colour drift in dark mode", thumb: fallbackThumb },
-  { id: "hairline-rules", title: "Hairline rules that survive zoom", thumb: fallbackThumb },
-  { id: "modal-hierarchy", title: "Modals without the modal", thumb: fallbackThumb },
-  { id: "form-rhythm", title: "Form rhythm", thumb: fallbackThumb },
-  { id: "chart-annotation", title: "Charts that annotate themselves", thumb: fallbackThumb },
-  { id: "cursor-affordance", title: "The cursor as affordance", thumb: fallbackThumb },
-  { id: "empty-states", title: "Empty states with agency", thumb: fallbackThumb },
-  { id: "keyboard-map", title: "A keyboard-first map", thumb: fallbackThumb },
-  { id: "print-poster", title: "Print poster, screen version", thumb: fallbackThumb },
-  { id: "scroll-cinema", title: "Scroll-driven cinema", thumb: fallbackThumb },
-  { id: "audit-trail", title: "The audit trail, humanised", thumb: fallbackThumb },
+  { id: "weather-glance", title: "Weather, at a glance", thumb: portraitTall },
+  { id: "loop-motion", title: "An honest loading loop", thumb: square },
+  { id: "found-typography", title: "Found typography, Lisbon", thumb: wide },
+  { id: "calm-dashboard", title: "The calm dashboard", thumb: panorama },
+  { id: "icon-grid", title: "A twelve-glyph icon grid", thumb: square },
+  { id: "colour-drift", title: "Colour drift in dark mode", thumb: tallPoster },
+  { id: "hairline-rules", title: "Hairline rules that survive zoom", thumb: portraitTall },
+  { id: "modal-hierarchy", title: "Modals without the modal", thumb: wide },
+  { id: "form-rhythm", title: "Form rhythm", thumb: tallPoster },
+  { id: "chart-annotation", title: "Charts that annotate themselves", thumb: panorama },
+  { id: "cursor-affordance", title: "The cursor as affordance", thumb: square },
+  { id: "empty-states", title: "Empty states with agency", thumb: portraitTall },
+  { id: "keyboard-map", title: "A keyboard-first map", thumb: wide },
+  { id: "print-poster", title: "Print poster, screen version", thumb: tallPoster },
+  { id: "scroll-cinema", title: "Scroll-driven cinema", thumb: portraitTall },
+  { id: "audit-trail", title: "The audit trail, humanised", thumb: panorama },
   { id: "onboard-three", title: "Three-screen onboarding", thumb: fallbackThumb },
-  { id: "wayfinding-signs", title: "Wayfinding, indoors", thumb: fallbackThumb },
-  { id: "typography-scale", title: "One type scale, everywhere", thumb: fallbackThumb },
-  { id: "notification-mute", title: "The polite notification", thumb: fallbackThumb },
+  { id: "wayfinding-signs", title: "Wayfinding, indoors", thumb: square },
+  { id: "typography-scale", title: "One type scale, everywhere", thumb: tallPoster },
+  { id: "notification-mute", title: "The polite notification", thumb: wide },
 ];
 
 export function Tests() {
