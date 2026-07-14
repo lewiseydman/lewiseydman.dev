@@ -104,11 +104,7 @@ export function Tests() {
               <motion.button
                 key={t.id}
                 type="button"
-                layoutId={`disputatio-${t.id}`}
                 onClick={() => setOpenId(t.id)}
-                onLayoutAnimationComplete={() => {
-                  if (closingId === t.id) setClosingId(null);
-                }}
                 aria-label={t.title}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -120,10 +116,15 @@ export function Tests() {
                 )}
               >
                 <motion.img
+                  layoutId={`disputatio-${t.id}`}
+                  onLayoutAnimationComplete={() => {
+                    if (closingId === t.id) setClosingId(null);
+                  }}
+                  transition={{ type: "spring", stiffness: 220, damping: 30, mass: 0.85 }}
                   src={t.thumb.url}
                   alt={t.title}
                   loading="lazy"
-                  className="block h-auto w-full object-cover mix-blend-multiply dark:mix-blend-screen"
+                  className="block h-auto w-full mix-blend-multiply dark:mix-blend-screen"
                 />
                 <div className="pointer-events-none absolute inset-0 paper-grain opacity-40" />
                 <span
@@ -148,17 +149,17 @@ export function Tests() {
               onClick={close}
               className="fixed inset-0 z-[60] flex items-center justify-center bg-ink/85 p-4 backdrop-blur-sm md:p-8"
             >
-              <motion.div
-                key={open.id}
-                layoutId={`disputatio-${open.id}`}
+              <div
                 onClick={(e) => e.stopPropagation()}
-                transition={{ type: "spring", stiffness: 220, damping: 30, mass: 0.85 }}
-                className="relative z-50 inline-block overflow-hidden rounded-sm border border-parchment/20 bg-card shadow-[0_40px_100px_-30px_rgba(0,0,0,0.5)]"
+                className="relative z-50 inline-block"
               >
                 <motion.img
+                  key={open.id}
+                  layoutId={`disputatio-${open.id}`}
+                  transition={{ type: "spring", stiffness: 220, damping: 30, mass: 0.85 }}
                   src={open.thumb.url}
                   alt={open.title}
-                  className="block h-auto w-auto max-h-[78vh] max-w-[80vw] object-contain"
+                  className="block h-auto w-auto max-h-[78vh] max-w-[80vw] rounded-sm border border-parchment/20 bg-card shadow-[0_40px_100px_-30px_rgba(0,0,0,0.5)]"
                 />
                 <motion.button
                   type="button"
@@ -174,7 +175,7 @@ export function Tests() {
                 >
                   <Minimize2 className="h-4 w-4" />
                 </motion.button>
-              </motion.div>
+              </div>
             </motion.div>
           ) : null}
         </AnimatePresence>
