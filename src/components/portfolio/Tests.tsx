@@ -1,12 +1,12 @@
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import { Maximize2, Minimize2 } from "lucide-react";
-import fallbackThumb from "@/assets/thumb-disputatio.jpg";
-import portraitTall from "@/assets/tests/portrait-tall.jpg";
-import square from "@/assets/tests/square.jpg";
-import wide from "@/assets/tests/wide.jpg";
-import tallPoster from "@/assets/tests/tall-poster.jpg";
-import panorama from "@/assets/tests/panorama.jpg";
+import fallbackThumb from "@/assets/thumb-disputatio.jpg.asset.json";
+import portraitTall from "@/assets/tests/portrait-tall.jpg.asset.json";
+import square from "@/assets/tests/square.jpg.asset.json";
+import wide from "@/assets/tests/wide.jpg.asset.json";
+import tallPoster from "@/assets/tests/tall-poster.jpg.asset.json";
+import panorama from "@/assets/tests/panorama.jpg.asset.json";
 import { cn } from "@/lib/utils";
 
 // ─── Per-tile artwork ────────────────────────────────────────────────────────
@@ -46,7 +46,7 @@ import { cn } from "@/lib/utils";
 type Test = {
   id: string;
   title: string;
-  thumb: string;
+  thumb: { url: string };
 };
 
 const tests: Test[] = [
@@ -120,7 +120,7 @@ export function Tests() {
                 )}
               >
                 <motion.img
-                  src={t.thumb}
+                  src={t.thumb.url}
                   alt={t.title}
                   loading="lazy"
                   className="block h-auto w-full object-cover mix-blend-multiply dark:mix-blend-screen"
@@ -156,7 +156,7 @@ export function Tests() {
                 className="relative z-50 inline-block overflow-hidden rounded-sm border border-parchment/20 bg-card shadow-[0_40px_100px_-30px_rgba(0,0,0,0.5)]"
               >
                 <motion.img
-                  src={open.thumb}
+                  src={open.thumb.url}
                   alt={open.title}
                   className="block max-h-[88vh] max-w-[92vw] object-contain"
                 />
