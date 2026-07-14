@@ -3,6 +3,7 @@ import { Outlet, Link, createRootRouteWithContext, useRouter, HeadContent, Scrip
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import vitruvianUrl from "../assets/vitruvian.png";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -83,6 +84,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "stylesheet",
         href: appCss,
+      },
+      {
+        rel: "preload",
+        as: "image",
+        href: vitruvianUrl,
+        fetchpriority: "high",
       },
     ],
     scripts: [
