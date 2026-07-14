@@ -41,42 +41,31 @@ import { cn } from "@/lib/utils";
 type Test = {
   id: string;
   title: string;
-  aspect: string;
   thumb: string;
 };
 
 const tests: Test[] = [
-  { id: "weather-glance", title: "Weather, at a glance", aspect: "3/4", thumb: fallbackThumb },
-  { id: "loop-motion", title: "An honest loading loop", aspect: "1/1", thumb: fallbackThumb },
-  { id: "found-typography", title: "Found typography, Lisbon", aspect: "4/5", thumb: fallbackThumb },
-  { id: "calm-dashboard", title: "The calm dashboard", aspect: "3/2", thumb: fallbackThumb },
-  { id: "icon-grid", title: "A twelve-glyph icon grid", aspect: "1/1", thumb: fallbackThumb },
-  { id: "colour-drift", title: "Colour drift in dark mode", aspect: "4/3", thumb: fallbackThumb },
-  { id: "hairline-rules", title: "Hairline rules that survive zoom", aspect: "9/16", thumb: fallbackThumb },
-  { id: "modal-hierarchy", title: "Modals without the modal", aspect: "3/4", thumb: fallbackThumb },
-  { id: "form-rhythm", title: "Form rhythm", aspect: "2/3", thumb: fallbackThumb },
-  { id: "chart-annotation", title: "Charts that annotate themselves", aspect: "3/2", thumb: fallbackThumb },
-  { id: "cursor-affordance", title: "The cursor as affordance", aspect: "1/1", thumb: fallbackThumb },
-  { id: "empty-states", title: "Empty states with agency", aspect: "4/5", thumb: fallbackThumb },
-  { id: "keyboard-map", title: "A keyboard-first map", aspect: "4/3", thumb: fallbackThumb },
-  { id: "print-poster", title: "Print poster, screen version", aspect: "3/4", thumb: fallbackThumb },
-  { id: "scroll-cinema", title: "Scroll-driven cinema", aspect: "9/16", thumb: fallbackThumb },
-  { id: "audit-trail", title: "The audit trail, humanised", aspect: "3/2", thumb: fallbackThumb },
-  { id: "onboard-three", title: "Three-screen onboarding", aspect: "2/3", thumb: fallbackThumb },
-  { id: "wayfinding-signs", title: "Wayfinding, indoors", aspect: "1/1", thumb: fallbackThumb },
-  { id: "typography-scale", title: "One type scale, everywhere", aspect: "4/5", thumb: fallbackThumb },
-  { id: "notification-mute", title: "The polite notification", aspect: "3/4", thumb: fallbackThumb },
+  { id: "weather-glance", title: "Weather, at a glance", thumb: fallbackThumb },
+  { id: "loop-motion", title: "An honest loading loop", thumb: fallbackThumb },
+  { id: "found-typography", title: "Found typography, Lisbon", thumb: fallbackThumb },
+  { id: "calm-dashboard", title: "The calm dashboard", thumb: fallbackThumb },
+  { id: "icon-grid", title: "A twelve-glyph icon grid", thumb: fallbackThumb },
+  { id: "colour-drift", title: "Colour drift in dark mode", thumb: fallbackThumb },
+  { id: "hairline-rules", title: "Hairline rules that survive zoom", thumb: fallbackThumb },
+  { id: "modal-hierarchy", title: "Modals without the modal", thumb: fallbackThumb },
+  { id: "form-rhythm", title: "Form rhythm", thumb: fallbackThumb },
+  { id: "chart-annotation", title: "Charts that annotate themselves", thumb: fallbackThumb },
+  { id: "cursor-affordance", title: "The cursor as affordance", thumb: fallbackThumb },
+  { id: "empty-states", title: "Empty states with agency", thumb: fallbackThumb },
+  { id: "keyboard-map", title: "A keyboard-first map", thumb: fallbackThumb },
+  { id: "print-poster", title: "Print poster, screen version", thumb: fallbackThumb },
+  { id: "scroll-cinema", title: "Scroll-driven cinema", thumb: fallbackThumb },
+  { id: "audit-trail", title: "The audit trail, humanised", thumb: fallbackThumb },
+  { id: "onboard-three", title: "Three-screen onboarding", thumb: fallbackThumb },
+  { id: "wayfinding-signs", title: "Wayfinding, indoors", thumb: fallbackThumb },
+  { id: "typography-scale", title: "One type scale, everywhere", thumb: fallbackThumb },
+  { id: "notification-mute", title: "The polite notification", thumb: fallbackThumb },
 ];
-
-const aspectClasses: Record<string, string> = {
-  "3/4": "aspect-[3/4] md:aspect-[3/4]",
-  "1/1": "aspect-[3/4] md:aspect-square",
-  "4/5": "aspect-[3/4] md:aspect-[4/5]",
-  "3/2": "aspect-[3/4] md:aspect-[3/2]",
-  "4/3": "aspect-[3/4] md:aspect-[4/3]",
-  "9/16": "aspect-[3/4] md:aspect-[9/16]",
-  "2/3": "aspect-[3/4] md:aspect-[2/3]",
-};
 
 export function Tests() {
   const [openId, setOpenId] = useState<string | null>(null);
@@ -122,7 +111,6 @@ export function Tests() {
                 whileHover={{ scale: 1.03, y: -2 }}
                 className={cn(
                   "group relative mb-3 block w-full break-inside-avoid overflow-hidden rounded-sm border border-border bg-card shadow-[0_10px_30px_-20px_color-mix(in_oklab,var(--ink)_25%,transparent)] transition-shadow duration-500 ease-out hover:shadow-[0_24px_60px_-24px_color-mix(in_oklab,var(--ink)_35%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass md:mb-4",
-                  aspectClasses[t.aspect],
                   (isOpen || isClosing) && "z-30"
                 )}
               >
@@ -130,7 +118,7 @@ export function Tests() {
                   src={t.thumb}
                   alt={t.title}
                   loading="lazy"
-                  className="absolute inset-0 h-full w-full object-cover mix-blend-multiply dark:mix-blend-screen"
+                  className="block h-auto w-full object-cover mix-blend-multiply dark:mix-blend-screen"
                 />
                 <div className="pointer-events-none absolute inset-0 paper-grain opacity-40" />
                 <span
