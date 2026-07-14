@@ -158,7 +158,7 @@ export function Tests() {
                 <motion.img
                   src={open.thumb.url}
                   alt={open.title}
-                  className="block max-h-[88vh] max-w-[92vw] object-contain"
+                  className="block h-auto w-auto max-h-[78vh] max-w-[80vw] object-contain"
                 />
                 <motion.button
                   type="button"
