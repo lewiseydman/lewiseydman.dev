@@ -147,11 +147,11 @@ export function Tests() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
               onClick={close}
-              className="fixed inset-0 z-[60] flex items-center justify-center bg-ink/85 p-4 backdrop-blur-sm md:p-8"
+              className="fixed left-1/2 top-1/2 z-[60] flex h-[88vh] w-[min(96vw,72rem)] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-sm border border-border bg-ink/85 p-6 backdrop-blur-sm md:p-10 lg:p-14"
             >
               <div
                 onClick={(e) => e.stopPropagation()}
-                className="relative z-50 inline-block"
+                className="relative z-50 flex h-full w-full items-center justify-center"
               >
                 <motion.img
                   key={open.id}
@@ -159,7 +159,7 @@ export function Tests() {
                   transition={{ type: "spring", stiffness: 220, damping: 30, mass: 0.85 }}
                   src={open.thumb.url}
                   alt={open.title}
-                  className="block h-auto w-auto max-h-[78vh] max-w-[80vw] rounded-sm border border-parchment/20 bg-card shadow-[0_40px_100px_-30px_rgba(0,0,0,0.5)]"
+                  className="block h-auto w-auto max-h-full max-w-full rounded-sm border border-parchment/20 bg-card object-contain shadow-[0_40px_100px_-30px_rgba(0,0,0,0.5)]"
                 />
                 <motion.button
                   type="button"
