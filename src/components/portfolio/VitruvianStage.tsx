@@ -146,6 +146,8 @@ export function VitruvianStage() {
               alt="Vitruvian-style line drawing"
               className="h-full w-full select-none object-contain mix-blend-multiply dark:mix-blend-screen dark:invert dark:hue-rotate-180"
               draggable={false}
+              decoding="async"
+              fetchPriority="high"
             />
           </motion.div>
 
