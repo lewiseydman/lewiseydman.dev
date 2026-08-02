@@ -79,6 +79,8 @@ export function VitruvianStage() {
   const active = section && sections[section] ? section : null;
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasPaused = useIntersectionPause(stageRef, { rootMargin: "150px" });
+  const hydrated = useHydrated();
+  const yearRoman = hydrated ? toRoman(new Date().getFullYear()) : "MMXXVI";
 
   const onOpen = (id: string) => openSection(id);
   const onClose = (open: boolean) => {
