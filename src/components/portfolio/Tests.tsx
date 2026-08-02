@@ -1,12 +1,12 @@
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import { Maximize2, Minimize2 } from "lucide-react";
-import fallbackThumb from "@/assets/thumb-disputatio.jpg.asset.json";
-import portraitTall from "@/assets/tests/portrait-tall.jpg.asset.json";
-import square from "@/assets/tests/square.jpg.asset.json";
-import wide from "@/assets/tests/wide.jpg.asset.json";
-import tallPoster from "@/assets/tests/tall-poster.jpg.asset.json";
-import panorama from "@/assets/tests/panorama.jpg.asset.json";
+import fallbackThumb from "@/assets/thumb-disputatio.jpg";
+import portraitTall from "@/assets/tests/portrait-tall.jpg";
+import square from "@/assets/tests/square.jpg";
+import wide from "@/assets/tests/wide.jpg";
+import tallPoster from "@/assets/tests/tall-poster.jpg";
+import panorama from "@/assets/tests/panorama.jpg";
 import { cn } from "@/lib/utils";
 import { spring, springSnappy, durations, easeOut } from "@/lib/motion";
 import { useSectionHash } from "@/hooks/use-section-hash";
@@ -16,8 +16,8 @@ import { useSectionHash } from "@/hooks/use-section-hash";
 //   1. Save the file to `src/assets/tests/<id>.jpg` (match the entry `id` below).
 //   2. Uncomment the matching import line and swap the entry's `thumb` to it.
 //   3. Match the entry's `aspect` when exporting so the masonry rhythm stays.
-//   4. For anything >~200KB, run it through `lovable-assets` and import the
-//      generated `.asset.json` pointer instead of the raw binary.
+//   4. Assets are bundled by Vite so the static GitHub Pages build can serve
+//      them; keep exports reasonably compressed.
 //
 // Example once art exists:
 //   import weatherGlance from "@/assets/tests/weather-glance.jpg";
@@ -48,7 +48,7 @@ import { useSectionHash } from "@/hooks/use-section-hash";
 type Test = {
   id: string;
   title: string;
-  thumb: { url: string };
+  thumb: string;
 };
 
 const tests: Test[] = [
