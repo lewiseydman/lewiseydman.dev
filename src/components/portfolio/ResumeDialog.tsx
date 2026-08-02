@@ -1,9 +1,9 @@
 import { Download, ExternalLink } from "lucide-react";
 import { SectionDialog } from "./SectionDialog";
 import { pillButtonClasses } from "./primitives/pillButton";
-import cvAsset from "@/assets/Lewis_Eydman_CV.pdf.asset.json";
+import cvUrl from "@/assets/Lewis_Eydman_CV.pdf?url";
 
-const PDF_URL = cvAsset.url;
+const PDF_URL = cvUrl;
 const DOWNLOAD_NAME = "Lewis_Eydman_CV.pdf";
 // Open with the thumbnail sidebar visible and 100% zoom by default
 const PDF_VIEW = "#pagemode=thumbs&zoom=100";

@@ -6,10 +6,25 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
+// GITHUB_PAGES=true switches the build to a fully static export (no server
+// runtime) for GitHub Pages. The default build stays on Cloudflare/Nitro so
+// Lovable preview and publish are unaffected.
+const isGitHubPages = process.env.GITHUB_PAGES === "true";
+
 export default defineConfig({
-  tanstackStart: {
-    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-    // nitro/vite builds from this
-    server: { entry: "server" },
-  },
+  tanstackStart: isGitHubPages
+    ? {
+        // Static export: use the stock server entry so the prerender preview
+        // server can boot, and prerender every page.
+        prerender: { enabled: true, crawlLinks: true },
+        pages: [{ path: "/", prerender: { enabled: true } }],
+      }
+    : {
+        // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
+        // nitro/vite builds from this
+        server: { entry: "server" },
+      },
+  // No server deploy target for the static export — prerendered HTML plus the
+  // client bundle in dist/client is all GitHub Pages needs.
+  ...(isGitHubPages ? { nitro: false as const } : {}),
 });
