@@ -29,6 +29,12 @@ jobs:
         run: |
           cp dist/client/index.html dist/client/404.html
           touch dist/client/.nojekyll
+          # Optional: set a repository variable named CUSTOM_DOMAIN
+          # (Settings > Secrets and variables > Actions > Variables)
+          # so the custom domain survives every deploy.
+          if [ -n "${{ vars.CUSTOM_DOMAIN }}" ]; then
+            echo "${{ vars.CUSTOM_DOMAIN }}" > dist/client/CNAME
+          fi
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
