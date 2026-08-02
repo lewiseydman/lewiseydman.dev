@@ -12,14 +12,18 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 const isGitHubPages = process.env.GITHUB_PAGES === "true";
 
 export default defineConfig({
-  tanstackStart: {
-    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-    // nitro/vite builds from this
-    server: { entry: "server" },
-    ...(isGitHubPages
-      ? { prerender: { enabled: true, crawlLinks: true }, pages: [{ path: "/", prerender: { enabled: true } }] }
-      : {}),
-  },
+  tanstackStart: isGitHubPages
+    ? {
+        // Static export: use the stock server entry so the prerender preview
+        // server can boot, and prerender every page.
+        prerender: { enabled: true, crawlLinks: true },
+        pages: [{ path: "/", prerender: { enabled: true } }],
+      }
+    : {
+        // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
+        // nitro/vite builds from this
+        server: { entry: "server" },
+      },
   ...(isGitHubPages
     ? {
         nitro: {
