@@ -24,11 +24,7 @@ export default defineConfig({
         // nitro/vite builds from this
         server: { entry: "server" },
       },
-  ...(isGitHubPages
-    ? {
-        nitro: {
-          preset: "static",
-        },
-      }
-    : {}),
+  // No server deploy target for the static export — prerendered HTML plus the
+  // client bundle in dist/client is all GitHub Pages needs.
+  ...(isGitHubPages ? { nitro: false as const } : {}),
 });
