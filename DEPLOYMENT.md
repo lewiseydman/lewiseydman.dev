@@ -9,10 +9,11 @@ The site builds to a fully static export (no server runtime required).
 3. Optional but recommended for a custom domain:
    **Settings → Secrets and variables → Actions → Variables → New variable**
    - Name: `CUSTOM_DOMAIN`
-   - Value: `yourdomain.com`
+   - Value: `lewiseydman.dev`
 
    The deploy writes a `CNAME` file from this variable, so the domain setting
    survives every deploy.
+
 4. **Settings → Pages → Custom domain**: enter the same domain and let GitHub
    provision the certificate. DNS: `A` records for the apex pointing at
    GitHub Pages IPs (185.199.108–111.153), or a `CNAME` for `www` pointing at
