@@ -14,8 +14,7 @@ import { FooterIcons } from "./FooterIcons";
 import { toRoman } from "@/lib/roman";
 import { useSectionHash } from "@/hooks/use-section-hash";
 import { useIntersectionPause } from "@/hooks/use-intersection-pause";
-
-const CURRENT_YEAR_ROMAN = toRoman(new Date().getFullYear());
+import { useHydrated } from "@/hooks/use-hydrated";
 
 const VitruvianScene = lazy(() => import("./VitruvianScene"));
 
@@ -80,6 +79,8 @@ export function VitruvianStage() {
   const active = section && sections[section] ? section : null;
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasPaused = useIntersectionPause(stageRef, { rootMargin: "150px" });
+  const hydrated = useHydrated();
+  const yearRoman = hydrated ? toRoman(new Date().getFullYear()) : "MMXXVI";
 
   const onOpen = (id: string) => openSection(id);
   const onClose = (open: boolean) => {
@@ -114,7 +115,7 @@ export function VitruvianStage() {
         className="font-mono-mar relative z-10 flex items-center gap-3"
       >
         <span className="hairline h-px w-10" />
-        <span>Folio · Anno {CURRENT_YEAR_ROMAN}</span>
+        <span>Folio · Anno {yearRoman}</span>
         <span className="hairline h-px w-10" />
       </motion.div>
 
