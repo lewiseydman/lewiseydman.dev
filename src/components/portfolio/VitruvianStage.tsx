@@ -14,8 +14,7 @@ import { FooterIcons } from "./FooterIcons";
 import { toRoman } from "@/lib/roman";
 import { useSectionHash } from "@/hooks/use-section-hash";
 import { useIntersectionPause } from "@/hooks/use-intersection-pause";
-
-const CURRENT_YEAR_ROMAN = toRoman(new Date().getFullYear());
+import { useHydrated } from "@/hooks/use-hydrated";
 
 const VitruvianScene = lazy(() => import("./VitruvianScene"));
 
