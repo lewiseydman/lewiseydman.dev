@@ -115,7 +115,7 @@ export function VitruvianStage() {
         className="font-mono-mar relative z-10 flex items-center gap-3"
       >
         <span className="hairline h-px w-10" />
-        <span>Folio · Anno {CURRENT_YEAR_ROMAN}</span>
+        <span>Folio · Anno {yearRoman}</span>
         <span className="hairline h-px w-10" />
       </motion.div>
 
