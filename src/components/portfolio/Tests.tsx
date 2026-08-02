@@ -124,7 +124,7 @@ export function Tests() {
                     if (closingId === t.id) setClosingId(null);
                   }}
                   transition={reduce ? { duration: 0 } : spring}
-                  src={t.thumb.url}
+                  src={t.thumb}
                   alt={t.title}
                   loading="lazy"
                   decoding="async"
@@ -161,7 +161,7 @@ export function Tests() {
                   key={open.id}
                   layoutId={`disputatio-${open.id}`}
                   transition={reduce ? { duration: 0 } : springSnappy}
-                  src={open.thumb.url}
+                  src={open.thumb}
                   alt={open.title}
                   decoding="async"
                   style={{ maxHeight: "100%", maxWidth: "100%", width: "auto", height: "auto" }}
